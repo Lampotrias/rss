@@ -21,10 +21,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.OkHttpClient;
 
 @ChannelScope
-public class ChannelFragment extends BaseFragment implements ChannelContract.View {
+public class ChannelFragment extends BaseFragment implements ChannelContract.V {
 
 	private static ChannelFragment instance = null;
 
@@ -49,6 +48,18 @@ public class ChannelFragment extends BaseFragment implements ChannelContract.Vie
 		super.onActivityCreated(savedInstanceState);
 		mPresenter.setView(this);
 		Toast.makeText(getActivity(), "1312312321", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		mPresenter.resume();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mPresenter.destroy();
 	}
 
 	@Nullable
@@ -82,8 +93,4 @@ public class ChannelFragment extends BaseFragment implements ChannelContract.Vie
 		showToastMessage("Success:" + message);
 	}
 
-	@Override
-	public Context getContextActivity() {
-		return this.getActivity().getApplicationContext();
-	}
 }

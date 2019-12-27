@@ -5,15 +5,14 @@ import android.content.Context;
 
 import com.example.rss.domain.interactor.ChannelInteractor;
 import com.example.rss.domain.interactor.DefaultObserver;
-import com.example.rss.presentation.BasePresenter;
 
 import javax.inject.Inject;
 
 
-public class ChannelPresenter extends BasePresenter implements ChannelContract.Presenter
+public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 {
 	private static final String LOG_TAG = ChannelPresenter.class.getSimpleName();
-	private ChannelContract.View mView;
+	private ChannelContract.V mView;
 	private final ChannelInteractor channelInteractor;
 	protected Context context;
 	private String sourceUrl;
@@ -23,8 +22,9 @@ public class ChannelPresenter extends BasePresenter implements ChannelContract.P
 		this.channelInteractor = channelInteractor;
 	}
 
+
 	@Override
-	public void setView(ChannelContract.View view) {
+	public void setView(ChannelContract.V view) {
 		mView = view;
 	}
 
@@ -35,6 +35,21 @@ public class ChannelPresenter extends BasePresenter implements ChannelContract.P
 
 	public void addNewChannel(String url) {
 		channelInteractor.execute(new ReturnObserver(), url);
+	}
+
+	@Override
+	public void resume() {
+		mView.displaySuccess("Init Ok");
+	}
+
+	@Override
+	public void pause() {
+
+	}
+
+	@Override
+	public void destroy() {
+
 	}
 
 	final class ReturnObserver extends DefaultObserver<Integer>{

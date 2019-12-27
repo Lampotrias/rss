@@ -1,7 +1,6 @@
-package com.example.rss.presentation.fragment;
+package com.example.rss.presentation;
 
 public interface Presenter{
-	void init();
 	void resume();
 	void pause();
 	void destroy();
