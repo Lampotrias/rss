@@ -3,23 +3,26 @@ package com.example.rss.presentation.channelControl;
 
 import android.content.Context;
 
-import com.example.rss.domain.interactor.ChannelInteractor;
 import com.example.rss.domain.interactor.DefaultObserver;
 
 import javax.inject.Inject;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 
 public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 {
 	private static final String LOG_TAG = ChannelPresenter.class.getSimpleName();
 	private ChannelContract.V mView;
-	private final ChannelInteractor channelInteractor;
+	private final CInteractor cInteractor;
+	private final CompositeDisposable compositeDisposable;
 	protected Context context;
 	private String sourceUrl;
 
 	@Inject
-	public ChannelPresenter(ChannelInteractor channelInteractor) {
-		this.channelInteractor = channelInteractor;
+	public ChannelPresenter(CInteractor cInteractor) {
+		this.cInteractor = cInteractor;
+		compositeDisposable = new CompositeDisposable();
 	}
 
 
@@ -34,7 +37,17 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 	}
 
 	public void addNewChannel(String url) {
-		channelInteractor.execute(new ReturnObserver(), url);
+		compositeDisposable.add(cInteractor.add(url)
+		.subscribe(s -> {
+			//ok
+				}, throwable -> {
+			//error
+				}, () -> {
+			//Success
+				}
+		));
+
+		//channelInteractor.execute(new ReturnObserver(), url);
 	}
 
 	@Override
@@ -52,16 +65,15 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 
 	}
 
-	final class ReturnObserver extends DefaultObserver<Integer>{
-
+	final class ReturnObserver extends DefaultObserver<Void>{
 		@Override
-		public void onNext(Integer integer) {
-			mView.displaySuccess("Ok: " + integer.toString());
+		public void onNext(Void aVoid) {
+			super.onNext(aVoid);
 		}
 
 		@Override
 		public void onError(Throwable e) {
-			mView.displayError(e);
+			super.onError(e);
 		}
 
 		@Override
@@ -69,4 +81,5 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 			super.onComplete();
 		}
 	}
+
 }
