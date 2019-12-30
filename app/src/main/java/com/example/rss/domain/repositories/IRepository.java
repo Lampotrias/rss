@@ -9,4 +9,5 @@ import io.reactivex.Single;
 
 public interface IRepository {
 	Single<String> getRssFeedContent(String path);
+	Single<Long> addChannel(Channel channel);
 }

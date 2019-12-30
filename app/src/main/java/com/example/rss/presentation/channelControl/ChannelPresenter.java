@@ -38,16 +38,13 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 
 	public void addNewChannel(String url) {
 		compositeDisposable.add(cInteractor.add(url)
-		.subscribe(s -> {
-			//ok
-				}, throwable -> {
-			//error
-				}, () -> {
-			//Success
-				}
-		));
+				.subscribe(
+						aLong -> {
+							mView.displaySuccess("new id: " + aLong);
+						}, throwable -> {
+							mView.displayError(throwable);
+						}));
 
-		//channelInteractor.execute(new ReturnObserver(), url);
 	}
 
 	@Override
@@ -62,24 +59,7 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 
 	@Override
 	public void destroy() {
-
+		if (!compositeDisposable.isDisposed())
+			compositeDisposable.dispose();
 	}
-
-	final class ReturnObserver extends DefaultObserver<Void>{
-		@Override
-		public void onNext(Void aVoid) {
-			super.onNext(aVoid);
-		}
-
-		@Override
-		public void onError(Throwable e) {
-			super.onError(e);
-		}
-
-		@Override
-		public void onComplete() {
-			super.onComplete();
-		}
-	}
-
 }

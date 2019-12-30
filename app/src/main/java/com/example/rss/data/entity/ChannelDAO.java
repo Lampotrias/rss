@@ -7,10 +7,11 @@ import androidx.room.OnConflictStrategy;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 @Dao
 public interface ChannelDAO {
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	Maybe<Long> insert(ChannelDTO channelDTO);
+	Single<Long> insert(ChannelDTO channelDTO);
 }

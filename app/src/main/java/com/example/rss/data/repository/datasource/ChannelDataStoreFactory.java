@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.example.rss.data.database.AppDatabase;
-import com.example.rss.data.repository.datasource.impl.DatabaseChannelDataStore;
+import com.example.rss.data.repository.datasource.impl.DatabaseDataStore;
 import com.example.rss.data.repository.datasource.impl.NetworkApi;
 
 import javax.inject.Inject;
@@ -23,18 +23,18 @@ public class ChannelDataStoreFactory {
 		this.context = context;
 	}
 
-	public IChannelDataStore create() {
-		IChannelDataStore userDataStore;
+	public IDataStore create() {
+		IDataStore userDataStore;
 		userDataStore = createNetworkApi();
 		return userDataStore;
 	}
 
-	private IChannelDataStore createDatabaseDataStore() {
+	private IDataStore createDatabaseDataStore() {
 		AppDatabase appDatabase = AppDatabase.getInstance(context);
-		return new DatabaseChannelDataStore(appDatabase);
+		return new DatabaseDataStore(appDatabase);
 	}
 
-	private IChannelDataStore createNetworkApi(){
+	private IDataStore createNetworkApi(){
 		final OkHttpClient client;
 		final HttpLoggingInterceptor networkLogInterceptor;
 

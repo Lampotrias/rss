@@ -16,6 +16,11 @@ public class ChannelDTO {
 	private Long id;
 
 	@NonNull
+	@ColumnInfo(name = "name")
+	private String name;
+
+
+	@NonNull
 	@ColumnInfo(name = "category")
 	private String category;
 
@@ -42,6 +47,15 @@ public class ChannelDTO {
 
 	public void setId(@NonNull Long id) {
 		this.id = id;
+	}
+
+	@NonNull
+	public String getName() {
+		return name;
+	}
+
+	public void setName(@NonNull String name) {
+		this.name = name;
 	}
 
 	@NonNull

@@ -9,6 +9,7 @@ import com.example.rss.domain.repositories.IRepository;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
 public class CInteractor {
@@ -16,7 +17,6 @@ public class CInteractor {
 	private final IThreadExecutor threadExecutor;
 	private final IPostExecutionThread postExecutionThread;
 	private final IRepository channelRepository;
-
 
 	@Inject
 	public CInteractor(IRepository channelRepository, IThreadExecutor threadExecutor, IPostExecutionThread postExecutionThread){
@@ -26,7 +26,7 @@ public class CInteractor {
 	}
 
 
-	public Observable<String> add(String s){
+	public Single<Long> add(String s){
 		return getRssFeedContent(s)
 				.map(this::transformToChannel)
 				.flatMap(this::addSource)
@@ -35,15 +35,15 @@ public class CInteractor {
 
 	}
 
-	Observable<String> addSource(Channel channel){
-		return Observable.create(emitter -> {emitter.onNext("76"); emitter.onComplete();});
+	private Single<Long> addSource(Channel channel){
+		return Single.create(emitter -> emitter.onSuccess(Long.valueOf(123123)));
 	}
 
-	Observable<String> getRssFeedContent (String s){
-		return channelRepository.getRssFeedContent(s).toObservable();
+	private Single<String> getRssFeedContent (String s){
+		return channelRepository.getRssFeedContent(s);
 	}
 
-	Channel transformToChannel(String s){
+	private Channel transformToChannel(String s){
 		return new Channel(1);
 	}
 

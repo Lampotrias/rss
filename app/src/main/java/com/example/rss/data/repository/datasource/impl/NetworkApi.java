@@ -1,11 +1,11 @@
 package com.example.rss.data.repository.datasource.impl;
 
-import com.example.rss.data.repository.datasource.IChannelDataStore;
+import com.example.rss.data.repository.datasource.IDataStore;
 
 import io.reactivex.Single;
 import okhttp3.OkHttpClient;
 
-public class NetworkApi implements IChannelDataStore {
+public class NetworkApi implements IDataStore {
 
     final OkHttpClient client;
 
