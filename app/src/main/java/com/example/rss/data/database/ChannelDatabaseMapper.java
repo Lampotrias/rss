@@ -1,6 +1,5 @@
 package com.example.rss.data.database;
 
-import com.example.rss.data.entity.ChannelDTO;
 import com.example.rss.domain.Channel;
 
 public class ChannelDatabaseMapper {

@@ -6,9 +6,6 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.rss.data.entity.ChannelDAO;
-import com.example.rss.data.entity.ChannelDTO;
-
 @Database(entities = {ChannelDTO.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 	private static AppDatabase singleton;

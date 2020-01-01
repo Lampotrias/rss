@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.example.rss.AndroidApplication;
 import com.example.rss.data.repository.AppDataRepository;
+import com.example.rss.data.repository.datasource.impl.CacheApp;
+import com.example.rss.data.repository.datasource.impl.ICacheApp;
 import com.example.rss.domain.executor.IPostExecutionThread;
 import com.example.rss.domain.executor.IThreadExecutor;
 import com.example.rss.domain.executor.JobExecutor;
@@ -14,8 +16,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 
 @Module
 public class AppModule {
@@ -24,11 +24,6 @@ public class AppModule {
     public AppModule(AndroidApplication application) {
         this.application = application;
     }
-
-
-
-
-
 
     @Provides
     @Singleton
@@ -49,5 +44,10 @@ public class AppModule {
     @Provides @Singleton
     IRepository provideAppDataRepository(AppDataRepository userDataRepository) {
         return userDataRepository;
+    }
+
+    @Provides @Singleton
+    ICacheApp provideCacheDataStore (CacheApp cacheApp){
+        return cacheApp;
     }
 }

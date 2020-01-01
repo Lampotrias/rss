@@ -1,4 +1,4 @@
-package com.example.rss.data.entity;
+package com.example.rss.data.database;
 
 
 import android.content.Intent;
