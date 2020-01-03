@@ -5,8 +5,13 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
+
+import com.example.rss.data.database.Converters.ConverterDate;
+import com.example.rss.data.database.dto.ChannelDTO;
 
 @Database(entities = {ChannelDTO.class}, version = 1, exportSchema = false)
+@TypeConverters({ConverterDate.class})
 public abstract class AppDatabase extends RoomDatabase {
 	private static AppDatabase singleton;
 	private static final String DATABASE_NAME = "rss.db";

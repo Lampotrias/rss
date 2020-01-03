@@ -1,11 +1,10 @@
 package com.example.rss.data.repository.datasource.impl;
 
 import com.example.rss.data.database.AppDatabase;
-import com.example.rss.data.database.ChannelDTO;
+import com.example.rss.data.database.dto.ChannelDTO;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.RowEntity;
 import com.example.rss.data.repository.datasource.IDataStore;
-import com.example.rss.domain.Channel;
 
 import java.util.List;
 

@@ -1,39 +1,75 @@
 package com.example.rss.domain;
 
+
+import java.util.Date;
+
 public class Channel {
-
-	private int channelId;
-
-	public Channel() {}
-	public Channel(int channelId) {
-		this.channelId = channelId;
-	}
-
-
-	private String category;
-	private String url;
+	private Long channelId;
+	private String title;
+	private String description;
+	private String categoryId;
+	private Integer imageId;
+	private String link;
+	private Date lastBuild;
 	private Boolean cacheImage;
-	private Boolean downloadFull;
+	private Boolean downloadFullText;
 	private Boolean onlyWifi;
+	private Boolean nextSyncDate;
 
-	public int getChannelId() {
+	public Long getChannelId() {
 		return channelId;
 	}
 
-	public String getCategory() {
-		return category;
+	public void setChannelId(Long channelId) {
+		this.channelId = channelId;
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
+	public String getTitle() {
+		return title;
 	}
 
-	public String getUrl() {
-		return url;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public Integer getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(Integer imageId) {
+		this.imageId = imageId;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+
+	public Date getLastBuild() {
+		return lastBuild;
+	}
+
+	public void setLastBuild(Date lastBuild) {
+		this.lastBuild = lastBuild;
 	}
 
 	public Boolean getCacheImage() {
@@ -44,12 +80,12 @@ public class Channel {
 		this.cacheImage = cacheImage;
 	}
 
-	public Boolean getDownloadFull() {
-		return downloadFull;
+	public Boolean getDownloadFullText() {
+		return downloadFullText;
 	}
 
-	public void setDownloadFull(Boolean downloadFull) {
-		this.downloadFull = downloadFull;
+	public void setDownloadFullText(Boolean downloadFullText) {
+		this.downloadFullText = downloadFullText;
 	}
 
 	public Boolean getOnlyWifi() {
@@ -58,5 +94,13 @@ public class Channel {
 
 	public void setOnlyWifi(Boolean onlyWifi) {
 		this.onlyWifi = onlyWifi;
+	}
+
+	public Boolean getNextSyncDate() {
+		return nextSyncDate;
+	}
+
+	public void setNextSyncDate(Boolean nextSyncDate) {
+		this.nextSyncDate = nextSyncDate;
 	}
 }

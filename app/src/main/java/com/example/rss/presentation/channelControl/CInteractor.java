@@ -44,7 +44,7 @@ public class CInteractor {
 	}
 
 	private Channel transformToChannel(String s){
-		return new Channel(1);
+		return new Channel();
 	}
 
 }
