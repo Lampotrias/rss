@@ -12,14 +12,14 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
-public class CInteractor {
+public class ChannelInteractor {
 
 	private final IThreadExecutor threadExecutor;
 	private final IPostExecutionThread postExecutionThread;
 	private final IRepository channelRepository;
 
 	@Inject
-	public CInteractor(IRepository channelRepository, IThreadExecutor threadExecutor, IPostExecutionThread postExecutionThread){
+	public ChannelInteractor(IRepository channelRepository, IThreadExecutor threadExecutor, IPostExecutionThread postExecutionThread){
 		this.threadExecutor = threadExecutor;
 		this.postExecutionThread = postExecutionThread;
 		this.channelRepository = channelRepository;

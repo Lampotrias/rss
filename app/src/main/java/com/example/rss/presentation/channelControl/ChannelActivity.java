@@ -24,7 +24,7 @@ public class ChannelActivity extends BaseActivity {
 
 	private void initializeActivity(Bundle savedInstanceState) {
 		if(savedInstanceState == null){
-			addFragment(R.id.channel_fragment, ChannelFragment.getInstance());
+			//addFragment(R.id.channel_fragment, ChannelFragment.getInstance());
 		}
 	}
 

@@ -11,6 +11,7 @@ import com.example.rss.domain.executor.IThreadExecutor;
 import com.example.rss.domain.executor.JobExecutor;
 import com.example.rss.domain.repositories.IRepository;
 import com.example.rss.presentation.UIThread;
+import com.example.rss.presentation.global.GlobalActions;
 
 import javax.inject.Singleton;
 
@@ -49,5 +50,10 @@ public class AppModule {
     @Provides @Singleton
     ICacheApp provideCacheDataStore (CacheApp cacheApp){
         return cacheApp;
+    }
+
+    @Provides @Singleton
+    GlobalActions provideGlobalActions(){
+        return application.getGlobalActivity();
     }
 }

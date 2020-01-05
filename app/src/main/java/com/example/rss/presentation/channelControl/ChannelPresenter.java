@@ -3,7 +3,7 @@ package com.example.rss.presentation.channelControl;
 
 import android.content.Context;
 
-import com.example.rss.domain.interactor.DefaultObserver;
+import com.example.rss.presentation.global.GlobalActions;
 
 import javax.inject.Inject;
 
@@ -14,14 +14,17 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 {
 	private static final String LOG_TAG = ChannelPresenter.class.getSimpleName();
 	private ChannelContract.V mView;
-	private final CInteractor cInteractor;
+	private final ChannelInteractor channelInteractor;
 	private final CompositeDisposable compositeDisposable;
 	protected Context context;
 	private String sourceUrl;
 
 	@Inject
-	public ChannelPresenter(CInteractor cInteractor) {
-		this.cInteractor = cInteractor;
+	GlobalActions globalActions;
+
+	@Inject
+	public ChannelPresenter(ChannelInteractor channelInteractor) {
+		this.channelInteractor = channelInteractor;
 		compositeDisposable = new CompositeDisposable();
 	}
 
@@ -37,7 +40,7 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 	}
 
 	public void addNewChannel(String url) {
-		compositeDisposable.add(cInteractor.add(url)
+		compositeDisposable.add(channelInteractor.add(url)
 				.subscribe(
 						aLong -> {
 							mView.displaySuccess("new id: " + aLong);
@@ -49,7 +52,7 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 
 	@Override
 	public void resume() {
-		mView.displaySuccess("Init Ok");
+		globalActions.setTitle("111");
 	}
 
 	@Override

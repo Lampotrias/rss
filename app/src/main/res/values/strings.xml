@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">rss</string>
     <string name="add">add</string>
+    <string name="draw_open">Open</string>
+    <string name="draw_close">Close</string>
+    <string name="add_new_channel">Добавить канал</string>
+    <string name="android_studio">Android Studio</string>
+    <string name="android_studio_android_com">android.studio@android.com</string>
 </resources>
