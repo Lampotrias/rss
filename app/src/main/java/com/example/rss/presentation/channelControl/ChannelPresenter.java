@@ -3,6 +3,7 @@ package com.example.rss.presentation.channelControl;
 
 import android.content.Context;
 
+import com.example.rss.data.xml.XmlParser;
 import com.example.rss.presentation.global.GlobalActions;
 
 import javax.inject.Inject;
@@ -52,7 +53,7 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 
 	@Override
 	public void resume() {
-		globalActions.setTitle("111");
+		globalActions.setTitle("Add channel");
 	}
 
 	@Override

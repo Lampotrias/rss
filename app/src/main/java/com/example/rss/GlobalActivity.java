@@ -32,10 +32,15 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 	private CoordinatorLayout container;
 
 	private DrawerLayout drawer;
-	private View containerViewId;
 
     @Inject
     public GlobalPresenter mPresenter;
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mPresenter.resume();
+	}
 
 	@Override
 	protected void onPostCreate(@Nullable Bundle savedInstanceState) {
@@ -47,8 +52,6 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		containerViewId = findViewById(R.id.main_frame);
 
 		AndroidApplication app = (AndroidApplication) getApplication();
 		app.setGlobalActivity(this);
@@ -127,15 +130,15 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 
 	@Override
 	public void setTitle(String title) {
-
+		actionBar.setTitle(title);
 	}
 
 	@Override
 	public void replaceFragment(Fragment fragment) {
-		final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-		fragmentTransaction.replace(R.id.main_frame, fragment);
-		fragmentTransaction.commit();
 
+		final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+		fragmentTransaction.add(R.id.main_frame, fragment);
+		fragmentTransaction.commit();
 	}
 
 }

@@ -37,7 +37,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
 
     @Override
     public void resume() {
-        globalActions.setTitle("test111");
+        globalActions.setTitle("Main fragment");
     }
 
     @Override

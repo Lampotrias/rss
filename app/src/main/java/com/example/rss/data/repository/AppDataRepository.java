@@ -6,7 +6,7 @@ import com.example.rss.data.entity.mapper.ChannelEntityDataMapper;
 import com.example.rss.data.repository.datasource.ChannelDataStoreFactory;
 import com.example.rss.data.repository.datasource.IDataStore;
 import com.example.rss.domain.Channel;
-import com.example.rss.domain.Row;
+import com.example.rss.domain.Item;
 import com.example.rss.domain.repositories.IRepository;
 
 import java.util.List;
@@ -49,7 +49,7 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
-	public Single<List<Row>> getRowsByChannelId(Integer id) {
+	public Single<List<Item>> getRowsByChannelId(Integer id) {
 		return null;
 	}
 }
