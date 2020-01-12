@@ -2,7 +2,6 @@ package com.example.rss;
 
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
@@ -80,7 +79,7 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 					.setAction("Action", null).show();
 		});
 
-		Button btnAdd = findViewById(R.id.btnAddChannel);
+		Button btnAdd = findViewById(R.id.btnAddChannelDrawer);
 		btnAdd.setOnClickListener(v -> mPresenter.OnClickChannelAdd(v));
 
 		replaceFragment(new MainFragment());

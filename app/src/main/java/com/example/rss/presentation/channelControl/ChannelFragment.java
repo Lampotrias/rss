@@ -1,10 +1,10 @@
 package com.example.rss.presentation.channelControl;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,6 +16,9 @@ import com.example.rss.R;
 import com.example.rss.presentation.BaseFragment;
 import com.example.rss.presentation.di.module.FragmentModule;
 import com.example.rss.presentation.di.scope.ChannelScope;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import javax.inject.Inject;
 
@@ -30,11 +33,14 @@ public class ChannelFragment extends BaseFragment implements ChannelContract.V {
 	@Inject
 	public ChannelPresenter mPresenter;
 
-	@BindView(R.id.btnAdd)
-	Button btnAdd;
+	@BindView(R.id.btnAddChannel)
+	MaterialButton btnAdd;
 
-	@BindView(R.id.url)
-	EditText url;
+	@BindView(R.id.url_text_input)
+	TextInputLayout urlTextInput;
+
+	@BindView(R.id.url_text_edit)
+	TextInputEditText urlEditText;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,15 +71,29 @@ public class ChannelFragment extends BaseFragment implements ChannelContract.V {
 	@Nullable
 	@Override
 	public android.view.View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		android.view.View rootView = inflater.inflate(R.layout.channel_fragment, container, false);
+		android.view.View rootView = inflater.inflate(R.layout.channel_edit_fragment, container, false);
 		ButterKnife.bind(this, rootView);
 		btnAdd.setOnClickListener((view)-> onSaveButtonClicked());
+		urlEditText.setOnKeyListener((v, keyCode, event) -> {
+			String url = String.valueOf(urlEditText.getText());
+			if (url.startsWith("http")){
+				urlTextInput.setError(null);
+				return true;
+			}
+			return false;
+		});
 		return rootView;
 	}
 
-	@Override
-	public void onSaveButtonClicked() {
-		mPresenter.addNewChannel(url.getText().toString());
+
+	private void onSaveButtonClicked() {
+		String url = String.valueOf(urlEditText.getText());
+		if(url.length()> 0 && url.startsWith("http")){
+			urlTextInput.setError(null);
+			mPresenter.onSaveButtonClicked(url);
+		}else{
+			urlTextInput.setError("Введите url");
+		}
 	}
 
 	public static ChannelFragment getInstance(){

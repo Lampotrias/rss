@@ -31,6 +31,16 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 
 
 	@Override
+	public void onSaveButtonClicked(String url) {
+		addNewChannel(url);
+	}
+
+	@Override
+	public void onCancelButtonClicked() {
+
+	}
+
+	@Override
 	public void setView(ChannelContract.V view) {
 		mView = view;
 	}

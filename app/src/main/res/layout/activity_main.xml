@@ -19,8 +19,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true">
-        <!--app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer"-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,7 +32,7 @@
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnAddChannel"
+                android:id="@+id/btnAddChannelDrawer"
                 android:text="@string/add_new_channel"/>
 
             <ExpandableListView

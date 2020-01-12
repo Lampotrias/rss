@@ -5,5 +5,5 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="main_screen"/>
+        android:text="list_items"/>
 </RelativeLayout>
