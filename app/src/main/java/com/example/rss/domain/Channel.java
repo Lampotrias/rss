@@ -1,16 +1,13 @@
 package com.example.rss.domain;
 
-
-import java.util.Date;
-
 public class Channel {
 	private Long channelId;
 	private String title;
 	private String description;
-	private String categoryId;
-	private Integer imageId;
+	private String category;
+	private File file;
 	private String link;
-	private Date lastBuild;
+	private String lastBuild;
 	private Boolean cacheImage;
 	private Boolean downloadFullText;
 	private Boolean onlyWifi;
@@ -32,6 +29,14 @@ public class Channel {
 		this.title = title;
 	}
 
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -40,20 +45,12 @@ public class Channel {
 		this.description = description;
 	}
 
-	public String getCategoryId() {
-		return categoryId;
+	public String getCategory() {
+		return category;
 	}
 
-	public void setCategoryId(String categoryId) {
-		this.categoryId = categoryId;
-	}
-
-	public Integer getImageId() {
-		return imageId;
-	}
-
-	public void setImageId(Integer imageId) {
-		this.imageId = imageId;
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 	public String getLink() {
@@ -64,11 +61,11 @@ public class Channel {
 		this.link = link;
 	}
 
-	public Date getLastBuild() {
+	public String getLastBuild() {
 		return lastBuild;
 	}
 
-	public void setLastBuild(Date lastBuild) {
+	public void setLastBuild(String lastBuild) {
 		this.lastBuild = lastBuild;
 	}
 

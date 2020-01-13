@@ -13,7 +13,6 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
@@ -30,45 +29,30 @@ public class ChannelInteractor {
 		this.channelRepository = channelRepository;
 	}
 
-//	public Single<Channel> AddChannelByUrl(String url){
-//		return getRssFeedContent(url)
-//				.flatMap()
-//
-//	}
-
-	//private Single<String>
 
 
-
-	public Single<Long> add(String s){
-		return getRssFeedContent(s)
-				.flatMap(this::get)
-				.subscribeOn(Schedulers.from(threadExecutor))
-				.observeOn(postExecutionThread.getScheduler());
+	public Single<Long> AddChannelByUrl(String url){
+		return getRssFeedContent(url)
+				.flatMap(this::parseStringToChannel)
+				.flatMap(channelRepository::addChannel)
+				.observeOn(Schedulers.from(threadExecutor))
+				.subscribeOn(postExecutionThread.getScheduler());
 	}
 
-
-	private Single<Long> get (String stream){
-		Log.e("myApp", stream);
-		XmlParser parser = new XmlParser(stream);
-		try {
-			parser.parse();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return Single.create(emitter -> emitter.onSuccess(Long.valueOf(123123)));
+	private Single<String> getRssFeedContent(String url){
+		return channelRepository.getRssFeedContent(url);
 	}
 
-	private Single<Long> addSource(Channel channel){
-		return Single.create(emitter -> emitter.onSuccess(Long.valueOf(123123)));
+	private Single<Channel>parseStringToChannel(String sourceString){
+		return Single.create(emitter -> {
+			//TODO change to java steams
+			XmlParser parser = new XmlParser(sourceString);
+			try {
+				Channel channel = parser.parseChannel();
+				emitter.onSuccess(channel);
+			} catch (IOException e) {
+				emitter.onError(e);
+			}
+		});
 	}
-
-	private Single<String> getRssFeedContent (String s){
-		return channelRepository.getRssFeedContent(s);
-	}
-
-	private Channel transformToChannel(String s){
-		return new Channel();
-	}
-
 }

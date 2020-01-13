@@ -13,7 +13,7 @@ public class ChannelDatabaseMapper {
 			channelDTO.setChannelId(channel.getChannelId());
 			channelDTO.setTitle(channel.getTitle());
 			channelDTO.setDescription(channel.getDescription());
-			channelDTO.setCategoryId(channel.getCategoryId());
+			channelDTO.setCategoryId(channel.getCategory());
 			channelDTO.setCacheImage(channel.getCacheImage());
 			channelDTO.setDownloadFullText(channel.getDownloadFullText());
 			channelDTO.setLastBuild(channel.getLastBuild());
@@ -28,7 +28,7 @@ public class ChannelDatabaseMapper {
 			channel.setChannelId(dto.getChannelId());
 			channel.setTitle(dto.getTitle());
 			channel.setDescription(dto.getDescription());
-			channel.setCategoryId(dto.getCategoryId());
+			channel.setCategory(dto.getCategoryId());
 			channel.setCacheImage(dto.getCacheImage());
 			channel.setDownloadFullText(dto.getDownloadFullText());
 			channel.setLastBuild(dto.getLastBuild());

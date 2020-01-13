@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class FileEntity {
 	@SerializedName("id")
-	private int fileId;
+	private Long fileId;
 
 	@SerializedName("title")
 	private String title;
@@ -21,11 +21,11 @@ public class FileEntity {
 	@SerializedName("height")
 	private Integer height;*/
 
-	public int getFileId() {
+	public Long getFileId() {
 		return fileId;
 	}
 
-	public void setFileId(int fileId) {
+	public void setFileId(Long fileId) {
 		this.fileId = fileId;
 	}
 
