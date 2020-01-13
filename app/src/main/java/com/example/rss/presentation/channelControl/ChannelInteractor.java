@@ -30,11 +30,11 @@ public class ChannelInteractor {
 		this.channelRepository = channelRepository;
 	}
 
-	public Single<Channel> AddChannelByUrl(String url){
-		return getRssFeedContent(url)
-				.flatMap()
-
-	}
+//	public Single<Channel> AddChannelByUrl(String url){
+//		return getRssFeedContent(url)
+//				.flatMap()
+//
+//	}
 
 	//private Single<String>
 

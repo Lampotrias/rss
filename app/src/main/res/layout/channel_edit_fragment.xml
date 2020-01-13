@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="132dp"
+            android:layout_marginBottom="50dp"
             android:text="@string/edit_channel"
             android:textAllCaps="true"
             android:textSize="16sp" />
@@ -28,9 +28,8 @@
             android:id="@+id/url_text_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            app:errorEnabled="true"
-            android:hint="@string/url_channel_source">
+            android:hint="@string/url_channel_source"
+            app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/url_text_edit"
@@ -39,6 +38,21 @@
                 android:inputType="text"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2"/>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -49,7 +63,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:text="@string/btn_channel_save" />
 
             <com.google.android.material.button.MaterialButton
@@ -58,9 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
-                android:layout_marginRight="12dp"
                 android:layout_toStartOf="@id/btnAddChannel"
-                android:layout_toLeftOf="@id/btnAddChannel"
                 android:text="@string/btn_channel_cancel" />
 
         </RelativeLayout>
