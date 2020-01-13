@@ -1,4 +1,4 @@
-package com.example.rss.data.database.Converters;
+package com.example.rss.data.database.сonverters;
 
 import androidx.room.TypeConverter;
 

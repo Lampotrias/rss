@@ -7,7 +7,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.example.rss.data.database.Converters.ConverterDate;
+import com.example.rss.data.database.сonverters.ConverterDate;
 import com.example.rss.data.database.dto.ChannelDTO;
 
 @Database(entities = {ChannelDTO.class}, version = 1, exportSchema = false)

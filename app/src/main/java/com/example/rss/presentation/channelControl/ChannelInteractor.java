@@ -9,6 +9,8 @@ import com.example.rss.domain.executor.IPostExecutionThread;
 import com.example.rss.domain.executor.IThreadExecutor;
 import com.example.rss.domain.repositories.IRepository;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -28,21 +30,32 @@ public class ChannelInteractor {
 		this.channelRepository = channelRepository;
 	}
 
-
-	public Single<Long> add(String s){
-		return getRssFeedContent(s)
-				//.map(this::transformToChannel)
-				//.flatMap(this::addSource)
-				.flatMap(this::parse)
-				.subscribeOn(Schedulers.from(threadExecutor))
-				.observeOn(postExecutionThread.getScheduler());
+	public Single<Channel> AddChannelByUrl(String url){
+		return getRssFeedContent(url)
+				.flatMap()
 
 	}
 
-	private Single<Long> parse (String stream){
+	//private Single<String>
+
+
+
+	public Single<Long> add(String s){
+		return getRssFeedContent(s)
+				.flatMap(this::get)
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
+	}
+
+
+	private Single<Long> get (String stream){
 		Log.e("myApp", stream);
 		XmlParser parser = new XmlParser(stream);
-
+		try {
+			parser.parse();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return Single.create(emitter -> emitter.onSuccess(Long.valueOf(123123)));
 	}
 
@@ -51,7 +64,6 @@ public class ChannelInteractor {
 	}
 
 	private Single<String> getRssFeedContent (String s){
-
 		return channelRepository.getRssFeedContent(s);
 	}
 

@@ -3,73 +3,75 @@ package com.example.rss.data.entity;
 import com.google.gson.annotations.SerializedName;
 
 public class ChannelEntity {
+
 	@SerializedName("id")
-	private int channelId;
+	private Long channelId;
 
-	@SerializedName("category")
-	private String category;
+	@SerializedName("title")
+	private String title;
 
-	@SerializedName("url")
-	private String url;
+	@SerializedName("description")
+	private String description;
 
-	@SerializedName("cacheImage")
-	private Boolean cacheImage;
+	@SerializedName("image")
+	private FileEntity image;
 
-	@SerializedName("downloadFull")
-	private Boolean downloadFull;
+	@SerializedName("link")
+	private String link;
 
-	@SerializedName("onlyWifi")
-	private Boolean onlyWifi;
+	@SerializedName("last_build")
+	private String lastBuild;
+
 
 	public ChannelEntity() {
 		//empty
 	}
 
-	public int getChannelId() {
+	public Long getChannelId() {
 		return channelId;
 	}
 
-	public void setChannelId(int channelId) {
+	public void setChannelId(Long channelId) {
 		this.channelId = channelId;
 	}
 
-	public String getCategory() {
-		return category;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public String getUrl() {
-		return url;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public Boolean getCacheImage() {
-		return cacheImage;
+	public FileEntity getImage() {
+		return image;
 	}
 
-	public void setCacheImage(Boolean cacheImage) {
-		this.cacheImage = cacheImage;
+	public void setImage(FileEntity image) {
+		this.image = image;
 	}
 
-	public Boolean getDownloadFull() {
-		return downloadFull;
+	public String getLink() {
+		return link;
 	}
 
-	public void setDownloadFull(Boolean downloadFull) {
-		this.downloadFull = downloadFull;
+	public void setLink(String link) {
+		this.link = link;
 	}
 
-	public Boolean getOnlyWifi() {
-		return onlyWifi;
+	public String getLastBuild() {
+		return lastBuild;
 	}
 
-	public void setOnlyWifi(Boolean onlyWifi) {
-		this.onlyWifi = onlyWifi;
+	public void setLastBuild(String lastBuild) {
+		this.lastBuild = lastBuild;
 	}
 }

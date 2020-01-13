@@ -24,6 +24,7 @@ public class ChannelDTO {
 	@ColumnInfo(name = "description")
 	private String description;
 
+	//Custom category
 	@NonNull
 	@ColumnInfo(name = "category_id")
 	private String categoryId;

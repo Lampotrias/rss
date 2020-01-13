@@ -21,6 +21,10 @@ public class FileDTO {
     private String path;
 
     @NonNull
+    @ColumnInfo(name = "description")
+    private String description;
+
+    @NonNull
     @ColumnInfo(name = "size")
     private Long size;
 
@@ -35,6 +39,15 @@ public class FileDTO {
 
     public void setFileId(@NonNull Long fileId) {
         this.fileId = fileId;
+    }
+
+    @NonNull
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(@NonNull String description) {
+        this.description = description;
     }
 
     @NonNull
