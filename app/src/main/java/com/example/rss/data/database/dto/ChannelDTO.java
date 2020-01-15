@@ -39,7 +39,7 @@ public class ChannelDTO {
 
 	@NonNull
 	@ColumnInfo(name = "last_build")
-	private Date lastBuild;
+	private String lastBuild;
 
 	//*****************
 	//System fields ***
@@ -115,11 +115,11 @@ public class ChannelDTO {
 	}
 
 	@NonNull
-	public Date getLastBuild() {
+	public String getLastBuild() {
 		return lastBuild;
 	}
 
-	public void setLastBuild(@NonNull Date lastBuild) {
+	public void setLastBuild(@NonNull String lastBuild) {
 		this.lastBuild = lastBuild;
 	}
 

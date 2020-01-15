@@ -11,7 +11,7 @@ public class Channel {
 	private Boolean cacheImage;
 	private Boolean downloadFullText;
 	private Boolean onlyWifi;
-	private Boolean nextSyncDate;
+	private String nextSyncDate;
 
 	public Long getChannelId() {
 		return channelId;
@@ -93,11 +93,11 @@ public class Channel {
 		this.onlyWifi = onlyWifi;
 	}
 
-	public Boolean getNextSyncDate() {
+	public String getNextSyncDate() {
 		return nextSyncDate;
 	}
 
-	public void setNextSyncDate(Boolean nextSyncDate) {
+	public void setNextSyncDate(String nextSyncDate) {
 		this.nextSyncDate = nextSyncDate;
 	}
 }

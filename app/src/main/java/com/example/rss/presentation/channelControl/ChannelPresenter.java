@@ -31,8 +31,14 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 
 
 	@Override
-	public void onSaveButtonClicked(String url) {
-		addNewChannel(url);
+	public void onSaveButtonClicked(String url, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi){
+		compositeDisposable.add(channelInteractor.add(url, bCacheImage, bDownloadFull, bOnlyWifi)
+				.subscribe(
+						aLong -> {
+							mView.displaySuccess("new id: " + aLong);
+						}, throwable -> {
+							mView.displayError(throwable);
+						}));
 	}
 
 	@Override
@@ -51,13 +57,7 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 	}
 
 	public void addNewChannel(String url) {
-		compositeDisposable.add(channelInteractor.add(url)
-				.subscribe(
-						aLong -> {
-							mView.displaySuccess("new id: " + aLong);
-						}, throwable -> {
-							mView.displayError(throwable);
-						}));
+
 
 	}
 

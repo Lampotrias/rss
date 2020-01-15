@@ -29,26 +29,39 @@ public class ChannelInteractor {
 		this.channelRepository = channelRepository;
 	}
 
-
-
-	public Single<Long> AddChannelByUrl(String url){
-		return getRssFeedContent(url)
-				.flatMap(this::parseStringToChannel)
+	public Single<Long> add(String url, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi){
+		return
+				channelRepository.getRssFeedContent(url)
+				.flatMap(this::parseChannel)
+				.map(channel -> prepareChannelObj(channel, bCacheImage, bDownloadFull, bOnlyWifi))
 				.flatMap(channelRepository::addChannel)
-				.observeOn(Schedulers.from(threadExecutor))
-				.subscribeOn(postExecutionThread.getScheduler());
+						.doOnError(throwable -> Log.e("myApp", throwable.getMessage()))
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
 	}
 
-	private Single<String> getRssFeedContent(String url){
-		return channelRepository.getRssFeedContent(url);
+	private Channel prepareChannelObj(Channel obj, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi){
+		obj.setCacheImage(bCacheImage);
+		obj.setDownloadFullText(bDownloadFull);
+		obj.setOnlyWifi(bOnlyWifi);
+		obj.setTitle("title");
+		obj.setCategoryId("setCategoryId");
+		obj.setDescription("setDescription");
+		obj.setImageId(1);
+		obj.setLink("setLink");
+		obj.setLastBuild("setLastBuild");
+		obj.setNextSyncDate("setNextSyncDate");
+		return obj;
 	}
 
-	private Single<Channel>parseStringToChannel(String sourceString){
+
+	private Single<Channel> parseChannel(String stream){
 		return Single.create(emitter -> {
-			//TODO change to java steams
-			XmlParser parser = new XmlParser(sourceString);
+			Channel channel;
 			try {
-				Channel channel = parser.parseChannel();
+				XmlParser parser = new XmlParser(stream);
+				parser.parse();
+				channel = new Channel();
 				emitter.onSuccess(channel);
 			} catch (IOException e) {
 				emitter.onError(e);

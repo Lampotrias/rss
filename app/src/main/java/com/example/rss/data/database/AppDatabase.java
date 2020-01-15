@@ -10,7 +10,7 @@ import androidx.room.TypeConverters;
 import com.example.rss.data.database.сonverters.ConverterDate;
 import com.example.rss.data.database.dto.ChannelDTO;
 
-@Database(entities = {ChannelDTO.class}, version = 1, exportSchema = false)
+@Database(entities = {ChannelDTO.class}, version = 2, exportSchema = false)
 @TypeConverters({ConverterDate.class})
 public abstract class AppDatabase extends RoomDatabase {
 	private static AppDatabase singleton;

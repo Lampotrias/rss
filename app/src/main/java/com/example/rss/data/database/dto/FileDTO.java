@@ -12,7 +12,6 @@ public class FileDTO {
     @ColumnInfo(name = "id")
     private Long fileId;
 
-    @NonNull
     @ColumnInfo(name = "type")
     private String type;
 
@@ -25,12 +24,8 @@ public class FileDTO {
     private String description;
 
     @NonNull
-    @ColumnInfo(name = "size")
-    private Long size;
-
-    @NonNull
     @ColumnInfo(name = "external")
-    private Long external;
+    private Boolean external;
 
     @NonNull
     public Long getFileId() {
@@ -69,20 +64,11 @@ public class FileDTO {
     }
 
     @NonNull
-    public Long getSize() {
-        return size;
-    }
-
-    public void setSize(@NonNull Long size) {
-        this.size = size;
-    }
-
-    @NonNull
-    public Long getExternal() {
+    public Boolean getExternal() {
         return external;
     }
 
-    public void setExternal(@NonNull Long external) {
+    public void setExternal(@NonNull Boolean external) {
         this.external = external;
     }
 }

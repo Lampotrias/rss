@@ -9,7 +9,7 @@ public interface ChannelContract {
 	}
 
 	interface P<T> extends Presenter {
-		void onSaveButtonClicked(String url);
+		void onSaveButtonClicked(String url, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi);
 		void onCancelButtonClicked();
 		void setView(T view);
 		void ShowExitsChannel(int id);

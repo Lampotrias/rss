@@ -95,7 +95,7 @@ public class XmlParser {
                                 Element imageElement = (Element) imageTag.item(j);
                                 switch (imageElement.getTagName()) {
                                     case "url":
-                                        fileEntity.setUrl(imageElement.getFirstChild().getNodeValue());
+                                        fileEntity.setPath(imageElement.getFirstChild().getNodeValue());
                                         break;
                                     case "title":
                                         fileEntity.setTitle(imageElement.getFirstChild().getNodeValue());
