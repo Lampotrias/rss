@@ -10,7 +10,7 @@ public class Channel {
 	private String categoryId;
 	private Integer imageId;
 	private String link;
-	private Date lastBuild;
+	private String lastBuild;
 	private Boolean cacheImage;
 	private Boolean downloadFullText;
 	private Boolean onlyWifi;
@@ -64,11 +64,11 @@ public class Channel {
 		this.link = link;
 	}
 
-	public Date getLastBuild() {
+	public String getLastBuild() {
 		return lastBuild;
 	}
 
-	public void setLastBuild(Date lastBuild) {
+	public void setLastBuild(String lastBuild) {
 		this.lastBuild = lastBuild;
 	}
 
