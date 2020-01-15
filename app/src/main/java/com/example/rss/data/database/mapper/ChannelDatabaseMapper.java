@@ -37,7 +37,7 @@ public class ChannelDatabaseMapper {
 			channelEntity.setDownloadFullText(dto.getDownloadFullText());
 			channelEntity.setLastBuild(dto.getLastBuild());
 		}
-		return channel;
+		return channelEntity;
 	}
 
 	public static CategoryDTO transform (CategoryEntity categoryEntity){

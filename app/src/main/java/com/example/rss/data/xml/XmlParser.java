@@ -1,8 +1,7 @@
 package com.example.rss.data.xml;
 
 import com.example.rss.data.entity.ChannelEntity;
-import com.example.rss.domain.Channel;
-import com.example.rss.domain.File;
+import com.example.rss.data.entity.FileEntity;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -14,16 +13,21 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import retrofit2.http.Url;
+
 public class XmlParser {
 
     private DocumentBuilder documentBuilder;
     private Document document;
-    Channel channelEntity;
+    ChannelEntity channelEntity;
 
 
     public XmlParser(String xmlRaw) {
@@ -44,52 +48,51 @@ public class XmlParser {
         }
     }
 
-    public Channel parseChannel() throws IOException {
+    public void parse() throws IOException {
             NodeList rssTag = document.getElementsByTagName("rss");
             NodeList channelTag = document.getElementsByTagName("channel");
             String version = getVersion(rssTag);
             channelEntity = getMetaChannel(channelTag);
-            return channelEntity;
     }
 
-    public Channel getChannel(){
+    public ChannelEntity getChannel(){
         return channelEntity;
     }
 
 
-    private Channel getMetaChannel(NodeList channelTag) throws IOException {
+    private ChannelEntity getMetaChannel(NodeList channelTag) throws IOException {
         if (channelTag.getLength() > 1)
             throw new IOException("Several '<channel>' tag");
 
         Node channel = channelTag.item(0);
         NodeList meta = channel.getChildNodes();
 
-        Channel channelObj = new Channel();
+        ChannelEntity channelEntity = new ChannelEntity();
 
         for (int i = 0; i < meta.getLength(); i++){
             if (meta.item(i).getNodeType() == Node.ELEMENT_NODE){
                 Element element = (Element) meta.item(i);
 
-                if (element.getTagName().equals("item")) {
+                if (element.getTagName() == "item") {
                     continue;
                 }
 
                 switch (element.getTagName()) {
                     case "title":
-                        channelObj.setTitle(element.getFirstChild().getNodeValue());
+                        channelEntity.setTitle(element.getFirstChild().getNodeValue());
                         break;
                     case "description":
-                        channelObj.setDescription(element.getFirstChild().getNodeValue());
+                        channelEntity.setDescription(element.getFirstChild().getNodeValue());
                         break;
                     case "link":
-                        channelObj.setLink(element.getFirstChild().getNodeValue());
+                        channelEntity.setLink(element.getFirstChild().getNodeValue());
                         break;
                     case "lastBuildDate":
-                        channelObj.setLastBuild(element.getFirstChild().getNodeValue());
+                        channelEntity.setLastBuild(element.getFirstChild().getNodeValue());
                         break;
                     case "image":
                         NodeList imageTag = element.getChildNodes();
-                        File fileEntity = new File();
+                        FileEntity fileEntity = new FileEntity();
                         for (int j = 0; j < imageTag.getLength(); j++) {
                             if (imageTag.item(j).getNodeType() == Node.ELEMENT_NODE) {
                                 Element imageElement = (Element) imageTag.item(j);
@@ -106,13 +109,13 @@ public class XmlParser {
                                 }
                             }
                         }
-                        channelObj.setFile(fileEntity);
+                        channelEntity.setImage(fileEntity);
                         break;
                 }
             }
         }
 
-        return channelObj;
+        return channelEntity;
 
     }
 
