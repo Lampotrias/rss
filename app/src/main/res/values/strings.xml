@@ -7,7 +7,10 @@
     <string name="android_studio">Android Studio</string>
     <string name="android_studio_android_com">android.studio@android.com</string>
     <string name="edit_channel">Edit channel</string>
-    <string name="url_channel_source">Введите url источника Rss</string>
+    <string name="url_channel_source">Введите path источника Rss</string>
     <string name="btn_channel_save">Создать</string>
     <string name="btn_channel_cancel">Вернуться</string>
+    <string name="ck_download_full_text">Загрузать полный текст статьи</string>
+    <string name="ck_only_wifi">Загружать статьи только по WiFi</string>
+    <string name="ck_cache_image">Кеширование изображения</string>
 </resources>

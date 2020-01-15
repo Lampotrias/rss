@@ -10,11 +10,11 @@ public class Channel {
 	private String categoryId;
 	private Integer imageId;
 	private String link;
-	private Date lastBuild;
+	private String lastBuild;
 	private Boolean cacheImage;
 	private Boolean downloadFullText;
 	private Boolean onlyWifi;
-	private Boolean nextSyncDate;
+	private String nextSyncDate;
 
 	public Long getChannelId() {
 		return channelId;
@@ -64,11 +64,11 @@ public class Channel {
 		this.link = link;
 	}
 
-	public Date getLastBuild() {
+	public String getLastBuild() {
 		return lastBuild;
 	}
 
-	public void setLastBuild(Date lastBuild) {
+	public void setLastBuild(String lastBuild) {
 		this.lastBuild = lastBuild;
 	}
 
@@ -96,11 +96,11 @@ public class Channel {
 		this.onlyWifi = onlyWifi;
 	}
 
-	public Boolean getNextSyncDate() {
+	public String getNextSyncDate() {
 		return nextSyncDate;
 	}
 
-	public void setNextSyncDate(Boolean nextSyncDate) {
+	public void setNextSyncDate(String nextSyncDate) {
 		this.nextSyncDate = nextSyncDate;
 	}
 }

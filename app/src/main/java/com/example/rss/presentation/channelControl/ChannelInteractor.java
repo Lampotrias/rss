@@ -13,7 +13,6 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
@@ -30,45 +29,43 @@ public class ChannelInteractor {
 		this.channelRepository = channelRepository;
 	}
 
-//	public Single<Channel> AddChannelByUrl(String url){
-//		return getRssFeedContent(url)
-//				.flatMap()
-//
-//	}
-
-	//private Single<String>
-
-
-
-	public Single<Long> add(String s){
-		return getRssFeedContent(s)
-				.flatMap(this::get)
+	public Single<Long> add(String url, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi){
+		return
+				channelRepository.getRssFeedContent(url)
+				.flatMap(this::parseChannel)
+				.map(channel -> prepareChannelObj(channel, bCacheImage, bDownloadFull, bOnlyWifi))
+				.flatMap(channelRepository::addChannel)
+						.doOnError(throwable -> Log.e("myApp", throwable.getMessage()))
 				.subscribeOn(Schedulers.from(threadExecutor))
 				.observeOn(postExecutionThread.getScheduler());
 	}
 
-
-	private Single<Long> get (String stream){
-		Log.e("myApp", stream);
-		XmlParser parser = new XmlParser(stream);
-		try {
-			parser.parse();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return Single.create(emitter -> emitter.onSuccess(Long.valueOf(123123)));
+	private Channel prepareChannelObj(Channel obj, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi){
+		obj.setCacheImage(bCacheImage);
+		obj.setDownloadFullText(bDownloadFull);
+		obj.setOnlyWifi(bOnlyWifi);
+		obj.setTitle("title");
+		obj.setCategoryId("setCategoryId");
+		obj.setDescription("setDescription");
+		obj.setImageId(1);
+		obj.setLink("setLink");
+		obj.setLastBuild("setLastBuild");
+		obj.setNextSyncDate("setNextSyncDate");
+		return obj;
 	}
 
-	private Single<Long> addSource(Channel channel){
-		return Single.create(emitter -> emitter.onSuccess(Long.valueOf(123123)));
-	}
 
-	private Single<String> getRssFeedContent (String s){
-		return channelRepository.getRssFeedContent(s);
+	private Single<Channel> parseChannel(String stream){
+		return Single.create(emitter -> {
+			Channel channel;
+			try {
+				XmlParser parser = new XmlParser(stream);
+				parser.parse();
+				channel = new Channel();
+				emitter.onSuccess(channel);
+			} catch (IOException e) {
+				emitter.onError(e);
+			}
+		});
 	}
-
-	private Channel transformToChannel(String s){
-		return new Channel();
-	}
-
 }

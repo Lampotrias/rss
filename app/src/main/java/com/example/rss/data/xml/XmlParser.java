@@ -13,15 +13,10 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
-import retrofit2.http.Url;
 
 public class XmlParser {
 
@@ -98,7 +93,7 @@ public class XmlParser {
                                 Element imageElement = (Element) imageTag.item(j);
                                 switch (imageElement.getTagName()) {
                                     case "url":
-                                        fileEntity.setUrl(imageElement.getFirstChild().getNodeValue());
+                                        fileEntity.setPath(imageElement.getFirstChild().getNodeValue());
                                         break;
                                     case "title":
                                         fileEntity.setTitle(imageElement.getFirstChild().getNodeValue());

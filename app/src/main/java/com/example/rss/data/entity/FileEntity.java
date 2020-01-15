@@ -9,17 +9,17 @@ public class FileEntity {
 	@SerializedName("title")
 	private String title;
 
-	@SerializedName("url")
-	private String url;
+	@SerializedName("path")
+	private String path;
 
 	@SerializedName("description")
 	private String description;
 
-	/*@SerializedName("width")
-	private Integer width;
+	@SerializedName("type")
+	private String type;
 
-	@SerializedName("height")
-	private Integer height;*/
+	@SerializedName("external")
+	private Boolean external;
 
 	public int getFileId() {
 		return fileId;
@@ -37,12 +37,12 @@ public class FileEntity {
 		this.title = title;
 	}
 
-	public String getUrl() {
-		return url;
+	public String getPath() {
+		return path;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 	public String getDescription() {
@@ -53,21 +53,21 @@ public class FileEntity {
 		this.description = description;
 	}
 
-	/*public Integer getWidth() {
-		return width;
+	public Boolean getExternal() {
+		return external;
 	}
 
-	public void setWidth(Integer width) {
-		this.width = width;
+	public void setExternal(Boolean external) {
+		this.external = external;
 	}
 
-	public Integer getHeight() {
-		return height;
+	public String getType() {
+		return type;
 	}
 
-	public void setHeight(Integer height) {
-		this.height = height;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	*/
+
 }
