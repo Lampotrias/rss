@@ -3,7 +3,6 @@ package com.example.rss.presentation.channelControl;
 
 import android.content.Context;
 
-import com.example.rss.data.xml.XmlParser;
 import com.example.rss.presentation.global.GlobalActions;
 
 import javax.inject.Inject;
@@ -32,7 +31,8 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 
 	@Override
 	public void onSaveButtonClicked(String url, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi){
-		compositeDisposable.add(channelInteractor.add(url, bCacheImage, bDownloadFull, bOnlyWifi)
+		//ToDo addChannel category logic
+		compositeDisposable.add(channelInteractor.addChannel(url, 1L, bCacheImage, bDownloadFull, bOnlyWifi)
 				.subscribe(
 						aLong -> {
 							mView.displaySuccess("new id: " + aLong);
@@ -51,13 +51,7 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 		mView = view;
 	}
 
-	@Override
-	public void ShowExitsChannel(int id) {
-
-	}
-
 	public void addNewChannel(String url) {
-
 
 	}
 

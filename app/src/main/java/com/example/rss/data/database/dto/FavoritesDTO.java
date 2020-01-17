@@ -5,7 +5,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "favorites")
+@Entity(tableName = "favorite")
 public class FavoritesDTO {
     @PrimaryKey(autoGenerate = true)
     @NonNull

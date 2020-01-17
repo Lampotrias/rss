@@ -1,14 +1,12 @@
 package com.example.rss.domain;
 
 
-import java.util.Date;
-
 public class Channel {
 	private Long channelId;
 	private String title;
 	private String description;
-	private String categoryId;
-	private Integer imageId;
+	private Long categoryId;
+	private Long fileId;
 	private String link;
 	private String lastBuild;
 	private Boolean cacheImage;
@@ -40,20 +38,20 @@ public class Channel {
 		this.description = description;
 	}
 
-	public String getCategoryId() {
+	public Long getCategoryId() {
 		return categoryId;
 	}
 
-	public void setCategoryId(String categoryId) {
+	public void setCategoryId(Long categoryId) {
 		this.categoryId = categoryId;
 	}
 
-	public Integer getImageId() {
-		return imageId;
+	public Long getFileId() {
+		return fileId;
 	}
 
-	public void setImageId(Integer imageId) {
-		this.imageId = imageId;
+	public void setFileId(Long fileId) {
+		this.fileId = fileId;
 	}
 
 	public String getLink() {

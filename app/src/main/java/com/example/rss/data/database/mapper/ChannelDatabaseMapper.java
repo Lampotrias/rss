@@ -6,7 +6,6 @@ import com.example.rss.data.database.dto.FileDTO;
 import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
-import com.example.rss.domain.Channel;
 
 public class ChannelDatabaseMapper {
 
@@ -18,10 +17,14 @@ public class ChannelDatabaseMapper {
 			channelDTO.setChannelId(channelEntity.getChannelId());
 			channelDTO.setTitle(channelEntity.getTitle());
 			channelDTO.setDescription(channelEntity.getDescription());
-			channelDTO.setCategoryId(channelEntity.getCategory());
+			channelDTO.setCategoryId(channelEntity.getCategoryId());
+			channelDTO.setFileId(channelEntity.getFileId());
+			channelDTO.setLink(channelEntity.getLink());
 			channelDTO.setCacheImage(channelEntity.getCacheImage());
 			channelDTO.setDownloadFullText(channelEntity.getDownloadFullText());
+			channelDTO.setOnlyWifi(channelEntity.getOnlyWifi());
 			channelDTO.setLastBuild(channelEntity.getLastBuild());
+			channelDTO.setNextSyncDate(channelEntity.getNextSyncDate());
 		}
 		return channelDTO;
 	}
@@ -33,10 +36,13 @@ public class ChannelDatabaseMapper {
 			channelEntity.setChannelId(dto.getChannelId());
 			channelEntity.setTitle(dto.getTitle());
 			channelEntity.setDescription(dto.getDescription());
-			channelEntity.setCategory(dto.getCategoryId());
+			channelEntity.setCategoryId(dto.getCategoryId());
+			channelEntity.setLink(dto.getLink());
 			channelEntity.setCacheImage(dto.getCacheImage());
 			channelEntity.setDownloadFullText(dto.getDownloadFullText());
+			channelEntity.setOnlyWifi(dto.getOnlyWifi());
 			channelEntity.setLastBuild(dto.getLastBuild());
+			channelEntity.setNextSyncDate(dto.getNextSyncDate());
 		}
 		return channelEntity;
 	}
@@ -67,6 +73,7 @@ public class ChannelDatabaseMapper {
 		FileDTO dto = null;
 		if (fileEntity != null) {
 			dto = new FileDTO();
+			dto.setFileId(fileEntity.getFileId());
 			dto.setPath(fileEntity.getPath());
 			dto.setDescription((fileEntity.getDescription()));
 			dto.setExternal(fileEntity.getExternal());
@@ -80,6 +87,7 @@ public class ChannelDatabaseMapper {
 		FileEntity fileEntity = null;
 		if (dto != null) {
 			fileEntity = new FileEntity();
+			fileEntity.setFileId(dto.getFileId());
 			fileEntity.setPath(dto.getPath());
 			fileEntity.setDescription((dto.getDescription()));
 			fileEntity.setExternal(dto.getExternal());

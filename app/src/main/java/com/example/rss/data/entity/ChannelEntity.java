@@ -13,8 +13,12 @@ public class ChannelEntity {
 	@SerializedName("description")
 	private String description;
 
-	@SerializedName("image")
-	private FileEntity image;
+
+	@SerializedName("description")
+	private Long categoryId;
+
+	@SerializedName("file")
+	private Long fileId;
 
 	@SerializedName("link")
 	private String link;
@@ -22,9 +26,60 @@ public class ChannelEntity {
 	@SerializedName("last_build")
 	private String lastBuild;
 
+	@SerializedName("nextSyncDate")
+	private String nextSyncDate;
+
+	@SerializedName("cache_image")
+	private Boolean cacheImage;
+
+	@SerializedName("download_full_text")
+	private Boolean downloadFullText;
+
+	@SerializedName("onlyWifi")
+	private Boolean onlyWifi;
+
+	public Boolean getCacheImage() {
+		return cacheImage;
+	}
+
+	public void setCacheImage(Boolean cacheImage) {
+		this.cacheImage = cacheImage;
+	}
+
+	public String getNextSyncDate() {
+		return nextSyncDate;
+	}
+
+	public void setNextSyncDate(String nextSyncDate) {
+		this.nextSyncDate = nextSyncDate;
+	}
+
+	public Boolean getDownloadFullText() {
+		return downloadFullText;
+	}
+
+	public void setDownloadFullText(Boolean downloadFullText) {
+		this.downloadFullText = downloadFullText;
+	}
+
+	public Boolean getOnlyWifi() {
+		return onlyWifi;
+	}
+
+	public void setOnlyWifi(Boolean onlyWifi) {
+		this.onlyWifi = onlyWifi;
+	}
 
 	public ChannelEntity() {
 		//empty
+	}
+
+	public Long getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
 	}
 
 	public Long getChannelId() {
@@ -51,12 +106,12 @@ public class ChannelEntity {
 		this.description = description;
 	}
 
-	public FileEntity getImage() {
-		return image;
+	public Long getFileId() {
+		return fileId;
 	}
 
-	public void setImage(FileEntity image) {
-		this.image = image;
+	public void setFileId(Long fileId) {
+		this.fileId = fileId;
 	}
 
 	public String getLink() {

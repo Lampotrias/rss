@@ -1,21 +1,16 @@
-package com.example.rss.data.entity;
+package com.example.rss.domain;
 
 import com.google.gson.annotations.SerializedName;
 
-public class FileEntity {
-	@SerializedName("id")
+public class File {
 	private Long fileId;
 
-	@SerializedName("path")
 	private String path;
 
-	@SerializedName("description")
 	private String description;
 
-	@SerializedName("type")
 	private String type;
 
-	@SerializedName("external")
 	private Boolean external;
 
 	public Long getFileId() {
@@ -42,14 +37,6 @@ public class FileEntity {
 		this.description = description;
 	}
 
-	public Boolean getExternal() {
-		return external;
-	}
-
-	public void setExternal(Boolean external) {
-		this.external = external;
-	}
-
 	public String getType() {
 		return type;
 	}
@@ -58,5 +45,11 @@ public class FileEntity {
 		this.type = type;
 	}
 
+	public Boolean getExternal() {
+		return external;
+	}
 
+	public void setExternal(Boolean external) {
+		this.external = external;
+	}
 }

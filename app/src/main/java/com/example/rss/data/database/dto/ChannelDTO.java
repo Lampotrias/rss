@@ -6,8 +6,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.Date;
-
 @Entity(tableName = "channel")
 public class ChannelDTO {
 
@@ -27,11 +25,11 @@ public class ChannelDTO {
 	//Custom category
 	@NonNull
 	@ColumnInfo(name = "category_id")
-	private String categoryId;
+	private Long categoryId;
 
 	@NonNull
-	@ColumnInfo(name = "image_id")
-	private Integer imageId;
+	@ColumnInfo(name = "file_id")
+	private Long fileId;
 
 	@NonNull
 	@ColumnInfo(name = "link")
@@ -58,7 +56,7 @@ public class ChannelDTO {
 
 	@NonNull
 	@ColumnInfo(name = "next_sync_date")
-	private Boolean nextSyncDate;
+	private String nextSyncDate;
 
 	@NonNull
 	public Long getChannelId() {
@@ -88,21 +86,21 @@ public class ChannelDTO {
 	}
 
 	@NonNull
-	public String getCategoryId() {
+	public Long getCategoryId() {
 		return categoryId;
 	}
 
-	public void setCategoryId(@NonNull String categoryId) {
+	public void setCategoryId(@NonNull Long categoryId) {
 		this.categoryId = categoryId;
 	}
 
 	@NonNull
-	public Integer getImageId() {
-		return imageId;
+	public Long getFileId() {
+		return fileId;
 	}
 
-	public void setImageId(@NonNull Integer imageId) {
-		this.imageId = imageId;
+	public void setFileId(@NonNull Long fileId) {
+		this.fileId = fileId;
 	}
 
 	@NonNull
@@ -151,11 +149,11 @@ public class ChannelDTO {
 	}
 
 	@NonNull
-	public Boolean getNextSyncDate() {
+	public String getNextSyncDate() {
 		return nextSyncDate;
 	}
 
-	public void setNextSyncDate(@NonNull Boolean nextSyncDate) {
+	public void setNextSyncDate(@NonNull String nextSyncDate) {
 		this.nextSyncDate = nextSyncDate;
 	}
 }

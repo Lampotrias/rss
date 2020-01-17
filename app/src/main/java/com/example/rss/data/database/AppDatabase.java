@@ -7,16 +7,19 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import com.example.rss.data.database.dto.FileDTO;
 import com.example.rss.data.database.сonverters.ConverterDate;
 import com.example.rss.data.database.dto.ChannelDTO;
 
-@Database(entities = {ChannelDTO.class}, version = 2, exportSchema = false)
+@Database(entities = {ChannelDTO.class, FileDTO.class}, version = 6, exportSchema = false)
 @TypeConverters({ConverterDate.class})
 public abstract class AppDatabase extends RoomDatabase {
 	private static AppDatabase singleton;
 	private static final String DATABASE_NAME = "rss.db";
 
+	public abstract FileDAO fileDAO();
 	public abstract ChannelDAO channelDAO();
+
 
 	public static AppDatabase getInstance(Context context){
 		if (singleton == null){

@@ -6,6 +6,6 @@ import io.reactivex.Single;
 
 public interface ICacheApp {
     Boolean isExpired();
-    Boolean isCachedChannel(Integer id);
-    Single<ChannelEntity> getChannel(Integer id);
+    Boolean isCachedChannel(Long id);
+    Single<ChannelEntity> getChannel(Long id);
 }

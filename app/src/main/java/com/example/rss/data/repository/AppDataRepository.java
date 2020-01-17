@@ -2,10 +2,12 @@ package com.example.rss.data.repository;
 
 
 import com.example.rss.data.entity.ChannelEntity;
-import com.example.rss.data.entity.mapper.ChannelEntityDataMapper;
+import com.example.rss.data.entity.FileEntity;
+import com.example.rss.data.entity.mapper.RepositoryEntityDataMapper;
 import com.example.rss.data.repository.datasource.ChannelDataStoreFactory;
 import com.example.rss.data.repository.datasource.IDataStore;
 import com.example.rss.domain.Channel;
+import com.example.rss.domain.File;
 import com.example.rss.domain.Item;
 import com.example.rss.domain.repositories.IRepository;
 
@@ -20,12 +22,12 @@ import io.reactivex.Single;
 public class AppDataRepository implements IRepository {
 
 	private final ChannelDataStoreFactory channelDataStoreFactory;
-	private final ChannelEntityDataMapper channelEntityDataMapper;
+	private final RepositoryEntityDataMapper repositoryEntityDataMapper;
 
 	@Inject
-	public AppDataRepository(ChannelDataStoreFactory channelDataStoreFactory, ChannelEntityDataMapper userEntityDataMapper){
+	public AppDataRepository(ChannelDataStoreFactory channelDataStoreFactory, RepositoryEntityDataMapper userEntityDataMapper){
 		this.channelDataStoreFactory = channelDataStoreFactory;
-		this.channelEntityDataMapper = userEntityDataMapper;
+		this.repositoryEntityDataMapper = userEntityDataMapper;
 
 	}
 
@@ -38,18 +40,26 @@ public class AppDataRepository implements IRepository {
 	@Override
 	public Single<Long> addChannel(Channel channel) {
 		final IDataStore dataStore = channelDataStoreFactory.createPut();
-		ChannelEntity channelEntity = channelEntityDataMapper.transform(channel);
+		ChannelEntity channelEntity = repositoryEntityDataMapper.transform(channel);
 		return dataStore.addChannel(channelEntity);
 	}
 
 	@Override
-	public Single<Channel> getChannelById(Integer id) {
+	public Single<Channel> getChannelById(Long id) {
 		final IDataStore dataStore = channelDataStoreFactory.createForChannel(id);
-		return dataStore.getChannelById(id).map(channelEntityDataMapper::transform);
+		return dataStore.getChannelById(id).map(repositoryEntityDataMapper::transform);
 	}
 
 	@Override
-	public Single<List<Item>> getRowsByChannelId(Integer id) {
+	public Single<List<Item>> getRowsByChannelId(Long id) {
 		return null;
+	}
+
+	@Override
+	public Single<Long> addFile(File file) {
+		final IDataStore dataStore = channelDataStoreFactory.createPut();
+		//TODO addChannel cache
+		FileEntity fileEntity = repositoryEntityDataMapper.transform(file);
+		return dataStore.addFile(fileEntity);
 	}
 }

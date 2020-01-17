@@ -7,7 +7,6 @@ import android.content.Context;
 import com.example.rss.presentation.di.component.AppComponent;
 import com.example.rss.presentation.di.component.DaggerAppComponent;
 import com.example.rss.presentation.di.module.AppModule;
-import com.example.rss.presentation.global.GlobalActions;
 
 
 public class AndroidApplication extends Application {

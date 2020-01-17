@@ -1,6 +1,7 @@
 package com.example.rss.data.repository.datasource.impl;
 
 import com.example.rss.data.entity.ChannelEntity;
+import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.RowEntity;
 import com.example.rss.data.repository.datasource.IDataStore;
 import com.example.rss.data.xml.XmlParser;
@@ -50,12 +51,17 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Single<ChannelEntity> getChannelById(Integer id) {
+    public Single<ChannelEntity> getChannelById(Long id) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
     @Override
-    public Single<List<RowEntity>> getRowsByChannelId(Integer id) {
+    public Single<List<RowEntity>> getRowsByChannelId(Long id) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Single<Long> addFile(FileEntity fileEntity) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 }

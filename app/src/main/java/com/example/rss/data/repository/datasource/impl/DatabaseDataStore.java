@@ -4,6 +4,7 @@ import com.example.rss.data.database.AppDatabase;
 import com.example.rss.data.database.dto.ChannelDTO;
 import com.example.rss.data.database.mapper.ChannelDatabaseMapper;
 import com.example.rss.data.entity.ChannelEntity;
+import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.RowEntity;
 import com.example.rss.data.repository.datasource.IDataStore;
 import com.example.rss.domain.Channel;
@@ -26,13 +27,18 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Single<ChannelEntity> getChannelById(Integer id) {
+	public Single<ChannelEntity> getChannelById(Long id) {
 		return null;
 	}
 
 	@Override
-	public Single<List<RowEntity>> getRowsByChannelId(Integer id) {
+	public Single<List<RowEntity>> getRowsByChannelId(Long id) {
 		return null;
+	}
+
+	@Override
+	public Single<Long> addFile(FileEntity fileEntity) {
+		return appDatabase.fileDAO().insert(ChannelDatabaseMapper.transform(fileEntity));
 	}
 
 	@Override

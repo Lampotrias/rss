@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity(tableName = "items")
+@Entity(tableName = "item")
 public class ItemDTO {
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -36,7 +36,7 @@ public class ItemDTO {
 
     @NonNull
     @ColumnInfo(name = "encosure")
-    private Integer encosure;
+    private Long encosure;
 
     @NonNull
     public Long getItemId() {
@@ -93,11 +93,11 @@ public class ItemDTO {
     }
 
     @NonNull
-    public Integer getEncosure() {
+    public Long getEncosure() {
         return encosure;
     }
 
-    public void setEncosure(@NonNull Integer encosure) {
+    public void setEncosure(@NonNull Long encosure) {
         this.encosure = encosure;
     }
 }

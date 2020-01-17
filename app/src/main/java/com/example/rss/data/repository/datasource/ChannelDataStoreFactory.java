@@ -54,7 +54,7 @@ public class ChannelDataStoreFactory {
 		return new NetworkDataStore(client);
 	}
 
-	public IDataStore createForChannel(Integer id) {
+	public IDataStore createForChannel(Long id) {
 		IDataStore dataStore;
 
 		if (!cacheDataStore.isExpired() && cacheDataStore.isCachedChannel(id))

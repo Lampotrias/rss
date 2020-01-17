@@ -18,13 +18,13 @@ public class CacheApp implements ICacheApp {
         return false;
     }
 
-    public Boolean isCachedChannel(Integer id)
+    public Boolean isCachedChannel(Long id)
     {
         return false;
     }
 
     @Override
-    public Single<ChannelEntity> getChannel(Integer id) {
+    public Single<ChannelEntity> getChannel(Long id) {
         return Single.create(emitter -> emitter.onSuccess(new ChannelEntity()));
     }
 }
