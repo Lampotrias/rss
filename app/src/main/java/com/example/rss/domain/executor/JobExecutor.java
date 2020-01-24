@@ -48,7 +48,7 @@ public class JobExecutor implements IThreadExecutor {
 				try {
 					threadPoolExecutor.getQueue().put(runnable);
 				} catch (InterruptedException e) {
-					;
+
 				}
 			}
 		}

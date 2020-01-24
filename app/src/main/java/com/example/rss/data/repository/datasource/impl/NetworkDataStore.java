@@ -4,7 +4,7 @@ import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.RowEntity;
 import com.example.rss.data.repository.datasource.IDataStore;
-import com.example.rss.data.xml.XmlParser;
+import com.example.rss.domain.xml.XmlParser;
 
 import java.util.List;
 import java.util.Objects;

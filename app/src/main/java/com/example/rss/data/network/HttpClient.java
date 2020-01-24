@@ -29,10 +29,9 @@ public class HttpClient {
     }
 
     static Request makeRequestFromUrl(String url){
-        Request request = new Request.Builder()
+        return new Request.Builder()
                 .url(url)
                 .build();
-        return request;
     }
 
     public Observable<Response> run() {

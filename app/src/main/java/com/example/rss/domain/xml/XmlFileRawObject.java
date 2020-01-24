@@ -1,4 +1,4 @@
-package com.example.rss.data.xml;
+package com.example.rss.domain.xml;
 
 public class XmlFileRawObject {
 	private String description;

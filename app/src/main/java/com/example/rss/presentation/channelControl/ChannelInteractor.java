@@ -1,12 +1,11 @@
 package com.example.rss.presentation.channelControl;
 
 
-import android.annotation.SuppressLint;
 import android.util.Log;
 
-import com.example.rss.data.xml.XmlChannelRawObject;
-import com.example.rss.data.xml.XmlFileRawObject;
-import com.example.rss.data.xml.XmlParser;
+import com.example.rss.domain.xml.XmlChannelRawObject;
+import com.example.rss.domain.xml.XmlFileRawObject;
+import com.example.rss.domain.xml.XmlParser;
 import com.example.rss.domain.Channel;
 import com.example.rss.domain.File;
 import com.example.rss.domain.executor.IPostExecutionThread;
@@ -14,7 +13,6 @@ import com.example.rss.domain.executor.IThreadExecutor;
 import com.example.rss.domain.repositories.IRepository;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,9 +22,6 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import io.reactivex.Single;
-import io.reactivex.SingleSource;
-import io.reactivex.functions.BiFunction;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class ChannelInteractor {

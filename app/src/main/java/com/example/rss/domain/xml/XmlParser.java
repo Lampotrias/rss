@@ -1,7 +1,4 @@
-package com.example.rss.data.xml;
-
-import com.example.rss.data.entity.ChannelEntity;
-import com.example.rss.data.entity.FileEntity;
+package com.example.rss.domain.xml;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
