@@ -13,6 +13,10 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.example.rss.presentation.BaseActivity;
 import com.example.rss.presentation.global.GlobalActions;
@@ -20,6 +24,7 @@ import com.example.rss.presentation.global.GlobalPresenter;
 import com.example.rss.presentation.global.GlobalContract;
 import com.example.rss.presentation.main.MainFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import javax.inject.Inject;
@@ -27,10 +32,8 @@ import javax.inject.Inject;
 public class GlobalActivity extends BaseActivity implements GlobalContract.V, GlobalActions {
 
 	private ActionBar actionBar;
-	private FloatingActionButton fab;
 	private CoordinatorLayout container;
-
-	private DrawerLayout drawer;
+	private AppBarConfiguration mAppBarConfiguration;
 
     @Inject
     public GlobalPresenter mPresenter;
@@ -52,10 +55,8 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		AndroidApplication app = (AndroidApplication) getApplication();
-		app.setGlobalActivity(this);
-		app.getAppComponent().inject(this);
-
+		inject();
+		initViewElements();
 
 		container = findViewById(R.id.container);
 		Toolbar toolbar = findViewById(R.id.toolbar);
@@ -67,22 +68,32 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 
-		drawer = findViewById(R.id.drawer_layout);
-		ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-				this, drawer, toolbar, R.string.draw_open, R.string.draw_close);
-		drawer.addDrawerListener(toggle);
-		toggle.syncState();
+		DrawerLayout drawer = findViewById(R.id.drawer_layout);
+		NavigationView navigationView = findViewById(R.id.nav_view);
 
-		fab = findViewById(R.id.fab);
-		fab.setOnClickListener(view -> {
-			Snackbar.make(container, "Прочитать все", Snackbar.LENGTH_LONG)
-					.setAction("Action", null).show();
-		});
+		mAppBarConfiguration = new AppBarConfiguration.Builder(
+				R.id.nav_main_fragment, R.id.nav_channel_edit_fragment)
+				.setDrawerLayout(drawer)
+				.build();
+
+		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+		NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+		NavigationUI.setupWithNavController(navigationView, navController);
+	}
+
+	private void initViewElements() {
+		FloatingActionButton fab = findViewById(R.id.fab);
+		fab.setOnClickListener(view -> Snackbar.make(container, "Прочитать все", Snackbar.LENGTH_LONG)
+				.setAction("Action", null).show());
 
 		Button btnAdd = findViewById(R.id.btnAddChannelDrawer);
 		btnAdd.setOnClickListener(v -> mPresenter.OnClickChannelAdd(v));
+	}
 
-		replaceFragment(new MainFragment());
+	private void inject() {
+		AndroidApplication app = (AndroidApplication) getApplication();
+		app.setGlobalActivity(this);
+		app.getAppComponent().inject(this);
 	}
 
 	@Override
@@ -98,7 +109,9 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 
 	@Override
 	public boolean onSupportNavigateUp() {
-		return super.onSupportNavigateUp();
+		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+		return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+				|| super.onSupportNavigateUp();
 	}
 
 	@Override
@@ -124,7 +137,7 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 
 	@Override
 	public void closeDrawer() {
-		drawer.closeDrawer(GravityCompat.START);
+		//drawer.closeDrawer(GravityCompat.START);
 	}
 
 	@Override
@@ -136,7 +149,7 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 	public void replaceFragment(Fragment fragment) {
 
 		final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-		fragmentTransaction.add(R.id.main_frame, fragment);
+		fragmentTransaction.add(R.id.nav_host_fragment, fragment);
 		fragmentTransaction.commit();
 	}
 
