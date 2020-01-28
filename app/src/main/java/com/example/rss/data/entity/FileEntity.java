@@ -1,21 +1,20 @@
 package com.example.rss.data.entity;
 
-import com.google.gson.annotations.SerializedName;
 
 public class FileEntity {
-	@SerializedName("id")
+	//@SerializedName("id")
 	private Long fileId;
 
-	@SerializedName("path")
+	//@SerializedName("path")
 	private String path;
 
-	@SerializedName("description")
+	//@SerializedName("description")
 	private String description;
 
-	@SerializedName("type")
+	//@SerializedName("type")
 	private String type;
 
-	@SerializedName("external")
+	//@SerializedName("external")
 	private Boolean external;
 
 	public Long getFileId() {

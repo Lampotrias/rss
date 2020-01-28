@@ -8,6 +8,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
 
@@ -21,20 +22,11 @@ public class XmlParser {
     private Document document;
     private String rssVersion;
 
-    public XmlParser(String xmlRaw) {
+    public XmlParser(InputStream inputStream) {
         try {
             documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            document = documentBuilder.parse(new InputSource(new StringReader(xmlRaw)));
+            document = documentBuilder.parse(inputStream);
         } catch (ParserConfigurationException | IOException | SAXException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public XmlParser(URL url) {
-        try {
-            documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            document = documentBuilder.parse(url.openStream());
-        } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -114,6 +106,7 @@ public class XmlParser {
                 }
             }
         }
+
         return channelEntity;
     }
 }

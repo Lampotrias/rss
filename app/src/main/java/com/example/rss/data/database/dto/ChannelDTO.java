@@ -36,6 +36,10 @@ public class ChannelDTO {
 	private String link;
 
 	@NonNull
+	@ColumnInfo(name = "source_link")
+	private String sourceLink;
+
+	@NonNull
 	@ColumnInfo(name = "last_build")
 	private String lastBuild;
 
@@ -76,6 +80,14 @@ public class ChannelDTO {
 		this.title = title;
 	}
 
+	@NonNull
+	public String getSourceLink() {
+		return sourceLink;
+	}
+
+	public void setSourceLink(@NonNull String sourceLink) {
+		this.sourceLink = sourceLink;
+	}
 	@NonNull
 	public String getDescription() {
 		return description;

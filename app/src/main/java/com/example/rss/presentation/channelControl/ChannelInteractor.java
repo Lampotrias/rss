@@ -1,10 +1,8 @@
 package com.example.rss.presentation.channelControl;
 
 
-import android.util.Log;
-
+import com.example.rss.domain.exception.XmlParseException;
 import com.example.rss.domain.xml.XmlChannelRawObject;
-import com.example.rss.domain.xml.XmlFileRawObject;
 import com.example.rss.domain.xml.XmlParser;
 import com.example.rss.domain.Channel;
 import com.example.rss.domain.File;
@@ -13,11 +11,11 @@ import com.example.rss.domain.executor.IThreadExecutor;
 import com.example.rss.domain.repositories.IRepository;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -37,27 +35,44 @@ public class ChannelInteractor {
 		this.channelRepository = channelRepository;
 	}
 
-	public Single<Long> addChannel(String url, Long categoryId, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi){
-
-		return
-				channelRepository.getRssFeedContent(url)
-				.map(this::parseChannel)
-						.flatMap(xmlChannelRawObject -> {
-							return saveFile(prepareFile(xmlChannelRawObject))
-									.map(fileId -> prepareChannelObj(xmlChannelRawObject, fileId, categoryId, bCacheImage,bDownloadFull,bOnlyWifi));
-						})
-				.flatMap(channelRepository::addChannel)
-						.doOnError(throwable -> Log.e("myApp", Objects.requireNonNull(throwable.getMessage())))
+	Single<Channel> checkChannelExistsByUrl(String url){
+		return channelRepository.getChannelByUrl(url)
+//				.doOnError(throwable -> {
+//
+//					if (throwable instanceof EmptyResultSetException)
+//						throw new ChannelNotFoundException();
+//					else
+//						throw new DatabaseConnectionException();
+//				})
 				.subscribeOn(Schedulers.from(threadExecutor))
 				.observeOn(postExecutionThread.getScheduler());
 	}
 
-	private Channel prepareChannelObj(XmlChannelRawObject xmlChannelRawObject, Long fileId, Long categoryId, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi) {
+	Single<Channel> getChannelById(Long id){
+		return channelRepository.getChannelById(id)
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
+	}
+
+	Single<Long> addChannel(String url, Long categoryId, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi){
+
+		return	channelRepository.getRssFeedContent(url)
+				.map(this::parseChannel)
+						.flatMap(xmlChannelRawObject -> saveFile(prepareFile(xmlChannelRawObject))
+								.map(fileId -> prepareChannelObj(xmlChannelRawObject, url, fileId, categoryId, bCacheImage, bDownloadFull, bOnlyWifi)))
+				.flatMap(channelRepository::addChannel)
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
+	}
+
+
+	private Channel prepareChannelObj(XmlChannelRawObject xmlChannelRawObject, String url, Long fileId, Long categoryId, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi) {
 		Channel channel = new Channel();
 		channel.setTitle(xmlChannelRawObject.getTitle());
 		channel.setLink(xmlChannelRawObject.getLink());
 		channel.setDescription(xmlChannelRawObject.getDescription());
 		channel.setLink(xmlChannelRawObject.getLink());
+		channel.setSourceLink(url);
 		channel.setFileId(fileId);
 		channel.setCategoryId(categoryId);
 		channel.setCacheImage(bCacheImage);
@@ -80,6 +95,7 @@ public class ChannelInteractor {
 	}
 
 
+
 	private File prepareFile(XmlChannelRawObject xmlChannelRawObject){
 		File file = new File();
 		file.setDescription(xmlChannelRawObject.getFile().getDescription());
@@ -93,13 +109,13 @@ public class ChannelInteractor {
 		return channelRepository.addFile(file);
 	}
 
-	private XmlChannelRawObject parseChannel(String stream) throws IOException {
+	private XmlChannelRawObject parseChannel(InputStream stream) throws XmlParseException {
 			Channel channel;
 			try {
 				XmlParser parser = new XmlParser(stream);
 				return parser.parseChannel();
 			} catch (IOException e) {
-				throw new IOException(e);
+				throw new XmlParseException(e.getCause());
 			}
 	}
 }

@@ -20,6 +20,7 @@ public class ChannelDatabaseMapper {
 			channelDTO.setCategoryId(channelEntity.getCategoryId());
 			channelDTO.setFileId(channelEntity.getFileId());
 			channelDTO.setLink(channelEntity.getLink());
+			channelDTO.setSourceLink(channelEntity.getSourceLink());
 			channelDTO.setCacheImage(channelEntity.getCacheImage());
 			channelDTO.setDownloadFullText(channelEntity.getDownloadFullText());
 			channelDTO.setOnlyWifi(channelEntity.getOnlyWifi());
@@ -29,69 +30,70 @@ public class ChannelDatabaseMapper {
 		return channelDTO;
 	}
 
-	public static ChannelEntity transform (ChannelDTO dto){
+	public static ChannelEntity transform (ChannelDTO channelDTO){
 		ChannelEntity channelEntity = null;
-		if (dto != null) {
+		if (channelDTO != null) {
 			channelEntity = new ChannelEntity();
-			channelEntity.setChannelId(dto.getChannelId());
-			channelEntity.setTitle(dto.getTitle());
-			channelEntity.setDescription(dto.getDescription());
-			channelEntity.setCategoryId(dto.getCategoryId());
-			channelEntity.setLink(dto.getLink());
-			channelEntity.setCacheImage(dto.getCacheImage());
-			channelEntity.setDownloadFullText(dto.getDownloadFullText());
-			channelEntity.setOnlyWifi(dto.getOnlyWifi());
-			channelEntity.setLastBuild(dto.getLastBuild());
-			channelEntity.setNextSyncDate(dto.getNextSyncDate());
+			channelEntity.setChannelId(channelDTO.getChannelId());
+			channelEntity.setTitle(channelDTO.getTitle());
+			channelEntity.setDescription(channelDTO.getDescription());
+			channelEntity.setCategoryId(channelDTO.getCategoryId());
+			channelEntity.setLink(channelDTO.getLink());
+			channelEntity.setSourceLink(channelDTO.getSourceLink());
+			channelEntity.setCacheImage(channelDTO.getCacheImage());
+			channelEntity.setDownloadFullText(channelDTO.getDownloadFullText());
+			channelEntity.setOnlyWifi(channelDTO.getOnlyWifi());
+			channelEntity.setLastBuild(channelDTO.getLastBuild());
+			channelEntity.setNextSyncDate(channelDTO.getNextSyncDate());
 		}
 		return channelEntity;
 	}
 
 	public static CategoryDTO transform (CategoryEntity categoryEntity){
-		CategoryDTO dto = null;
+		CategoryDTO categoryDTO = null;
 		if (categoryEntity != null) {
-			dto = new CategoryDTO();
-			dto.setName(categoryEntity.getName());
-			dto.setType(categoryEntity.getType());
+			categoryDTO = new CategoryDTO();
+			categoryDTO.setName(categoryEntity.getName());
+			categoryDTO.setType(categoryEntity.getType());
 		}
 
-		return dto;
+		return categoryDTO;
 	}
 
-	public static CategoryEntity transform (CategoryDTO dto){
+	public static CategoryEntity transform (CategoryDTO categoryDTO){
 		CategoryEntity categoryEntity = null;
-		if (dto != null) {
+		if (categoryDTO != null) {
 			categoryEntity = new CategoryEntity();
-			categoryEntity.setName(dto.getName());
-			categoryEntity.setType(dto.getType());
+			categoryEntity.setName(categoryDTO.getName());
+			categoryEntity.setType(categoryDTO.getType());
 		}
 
 		return categoryEntity;
 	}
 
 	public static FileDTO transform (FileEntity fileEntity){
-		FileDTO dto = null;
+		FileDTO fileDTO = null;
 		if (fileEntity != null) {
-			dto = new FileDTO();
-			dto.setFileId(fileEntity.getFileId());
-			dto.setPath(fileEntity.getPath());
-			dto.setDescription((fileEntity.getDescription()));
-			dto.setExternal(fileEntity.getExternal());
-			dto.setType(fileEntity.getType());
+			fileDTO = new FileDTO();
+			fileDTO.setFileId(fileEntity.getFileId());
+			fileDTO.setPath(fileEntity.getPath());
+			fileDTO.setDescription((fileEntity.getDescription()));
+			fileDTO.setExternal(fileEntity.getExternal());
+			fileDTO.setType(fileEntity.getType());
 		}
 
-		return dto;
+		return fileDTO;
 	}
 
-	public static FileEntity transform (FileDTO dto){
+	public static FileEntity transform (FileDTO fileDTO){
 		FileEntity fileEntity = null;
-		if (dto != null) {
+		if (fileDTO != null) {
 			fileEntity = new FileEntity();
-			fileEntity.setFileId(dto.getFileId());
-			fileEntity.setPath(dto.getPath());
-			fileEntity.setDescription((dto.getDescription()));
-			fileEntity.setExternal(dto.getExternal());
-			fileEntity.setType(dto.getType());
+			fileEntity.setFileId(fileDTO.getFileId());
+			fileEntity.setPath(fileDTO.getPath());
+			fileEntity.setDescription((fileDTO.getDescription()));
+			fileEntity.setExternal(fileDTO.getExternal());
+			fileEntity.setType(fileDTO.getType());
 		}
 		return fileEntity;
 	}

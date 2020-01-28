@@ -1,11 +1,13 @@
 package com.example.rss.data.repository.datasource.impl;
 
+import com.example.rss.data.database.dto.ChannelDTO;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.RowEntity;
 import com.example.rss.data.repository.datasource.IDataStore;
 import com.example.rss.domain.Channel;
 
+import java.io.InputStream;
 import java.util.List;
 
 import io.reactivex.Single;
@@ -23,7 +25,7 @@ public class DiskDataStore implements IDataStore {
     }
 
     @Override
-    public Single<String> getRssFeedContent(String path) {
+    public Single<InputStream> getRssFeedContent(String path) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
@@ -34,6 +36,11 @@ public class DiskDataStore implements IDataStore {
 
     @Override
     public Single<List<RowEntity>> getRowsByChannelId(Long id) {
+        return null;
+    }
+
+    @Override
+    public Single<ChannelEntity> getChannelByUrl(String url) {
         return null;
     }
 

@@ -13,4 +13,10 @@
     <string name="ck_download_full_text">Загрузать полный текст статьи</string>
     <string name="ck_only_wifi">Загружать статьи только по WiFi</string>
     <string name="ck_cache_image">Кеширование изображения</string>
+    <string name="exception_message_no_connection">Ошибка соединения с сервером</string>
+    <string name="exception_message_generic">Неизвестная ошибка</string>
+    <string name="exception_parse_xml">Ошибка разбора XML</string>
+    <string name="exception_channel_not_found">Канал не найден</string>
+    <string name="exception_channel_exists">Такой канал уже существует</string>
+    <string name="exception_database_connect">Ошибка соединения с бд</string>
 </resources>

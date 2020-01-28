@@ -11,6 +11,7 @@ import com.example.rss.domain.File;
 import com.example.rss.domain.Item;
 import com.example.rss.domain.repositories.IRepository;
 
+import java.io.InputStream;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -32,7 +33,7 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
-	public Single<String> getRssFeedContent(String path) {
+	public Single<InputStream> getRssFeedContent(String path) {
 		final IDataStore dataStore = channelDataStoreFactory.createNetwork();
 		return dataStore.getRssFeedContent(path);
 	}
@@ -53,6 +54,12 @@ public class AppDataRepository implements IRepository {
 	@Override
 	public Single<List<Item>> getRowsByChannelId(Long id) {
 		return null;
+	}
+
+	@Override
+	public Single<Channel> getChannelByUrl(String url) {
+		final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
+		return dataStore.getChannelByUrl(url).map(repositoryEntityDataMapper::transform);
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package com.example.rss.domain;
 
-import com.google.gson.annotations.SerializedName;
 
 public class File {
 	private Long fileId;

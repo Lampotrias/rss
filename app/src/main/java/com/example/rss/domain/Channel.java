@@ -8,12 +8,20 @@ public class Channel {
 	private Long categoryId;
 	private Long fileId;
 	private String link;
+	private String sourceLink;
 	private String lastBuild;
 	private Boolean cacheImage;
 	private Boolean downloadFullText;
 	private Boolean onlyWifi;
 	private String nextSyncDate;
 
+	public String getSourceLink() {
+		return sourceLink;
+	}
+
+	public void setSourceLink(String sourceLink) {
+		this.sourceLink = sourceLink;
+	}
 	public Long getChannelId() {
 		return channelId;
 	}

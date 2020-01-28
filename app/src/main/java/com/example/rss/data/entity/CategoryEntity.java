@@ -4,16 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.PrimaryKey;
 
-import com.google.gson.annotations.SerializedName;
+//import com.google.gson.annotations.SerializedName;
 
 public class CategoryEntity {
-	@SerializedName("id")
+	//@SerializedName("id")
 	private Long categoryId;
 
-	@SerializedName("name")
+	//@SerializedName("name")
 	private String name;
 
-	@SerializedName("type")
+	//@SerializedName("type")
 	private String type;
 
 	public Long getCategoryId() {

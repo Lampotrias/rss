@@ -1,41 +1,42 @@
 package com.example.rss.data.entity;
 
-import com.google.gson.annotations.SerializedName;
-
 public class ChannelEntity {
 
-	@SerializedName("id")
+	//@SerializedName("id")
 	private Long channelId;
 
-	@SerializedName("title")
+	//@SerializedName("title")
 	private String title;
 
-	@SerializedName("description")
+	//@SerializedName("description")
 	private String description;
 
 
-	@SerializedName("description")
+	//@SerializedName("description")
 	private Long categoryId;
 
-	@SerializedName("file")
+	//@SerializedName("file")
 	private Long fileId;
 
-	@SerializedName("link")
+	//@SerializedName("link")
 	private String link;
 
-	@SerializedName("last_build")
+
+	private String sourceLink;
+
+	//@SerializedName("last_build")
 	private String lastBuild;
 
-	@SerializedName("nextSyncDate")
+	//@SerializedName("nextSyncDate")
 	private String nextSyncDate;
 
-	@SerializedName("cache_image")
+	//@SerializedName("cache_image")
 	private Boolean cacheImage;
 
-	@SerializedName("download_full_text")
+	//@SerializedName("download_full_text")
 	private Boolean downloadFullText;
 
-	@SerializedName("onlyWifi")
+	//@SerializedName("onlyWifi")
 	private Boolean onlyWifi;
 
 	public Boolean getCacheImage() {
@@ -60,6 +61,14 @@ public class ChannelEntity {
 
 	public void setDownloadFullText(Boolean downloadFullText) {
 		this.downloadFullText = downloadFullText;
+	}
+
+	public String getSourceLink() {
+		return sourceLink;
+	}
+
+	public void setSourceLink(String sourceLink) {
+		this.sourceLink = sourceLink;
 	}
 
 	public Boolean getOnlyWifi() {

@@ -7,11 +7,14 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import com.example.rss.data.database.dto.CategoryDTO;
+import com.example.rss.data.database.dto.FavoritesDTO;
 import com.example.rss.data.database.dto.FileDTO;
+import com.example.rss.data.database.dto.ItemDTO;
 import com.example.rss.data.database.сonverters.ConverterDate;
 import com.example.rss.data.database.dto.ChannelDTO;
 
-@Database(entities = {ChannelDTO.class, FileDTO.class}, version = 6, exportSchema = false)
+@Database(entities = {ChannelDTO.class, FileDTO.class, FavoritesDTO.class, ItemDTO.class, CategoryDTO.class}, version = 8, exportSchema = false)
 @TypeConverters({ConverterDate.class})
 public abstract class AppDatabase extends RoomDatabase {
 	private static AppDatabase singleton;

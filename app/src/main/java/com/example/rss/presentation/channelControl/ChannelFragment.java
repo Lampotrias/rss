@@ -1,5 +1,6 @@
 package com.example.rss.presentation.channelControl;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -36,6 +37,9 @@ public class ChannelFragment extends BaseFragment implements ChannelContract.V {
 
 	@BindView(R.id.btnAddChannel)
 	MaterialButton btnAdd;
+
+	@BindView(R.id.btnCancel)
+	MaterialButton btnCancel;
 
 	@BindView(R.id.url_text_input)
 	TextInputLayout urlTextInput;
@@ -78,6 +82,10 @@ public class ChannelFragment extends BaseFragment implements ChannelContract.V {
 			}
 			return false;
 		});
+
+		btnCancel.setOnClickListener(v -> {
+			mPresenter.onCancelButtonClicked();
+		});
 		return rootView;
 	}
 
@@ -101,8 +109,8 @@ public class ChannelFragment extends BaseFragment implements ChannelContract.V {
 	}
 
 	@Override
-	public void displayError(Throwable throwable) {
-		showToastMessage("Error:" + throwable.getMessage());
+	public void displayError(String errorMessage) {
+		showToastMessage(errorMessage);
 	}
 
 	@Override
@@ -111,10 +119,14 @@ public class ChannelFragment extends BaseFragment implements ChannelContract.V {
 	}
 
 	@Override
+	public Context context() {
+		return this.getActivity();
+	}
+
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		mPresenter.setView(this);
-		Toast.makeText(getActivity(), "1312312321", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override

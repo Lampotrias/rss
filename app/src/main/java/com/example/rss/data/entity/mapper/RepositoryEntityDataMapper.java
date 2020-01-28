@@ -25,6 +25,7 @@ public class RepositoryEntityDataMapper {
             channelEntity.setFileId(channel.getFileId());
             channelEntity.setDescription(channel.getDescription());
             channelEntity.setLink(channel.getLink());
+            channelEntity.setSourceLink(channel.getSourceLink());
             channelEntity.setCategoryId(channel.getCategoryId());
             channelEntity.setCacheImage(channel.getCacheImage());
             channelEntity.setDownloadFullText(channel.getDownloadFullText());
@@ -44,6 +45,7 @@ public class RepositoryEntityDataMapper {
             channel.setTitle(channelEntity.getTitle());
             channel.setFileId(channelEntity.getFileId());
             channel.setLink(channelEntity.getLink());
+            channel.setSourceLink(channelEntity.getSourceLink());
             channel.setDescription(channelEntity.getDescription());
             channel.setCategoryId(channelEntity.getCategoryId());
             channel.setCacheImage(channelEntity.getCacheImage());
