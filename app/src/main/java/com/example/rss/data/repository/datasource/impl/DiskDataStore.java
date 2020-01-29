@@ -12,7 +12,7 @@ import java.util.List;
 
 import io.reactivex.Single;
 
-public class DiskDataStore implements IDataStore {
+public abstract class DiskDataStore implements IDataStore {
     private final ICacheApp cache;
 
     public DiskDataStore(ICacheApp cache) {

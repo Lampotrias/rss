@@ -7,6 +7,9 @@ import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChannelDatabaseMapper {
 
 	public static ChannelDTO transform (ChannelEntity channelEntity){
@@ -30,7 +33,7 @@ public class ChannelDatabaseMapper {
 		return channelDTO;
 	}
 
-	public static ChannelEntity transform (ChannelDTO channelDTO){
+	public static ChannelEntity transform(ChannelDTO channelDTO){
 		ChannelEntity channelEntity = null;
 		if (channelDTO != null) {
 			channelEntity = new ChannelEntity();
@@ -47,6 +50,17 @@ public class ChannelDatabaseMapper {
 			channelEntity.setNextSyncDate(channelDTO.getNextSyncDate());
 		}
 		return channelEntity;
+	}
+
+	public static List<ChannelEntity> transformChannels (List<ChannelDTO> channelDTOS) {
+		List<ChannelEntity> channelEntities = new ArrayList<>();
+
+		for (ChannelDTO channelDTO : channelDTOS) {
+			if (channelDTO != null) {
+				channelEntities.add(transform(channelDTO));
+			}
+		}
+		return channelEntities;
 	}
 
 	public static CategoryDTO transform (CategoryEntity categoryEntity){
@@ -69,6 +83,17 @@ public class ChannelDatabaseMapper {
 		}
 
 		return categoryEntity;
+	}
+
+
+	public static List<CategoryEntity> transformCategories(List<CategoryDTO> categoryDTOS){
+		List<CategoryEntity> categoryEntities = new ArrayList<>();
+		for (CategoryDTO categoryDTO: categoryDTOS) {
+			if (categoryDTO != null){
+				categoryEntities.add(transform(categoryDTO));
+			}
+		}
+		return categoryEntities;
 	}
 
 	public static FileDTO transform (FileEntity fileEntity){
@@ -97,4 +122,5 @@ public class ChannelDatabaseMapper {
 		}
 		return fileEntity;
 	}
+
 }

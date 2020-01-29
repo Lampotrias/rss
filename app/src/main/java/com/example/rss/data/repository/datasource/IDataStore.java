@@ -1,6 +1,6 @@
 package com.example.rss.data.repository.datasource;
 
-import com.example.rss.data.database.dto.ChannelDTO;
+import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.RowEntity;
@@ -8,6 +8,7 @@ import com.example.rss.data.entity.RowEntity;
 import java.io.InputStream;
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 public interface IDataStore {
@@ -17,5 +18,8 @@ public interface IDataStore {
 	Single<List<RowEntity>> getRowsByChannelId(Long id);
 
 	Single<ChannelEntity> getChannelByUrl(String url);
+	Flowable<List<ChannelEntity>> getAllChannels();
 	Single<Long> addFile (FileEntity fileEntity);
+
+	Flowable<List<CategoryEntity>> getCategoriesByType(String mType);
 }

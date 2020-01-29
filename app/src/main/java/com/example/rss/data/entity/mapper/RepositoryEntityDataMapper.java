@@ -1,9 +1,14 @@
 package com.example.rss.data.entity.mapper;
 
+import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
+import com.example.rss.domain.Category;
 import com.example.rss.domain.Channel;
 import com.example.rss.domain.File;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -57,6 +62,16 @@ public class RepositoryEntityDataMapper {
         return channel;
     }
 
+    public List<Channel> transformChannels(List<ChannelEntity> channelEntities){
+        List<Channel> channels = new ArrayList<>();
+        for (ChannelEntity channelEntity: channelEntities) {
+            if (channelEntity != null){
+                channels.add(this.transform(channelEntity));
+            }
+        }
+        return channels;
+    }
+
     public File transform (FileEntity fileEntity){
         File file = null;
         if (fileEntity != null) {
@@ -81,6 +96,40 @@ public class RepositoryEntityDataMapper {
             fileEntity.setType(file.getType());
         }
         return fileEntity;
+    }
+
+
+
+    public CategoryEntity transform (Category category){
+        CategoryEntity categoryEntity = null;
+        if (category != null) {
+            categoryEntity = new CategoryEntity();
+            categoryEntity.setCategoryId(category.getCategoryId());
+            categoryEntity.setName(category.getName());
+            categoryEntity.setType(category.getType());
+        }
+        return categoryEntity;
+    }
+
+    public Category transform (CategoryEntity categoryEntity){
+        Category category = null;
+        if (categoryEntity != null) {
+            category = new Category();
+            category.setCategoryId(categoryEntity.getCategoryId());
+            category.setName(categoryEntity.getName());
+            category.setType(categoryEntity.getType());
+        }
+        return category;
+    }
+
+    public List<Category> transformCategories(List<CategoryEntity> categoryEntities){
+        List<Category> categories = new ArrayList<>();
+        for (CategoryEntity categoryEntity: categoryEntities) {
+            if (categoryEntity != null){
+                categories.add(this.transform(categoryEntity));
+            }
+        }
+        return categories;
     }
 
 }

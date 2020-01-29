@@ -1,17 +1,17 @@
 package com.example.rss.data.repository.datasource.impl;
 
 import com.example.rss.data.database.AppDatabase;
-import com.example.rss.data.database.dto.ChannelDTO;
 import com.example.rss.data.database.mapper.ChannelDatabaseMapper;
+import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.RowEntity;
 import com.example.rss.data.repository.datasource.IDataStore;
-import com.example.rss.domain.Channel;
 
 import java.io.InputStream;
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 public class DatabaseDataStore implements IDataStore {
@@ -43,8 +43,18 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
+	public Flowable<List<ChannelEntity>> getAllChannels() {
+		return appDatabase.channelDAO().getAllChannels().map(ChannelDatabaseMapper::transformChannels);
+	}
+
+	@Override
 	public Single<Long> addFile(FileEntity fileEntity) {
 		return appDatabase.fileDAO().insert(ChannelDatabaseMapper.transform(fileEntity));
+	}
+
+	@Override
+	public Flowable<List<CategoryEntity>> getCategoriesByType(String mType) {
+		return appDatabase.categoryDAO().getCategoriesByType(mType).map(ChannelDatabaseMapper::transformCategories);
 	}
 
 	@Override
