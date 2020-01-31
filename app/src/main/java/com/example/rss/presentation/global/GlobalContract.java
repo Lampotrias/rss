@@ -9,11 +9,13 @@ public interface GlobalContract {
         void showMessage(String message);
         void openDrawer();
         void closeDrawer();
-
+        int getNavHostViewId();
+        void onClickMenuSettings();
     }
 
     interface P<T> extends Presenter {
         void setView(T view);
         void OnClickChannelAdd(View view);
+        void openSettingsFragment();
     }
 }

@@ -1,8 +1,13 @@
 package com.example.rss.presentation.di.module;
 
+import android.app.Activity;
 import android.content.Context;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.example.rss.AndroidApplication;
+import com.example.rss.R;
 import com.example.rss.data.repository.AppDataRepository;
 import com.example.rss.data.repository.datasource.impl.CacheApp;
 import com.example.rss.data.repository.datasource.impl.ICacheApp;
@@ -55,5 +60,10 @@ public class AppModule {
     @Provides @Singleton
     GlobalActions provideGlobalActions(){
         return application.getGlobalActivity();
+    }
+
+    @Provides @Singleton
+    NavController provideNavController(){
+        return Navigation.findNavController(application.getGlobalActivity(), application.getGlobalActivity().getNavHostViewId());
     }
 }

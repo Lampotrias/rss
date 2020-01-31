@@ -1,11 +1,9 @@
 package com.example.rss.presentation.global;
 
 import android.view.View;
-
-import com.example.rss.presentation.channelControl.ChannelFragment;
-
+import androidx.navigation.NavController;
+import com.example.rss.R;
 import javax.inject.Inject;
-
 import io.reactivex.disposables.CompositeDisposable;
 
 public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
@@ -16,6 +14,9 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
 
     @Inject
     GlobalActions globalActions;
+
+    @Inject
+    NavController navController;
 
     @Inject
     public GlobalPresenter(GlobalInteractor globalInteractor) {
@@ -31,8 +32,13 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
 
     @Override
     public void OnClickChannelAdd(View view) {
-        globalActions.replaceFragment(ChannelFragment.getInstance());
+        navController.navigate(R.id.nav_channel_edit_fragment);
         mView.closeDrawer();
+    }
+
+    @Override
+    public void openSettingsFragment() {
+        navController.navigate(R.id.nav_settingsFragment);
     }
 
     @Override
