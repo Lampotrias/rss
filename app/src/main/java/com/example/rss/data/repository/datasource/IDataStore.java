@@ -3,7 +3,7 @@ package com.example.rss.data.repository.datasource;
 import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
-import com.example.rss.data.entity.RowEntity;
+import com.example.rss.data.entity.ItemEntity;
 
 import java.io.InputStream;
 import java.util.List;
@@ -15,7 +15,7 @@ public interface IDataStore {
 	Single<Long> addChannel(ChannelEntity channel);
 	Single<InputStream> getRssFeedContent(String path);
 	Single<ChannelEntity> getChannelById(Long id);
-	Single<List<RowEntity>> getRowsByChannelId(Long id);
+	Single<List<ItemEntity>> getRowsByChannelId(Long id);
 
 	Single<ChannelEntity> getChannelByUrl(String url);
 	Flowable<List<ChannelEntity>> getAllChannels();
