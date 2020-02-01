@@ -1,6 +1,7 @@
 package com.example.rss.data.repository.datasource.impl;
 
 import com.example.rss.data.database.dto.ChannelDTO;
+import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.RowEntity;
@@ -12,6 +13,7 @@ import java.net.URL;
 import java.util.List;
 
 
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 public class NetworkDataStore implements IDataStore {
@@ -54,7 +56,17 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
+    public Flowable<List<ChannelEntity>> getAllChannels() {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
     public Single<Long> addFile(FileEntity fileEntity) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Flowable<List<CategoryEntity>> getCategoriesByType(String mType) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 }

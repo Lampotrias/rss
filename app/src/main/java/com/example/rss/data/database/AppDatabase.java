@@ -22,7 +22,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
 	public abstract FileDAO fileDAO();
 	public abstract ChannelDAO channelDAO();
-
+	public abstract CategoryDAO categoryDAO();
 
 	public static AppDatabase getInstance(Context context){
 		if (singleton == null){

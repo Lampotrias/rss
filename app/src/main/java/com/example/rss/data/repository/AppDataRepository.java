@@ -6,6 +6,7 @@ import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.mapper.RepositoryEntityDataMapper;
 import com.example.rss.data.repository.datasource.ChannelDataStoreFactory;
 import com.example.rss.data.repository.datasource.IDataStore;
+import com.example.rss.domain.Category;
 import com.example.rss.domain.Channel;
 import com.example.rss.domain.File;
 import com.example.rss.domain.Item;
@@ -17,6 +18,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 @Singleton
@@ -52,6 +54,12 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
+	public Flowable<List<Channel>> getAllChannels() {
+		final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
+		return dataStore.getAllChannels().map(repositoryEntityDataMapper::transformChannels);
+	}
+
+	@Override
 	public Single<List<Item>> getRowsByChannelId(Long id) {
 		return null;
 	}
@@ -60,6 +68,12 @@ public class AppDataRepository implements IRepository {
 	public Single<Channel> getChannelByUrl(String url) {
 		final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
 		return dataStore.getChannelByUrl(url).map(repositoryEntityDataMapper::transform);
+	}
+
+	@Override
+	public Flowable<List<Category>> getCategoriesByType(String mType) {
+		final IDataStore dataStore = channelDataStoreFactory.createForCategory(null);
+		return dataStore.getCategoriesByType(mType).map(repositoryEntityDataMapper::transformCategories);
 	}
 
 	@Override

@@ -45,10 +45,24 @@ public class ChannelDataStoreFactory {
 		IDataStore dataStore;
 
 		if (id != null){
-			if (!cacheDataStore.isExpired() && cacheDataStore.isCachedChannel(id))
-				dataStore = new DiskDataStore(cacheDataStore);
-			else
+			/*if (!cacheDataStore.isExpired() && cacheDataStore.isCachedChannel(id))
+				//dataStore = new DiskDataStore(cacheDataStore);
+			else*/
 				dataStore = createDatabaseDataStore();
+		}else
+		{
+			dataStore = createDatabaseDataStore();
+		}
+
+		return dataStore;
+	}
+
+	public IDataStore createForCategory(Long id) {
+		IDataStore dataStore;
+
+		if (id != null){
+			//check cache
+			dataStore = createDatabaseDataStore();
 		}else
 		{
 			dataStore = createDatabaseDataStore();

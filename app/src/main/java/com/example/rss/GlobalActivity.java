@@ -5,6 +5,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ExpandableListView;
+import android.widget.SimpleExpandableListAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +27,10 @@ import com.example.rss.presentation.global.GlobalContract;
 import com.example.rss.presentation.main.MainFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -164,7 +170,5 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 		fragmentTransaction.add(R.id.nav_host_fragment, fragment);
 		fragmentTransaction.commit();
 	}
-
-
 
 }

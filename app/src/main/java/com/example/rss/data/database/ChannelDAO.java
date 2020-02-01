@@ -7,6 +7,11 @@ import androidx.room.Query;
 
 import com.example.rss.data.database.dto.ChannelDTO;
 
+import org.intellij.lang.annotations.Flow;
+
+import java.util.List;
+
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 @Dao
@@ -20,4 +25,7 @@ public interface ChannelDAO {
 
 	@Query("SELECT * FROM channel WHERE id = :id")
 	Single<ChannelDTO> getChannelById(Long id);
+
+	@Query("SELECT * FROM channel")
+	Flowable<List<ChannelDTO>> getAllChannels();
 }
