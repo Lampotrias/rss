@@ -21,7 +21,7 @@ public interface IRepository {
 	Flowable<List<Channel>> getAllChannels();
 
 
-	Single<List<Item>> getRowsByChannelId(Long id);
+	Single<List<Item>> getItemsByChannelId(Long id);
 
 	Single<Channel> getChannelByUrl(String url);
 

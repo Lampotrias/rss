@@ -1,6 +1,6 @@
-package com.example.rss.domain;
+package com.example.rss.data.entity;
 
-public class Item {
+public class ItemEntity {
     private Long itemId;
     private Long guid;
     private String title;

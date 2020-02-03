@@ -3,7 +3,7 @@ package com.example.rss.data.repository.datasource.impl;
 import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
-import com.example.rss.data.entity.RowEntity;
+import com.example.rss.data.entity.ItemEntity;
 import com.example.rss.data.exception.NetworkConnectionException;
 import com.example.rss.data.repository.datasource.IDataStore;
 
@@ -45,7 +45,7 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Single<List<RowEntity>> getRowsByChannelId(Long id) {
+    public Single<List<ItemEntity>> getItemsByChannelId(Long id) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 

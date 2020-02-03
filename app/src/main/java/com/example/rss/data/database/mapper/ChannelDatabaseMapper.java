@@ -3,9 +3,11 @@ package com.example.rss.data.database.mapper;
 import com.example.rss.data.database.dto.CategoryDTO;
 import com.example.rss.data.database.dto.ChannelDTO;
 import com.example.rss.data.database.dto.FileDTO;
+import com.example.rss.data.database.dto.ItemDTO;
 import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
+import com.example.rss.data.entity.ItemEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,4 +127,47 @@ public class ChannelDatabaseMapper {
 		return fileEntity;
 	}
 
+	public static ItemDTO transform (ItemEntity itemEntity){
+		ItemDTO itemDTO = null;
+		if (itemEntity != null) {
+			itemDTO = new ItemDTO();
+			itemDTO.setItemId(itemEntity.getItemId());
+			itemDTO.setTitle(itemEntity.getTitle());
+			itemDTO.setDescription(itemEntity.getDescription());
+			itemDTO.setEnclosure(itemEntity.getEnclosure());
+			itemDTO.setGuid(itemEntity.getGuid());
+			itemDTO.setLink(itemEntity.getLink());
+			itemDTO.setPubDate(itemEntity.getPubDate());
+			itemDTO.setRead(itemEntity.getRead());
+		}
+
+		return itemDTO;
+	}
+
+	public static ItemEntity transform (ItemDTO itemDTO){
+		ItemEntity itemEntity = null;
+		if (itemDTO != null) {
+			itemEntity = new ItemEntity();
+			itemEntity.setItemId(itemDTO.getItemId());
+			itemEntity.setTitle(itemDTO.getTitle());
+			itemEntity.setDescription(itemDTO.getDescription());
+			itemEntity.setEnclosure(itemDTO.getEnclosure());
+			itemEntity.setGuid(itemDTO.getGuid());
+			itemEntity.setLink(itemDTO.getLink());
+			itemEntity.setPubDate(itemDTO.getPubDate());
+			itemEntity.setRead(itemDTO.getRead());
+		}
+
+		return itemEntity;
+	}
+
+	public static List<ItemEntity> transformItems(List<ItemDTO> itemDTOS){
+		List<ItemEntity> itemEntities = new ArrayList<>();
+		for (ItemDTO categoryDTO: itemDTOS) {
+			if (categoryDTO != null){
+				itemEntities.add(transform(categoryDTO));
+			}
+		}
+		return itemEntities;
+	}
 }

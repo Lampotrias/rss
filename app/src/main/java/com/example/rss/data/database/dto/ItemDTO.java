@@ -32,11 +32,15 @@ public class ItemDTO {
 
     @NonNull
     @ColumnInfo(name = "pub_date")
-    private Date pubDate;
+    private String pubDate;
 
     @NonNull
     @ColumnInfo(name = "enclosure")
     private Long enclosure;
+
+    @NonNull
+    @ColumnInfo(name = "is_read")
+    private Boolean isRead;
 
     @NonNull
     public Long getItemId() {
@@ -45,6 +49,15 @@ public class ItemDTO {
 
     public void setItemId(@NonNull Long itemId) {
         this.itemId = itemId;
+    }
+
+    @NonNull
+    public Boolean getRead() {
+        return isRead;
+    }
+
+    public void setRead(@NonNull Boolean read) {
+        isRead = read;
     }
 
     @NonNull
@@ -84,11 +97,11 @@ public class ItemDTO {
     }
 
     @NonNull
-    public Date getPubDate() {
+    public String getPubDate() {
         return pubDate;
     }
 
-    public void setPubDate(@NonNull Date pubDate) {
+    public void setPubDate(@NonNull String pubDate) {
         this.pubDate = pubDate;
     }
 
