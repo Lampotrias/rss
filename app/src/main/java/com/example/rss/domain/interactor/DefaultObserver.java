@@ -2,7 +2,7 @@ package com.example.rss.domain.interactor;
 
 import io.reactivex.observers.DisposableObserver;
 
-public class DefaultObserver<T> extends DisposableObserver<T> {
+class DefaultObserver<T> extends DisposableObserver<T> {
 
 	@Override
 	public void onNext(T t) {

@@ -1,6 +1,5 @@
 package com.example.rss.presentation.global;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 

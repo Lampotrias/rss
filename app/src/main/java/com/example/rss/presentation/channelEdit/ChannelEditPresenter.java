@@ -42,17 +42,11 @@ public class ChannelEditPresenter implements ChannelEditContract.P<ChannelEditCo
 
 		compositeDisposable.add(
 				channelEditInteractor.checkChannelExistsByUrl(url)
-					.subscribe(channel -> {
-							showErrorMessage(new DefaultErrorBundle(new ChannelExistsException()));
-						},throwable -> {
+					.subscribe(channel -> showErrorMessage(new DefaultErrorBundle(new ChannelExistsException())), throwable -> {
 							if (throwable instanceof EmptyResultSetException){
 								compositeDisposable.add(channelEditInteractor.addChannel(url, 1L, bCacheImage, bDownloadFull, bOnlyWifi)
 										.subscribe(
-												aLong -> {
-													mView.displaySuccess("new id: " + aLong);
-												}, throwableAdd -> {
-													showErrorMessage(new DefaultErrorBundle((Exception) throwableAdd));
-												}));
+												aLong -> mView.displaySuccess("new id: " + aLong), throwableAdd -> showErrorMessage(new DefaultErrorBundle((Exception) throwableAdd))));
 							}else{
 								showErrorMessage(new DefaultErrorBundle((Exception) throwable));
 							}
@@ -65,9 +59,7 @@ public class ChannelEditPresenter implements ChannelEditContract.P<ChannelEditCo
 	public void onCancelButtonClicked() {
 		compositeDisposable.add(
 				channelEditInteractor.getChannelById(1L)
-						.subscribe((channel, throwable) -> {
-							Log.e("myApp", "1123");
-						})
+						.subscribe((channel, throwable) -> Log.e("myApp", "1123"))
 		);
 	}
 

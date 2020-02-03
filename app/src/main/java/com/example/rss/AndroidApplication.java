@@ -15,8 +15,8 @@ import com.example.rss.presentation.di.module.FragmentModule;
 public class AndroidApplication extends Application {
 	private AppComponent appComponent;
 
-	GlobalActivity globalActivity;
-	FragmentComponent fragmentComponent;
+	private GlobalActivity globalActivity;
+	private FragmentComponent fragmentComponent;
 
 
 	@Override public void onCreate() {
@@ -38,9 +38,9 @@ public class AndroidApplication extends Application {
 	}
 
 	private void initializeLeakDetection() {
-		if (BuildConfig.DEBUG) {
-
-		}
+//		if (BuildConfig.DEBUG) {
+//
+//		}
 	}
 
 	public GlobalActivity getGlobalActivity() {

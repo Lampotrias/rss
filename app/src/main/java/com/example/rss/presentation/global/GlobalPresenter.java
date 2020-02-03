@@ -7,7 +7,6 @@ import com.example.rss.domain.Category;
 import com.example.rss.domain.Channel;
 import com.example.rss.domain.exception.DefaultErrorBundle;
 import com.example.rss.domain.exception.IErrorBundle;
-import com.example.rss.presentation.channelEdit.ChannelEditFragment;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
 
 import java.util.ArrayList;
@@ -23,19 +22,19 @@ import io.reactivex.disposables.CompositeDisposable;
 public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
 
     private GlobalContract.V mView;
-    private GlobalInteractor globalInteractor;
-    private CompositeDisposable compositeDisposable;
+    private final GlobalInteractor globalInteractor;
+    private final CompositeDisposable compositeDisposable;
     private final String CATEGORY_TYPE = "C";
     private final String FAVORITE_TYPE = "F";
 
     private List<Channel> mChannels = null;
     private List<Category> mCategories = null;
 
-    void setCategories(List<Category> mCategories) {
+    private void setCategories(List<Category> mCategories) {
         this.mCategories = mCategories;
     }
 
-    void setChannels(List<Channel> mChannels) {
+    private void setChannels(List<Channel> mChannels) {
         this.mChannels = mChannels;
     }
 
@@ -69,13 +68,9 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
                             .subscribe(channels -> {
                                 setChannels(channels);
                                 initChannelListMenu();
-                            }, throwable -> {
-                                showErrorMessage(new DefaultErrorBundle(new DatabaseConnectionException()));
-                            })
+                            }, throwable -> showErrorMessage(new DefaultErrorBundle(new DatabaseConnectionException())))
                     );
-                }, throwable -> {
-                    showErrorMessage(new DefaultErrorBundle(new DatabaseConnectionException()));
-                })
+                }, throwable -> showErrorMessage(new DefaultErrorBundle(new DatabaseConnectionException())))
         );
     }
 
@@ -96,7 +91,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
                 for (Channel channel: mChannels) {
                     tmpChild = new ArrayList<>();
                     if (category.getCategoryId().equals(channel.getCategoryId())){
-                        mChildTitle = new HashMap<String, String>();
+                        mChildTitle = new HashMap<>();
                         mChildTitle.put(attrChildTitle, channel.getTitle());
                         tmpChild.add(mChildTitle);
                     }

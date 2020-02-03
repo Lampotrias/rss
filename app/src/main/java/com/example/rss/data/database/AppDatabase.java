@@ -1,7 +1,6 @@
 package com.example.rss.data.database;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -16,8 +15,6 @@ import com.example.rss.data.database.dto.FileDTO;
 import com.example.rss.data.database.dto.ItemDTO;
 import com.example.rss.data.database.сonverters.ConverterDate;
 import com.example.rss.data.database.dto.ChannelDTO;
-
-import java.util.concurrent.Executors;
 
 @Database(entities = {ChannelDTO.class, FileDTO.class, FavoritesDTO.class, ItemDTO.class, CategoryDTO.class}, version = 2, exportSchema = false)
 @TypeConverters({ConverterDate.class})

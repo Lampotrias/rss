@@ -82,10 +82,8 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 		toggle.syncState();
 
 		fab = findViewById(R.id.fab);
-		fab.setOnClickListener(view -> {
-			Snackbar.make(container, "Прочитать все", Snackbar.LENGTH_LONG)
-					.setAction("Action", null).show();
-		});
+		fab.setOnClickListener(view -> Snackbar.make(container, "Прочитать все", Snackbar.LENGTH_LONG)
+				.setAction("Action", null).show());
 
 		Button btnAdd = findViewById(R.id.btnAddChannelDrawer);
 		btnAdd.setOnClickListener(v -> mPresenter.OnClickChannelAdd(v));
@@ -124,11 +122,6 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_menu, menu);
 		return true;
-	}
-
-	@Override
-	public boolean onSupportNavigateUp() {
-		return super.onSupportNavigateUp();
 	}
 
 	@Override

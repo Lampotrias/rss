@@ -1,6 +1,5 @@
 package com.example.rss.presentation.global;
 
-import androidx.room.Insert;
 
 import com.example.rss.domain.Category;
 import com.example.rss.domain.Channel;
@@ -15,7 +14,7 @@ import javax.inject.Inject;
 import io.reactivex.Flowable;
 import io.reactivex.schedulers.Schedulers;
 
-public class GlobalInteractor {
+class GlobalInteractor {
 
     private final IThreadExecutor threadExecutor;
     private final IPostExecutionThread postExecutionThread;

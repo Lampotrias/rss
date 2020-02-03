@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import com.example.rss.AndroidApplication;
 import com.example.rss.R;
 import com.example.rss.presentation.BaseFragment;
-import com.example.rss.presentation.di.module.FragmentModule;
 import com.example.rss.presentation.di.scope.ChannelScope;
 import com.example.rss.presentation.global.GlobalActions;
 import com.google.android.material.button.MaterialButton;
@@ -19,7 +18,7 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.lang.ref.WeakReference;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -62,7 +61,7 @@ public class ChannelEditFragment extends BaseFragment implements ChannelEditCont
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		app = (AndroidApplication) getActivity().getApplication();
+		app = (AndroidApplication) Objects.requireNonNull(getActivity()).getApplication();
 		app.getFragmentModule(this).inject(this);
 	}
 
@@ -86,9 +85,7 @@ public class ChannelEditFragment extends BaseFragment implements ChannelEditCont
 			return false;
 		});
 
-		btnCancel.setOnClickListener(v -> {
-			mPresenter.onCancelButtonClicked();
-		});
+		btnCancel.setOnClickListener(v -> mPresenter.onCancelButtonClicked());
 		return rootView;
 	}
 

@@ -44,9 +44,9 @@ dependencies {
     implementation 'androidx.navigation:navigation-runtime:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
-    api 'com.google.dagger:dagger:2.25.4'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.25.4'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0'
+    api 'com.google.dagger:dagger:2.26'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.26'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.1'
     implementation 'com.jakewharton:butterknife:10.2.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
     implementation 'com.google.android.material:material:1.2.0-alpha04'

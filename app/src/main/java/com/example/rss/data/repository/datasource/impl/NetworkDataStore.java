@@ -1,6 +1,5 @@
 package com.example.rss.data.repository.datasource.impl;
 
-import com.example.rss.data.database.dto.ChannelDTO;
 import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;

@@ -7,13 +7,10 @@ import androidx.room.Transaction;
 
 import com.example.rss.data.database.dto.CategoryDTO;
 
-import org.intellij.lang.annotations.Flow;
-
 import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
-import io.reactivex.Single;
 
 @Dao
 public interface CategoryDAO {

@@ -35,8 +35,8 @@ public class ItemDTO {
     private Date pubDate;
 
     @NonNull
-    @ColumnInfo(name = "encosure")
-    private Long encosure;
+    @ColumnInfo(name = "enclosure")
+    private Long enclosure;
 
     @NonNull
     public Long getItemId() {
@@ -93,11 +93,11 @@ public class ItemDTO {
     }
 
     @NonNull
-    public Long getEncosure() {
-        return encosure;
+    public Long getEnclosure() {
+        return enclosure;
     }
 
-    public void setEncosure(@NonNull Long encosure) {
-        this.encosure = encosure;
+    public void setEnclosure(@NonNull Long enclosure) {
+        this.enclosure = enclosure;
     }
 }

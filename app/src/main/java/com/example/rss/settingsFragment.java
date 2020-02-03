@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class settingsFragment extends Fragment {
+class settingsFragment extends Fragment {
 
 
     public settingsFragment() {

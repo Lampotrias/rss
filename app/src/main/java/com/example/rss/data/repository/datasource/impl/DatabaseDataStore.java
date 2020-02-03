@@ -16,7 +16,7 @@ import io.reactivex.Single;
 
 public class DatabaseDataStore implements IDataStore {
 
-	private AppDatabase appDatabase;
+	private final AppDatabase appDatabase;
 
 	public DatabaseDataStore(AppDatabase appDatabase) {
 		this.appDatabase = appDatabase;

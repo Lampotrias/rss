@@ -22,7 +22,7 @@ import javax.inject.Inject;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
-public class ChannelEditInteractor {
+class ChannelEditInteractor {
 
 	private final IThreadExecutor threadExecutor;
 	private final IPostExecutionThread postExecutionThread;
