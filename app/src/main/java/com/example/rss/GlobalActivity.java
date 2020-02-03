@@ -1,12 +1,13 @@
 package com.example.rss;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,20 +17,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
 
 import com.example.rss.presentation.BaseActivity;
 import com.example.rss.presentation.global.GlobalActions;
 import com.example.rss.presentation.global.GlobalPresenter;
 import com.example.rss.presentation.global.GlobalContract;
-import com.example.rss.presentation.main.MainFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -41,6 +37,8 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 	private CoordinatorLayout container;
 
 	private DrawerLayout drawer;
+	private ExpandableListView expandableListView;
+	private AndroidApplication app;
 
     @Inject
     public GlobalPresenter mPresenter;
@@ -62,7 +60,7 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		AndroidApplication app = (AndroidApplication) getApplication();
+		app = (AndroidApplication) getApplication();
 		app.setGlobalActivity(this);
 		app.getAppComponent().inject(this);
 
@@ -91,8 +89,30 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 
 		Button btnAdd = findViewById(R.id.btnAddChannelDrawer);
 		btnAdd.setOnClickListener(v -> mPresenter.OnClickChannelAdd(v));
+	}
 
-		//replaceFragment(new MainFragment());
+	@Override
+	public void ShowChannelListMenu(List<Map<String, String>> groupData, List<List<Map<String, String>>> childData, String attrParentTitle, String attrChildTitle) {
+		expandableListView = findViewById(R.id.expandableListView);
+
+		String[] groupFrom = new String[]{attrParentTitle};
+		int[] groupTo = new int[]{android.R.id.text1};
+
+		String[] childFrom = new String[]{attrChildTitle};
+		int[] childTo = new int[]{android.R.id.text1};
+
+		SimpleExpandableListAdapter adapter = new SimpleExpandableListAdapter(
+				this,
+				groupData,
+				android.R.layout.simple_expandable_list_item_1,
+				groupFrom,
+				groupTo,
+				childData,
+				android.R.layout.simple_list_item_1,
+				childFrom,
+				childTo);
+
+		expandableListView.setAdapter(adapter);
 	}
 
 	@Override
@@ -129,13 +149,24 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 
 	@Override
 	public void openDrawer() {
-
+		drawer.openDrawer(GravityCompat.START);
 	}
 
 	@Override
 	public void closeDrawer() {
 		drawer.closeDrawer(GravityCompat.START);
 	}
+
+	@Override
+	public Context context() {
+		return this;
+	}
+
+	@Override
+	public void displayError(String errorMessage) {
+		Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+	}
+
 
     @Override
     public int getNavHostViewId() {
@@ -148,6 +179,10 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 		switch (itemId){
 			case R.id.action_settings:
 				onClickMenuSettings();
+				break;
+			case R.id.action_close_app:
+				finish();
+				break;
 		}
 
 		return false;
@@ -164,11 +199,10 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 	}
 
 	@Override
-	public void replaceFragment(Fragment fragment) {
-
-		final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-		fragmentTransaction.add(R.id.nav_host_fragment, fragment);
-		fragmentTransaction.commit();
+	protected void onDestroy() {
+		app.releaseGlobalActivity();
+		mPresenter.destroy();
+		mPresenter = null;
+		super.onDestroy();
 	}
-
 }

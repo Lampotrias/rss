@@ -67,6 +67,7 @@ public class ChannelDatabaseMapper {
 		CategoryDTO categoryDTO = null;
 		if (categoryEntity != null) {
 			categoryDTO = new CategoryDTO();
+			categoryDTO.setCategoryId(categoryEntity.getCategoryId());
 			categoryDTO.setName(categoryEntity.getName());
 			categoryDTO.setType(categoryEntity.getType());
 		}
@@ -78,6 +79,7 @@ public class ChannelDatabaseMapper {
 		CategoryEntity categoryEntity = null;
 		if (categoryDTO != null) {
 			categoryEntity = new CategoryEntity();
+			categoryEntity.setCategoryId(categoryDTO.getCategoryId());
 			categoryEntity.setName(categoryDTO.getName());
 			categoryEntity.setType(categoryDTO.getType());
 		}

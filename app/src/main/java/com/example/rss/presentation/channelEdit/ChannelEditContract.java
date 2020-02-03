@@ -1,11 +1,10 @@
-package com.example.rss.presentation.channelControl;
+package com.example.rss.presentation.channelEdit;
 
-import android.content.ContentValues;
 import android.content.Context;
 
 import com.example.rss.presentation.Presenter;
 
-public interface ChannelContract {
+public interface ChannelEditContract {
 	interface V {
 		void displayError (String throwable);
 		void displaySuccess(String message);

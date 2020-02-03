@@ -1,4 +1,4 @@
-package com.example.rss.presentation.channelControl;
+package com.example.rss.presentation.channelEdit;
 
 
 import android.content.Context;
@@ -6,11 +6,9 @@ import android.util.Log;
 
 import androidx.room.EmptyResultSetException;
 
-import com.example.rss.data.exception.DatabaseConnectionException;
 import com.example.rss.domain.exception.DefaultErrorBundle;
 import com.example.rss.domain.exception.IErrorBundle;
 import com.example.rss.presentation.exception.ChannelExistsException;
-import com.example.rss.presentation.exception.ChannelNotFoundException;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
 import com.example.rss.presentation.global.GlobalActions;
 
@@ -19,11 +17,11 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 
 
-public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
+public class ChannelEditPresenter implements ChannelEditContract.P<ChannelEditContract.V>
 {
-	private static final String LOG_TAG = ChannelPresenter.class.getSimpleName();
-	private ChannelContract.V mView;
-	private final ChannelInteractor channelInteractor;
+	private static final String LOG_TAG = ChannelEditPresenter.class.getSimpleName();
+	private ChannelEditContract.V mView;
+	private final ChannelEditInteractor channelEditInteractor;
 	private final CompositeDisposable compositeDisposable;
 	protected Context context;
 	private String sourceUrl;
@@ -32,8 +30,8 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 	GlobalActions globalActions;
 
 	@Inject
-	ChannelPresenter(ChannelInteractor channelInteractor) {
-		this.channelInteractor = channelInteractor;
+	ChannelEditPresenter(ChannelEditInteractor channelEditInteractor) {
+		this.channelEditInteractor = channelEditInteractor;
 		compositeDisposable = new CompositeDisposable();
 	}
 
@@ -43,12 +41,12 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 		//ToDo addChannel category logic
 
 		compositeDisposable.add(
-				channelInteractor.checkChannelExistsByUrl(url)
+				channelEditInteractor.checkChannelExistsByUrl(url)
 					.subscribe(channel -> {
 							showErrorMessage(new DefaultErrorBundle(new ChannelExistsException()));
 						},throwable -> {
 							if (throwable instanceof EmptyResultSetException){
-								compositeDisposable.add(channelInteractor.addChannel(url, 1L, bCacheImage, bDownloadFull, bOnlyWifi)
+								compositeDisposable.add(channelEditInteractor.addChannel(url, 1L, bCacheImage, bDownloadFull, bOnlyWifi)
 										.subscribe(
 												aLong -> {
 													mView.displaySuccess("new id: " + aLong);
@@ -66,7 +64,7 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 	@Override
 	public void onCancelButtonClicked() {
 		compositeDisposable.add(
-				channelInteractor.getChannelById(1L)
+				channelEditInteractor.getChannelById(1L)
 						.subscribe((channel, throwable) -> {
 							Log.e("myApp", "1123");
 						})
@@ -74,7 +72,7 @@ public class ChannelPresenter implements ChannelContract.P<ChannelContract.V>
 	}
 
 	@Override
-	public void setView(ChannelContract.V view) {
+	public void setView(ChannelEditContract.V view) {
 		mView = view;
 	}
 
