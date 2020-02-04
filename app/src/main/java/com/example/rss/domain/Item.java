@@ -2,6 +2,7 @@ package com.example.rss.domain;
 
 public class Item {
     private Long itemId;
+    private Long channelId;
     private Long guid;
     private String title;
     private String description;
@@ -9,6 +10,7 @@ public class Item {
     private String pubDate;
     private Long enclosure;
     private Boolean isRead;
+    private Boolean isFavorite;
 
     public Long getItemId() {
         return itemId;
@@ -24,6 +26,22 @@ public class Item {
 
     public void setGuid(Long guid) {
         this.guid = guid;
+    }
+
+    public Long getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(Long channelId) {
+        this.channelId = channelId;
+    }
+
+    public Boolean getFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        isFavorite = favorite;
     }
 
     public String getTitle() {

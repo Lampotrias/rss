@@ -37,13 +37,6 @@ class ChannelEditInteractor {
 
 	Single<Channel> checkChannelExistsByUrl(String url){
 		return channelRepository.getChannelByUrl(url)
-//				.doOnError(throwable -> {
-//
-//					if (throwable instanceof EmptyResultSetException)
-//						throw new ChannelNotFoundException();
-//					else
-//						throw new DatabaseConnectionException();
-//				})
 				.subscribeOn(Schedulers.from(threadExecutor))
 				.observeOn(postExecutionThread.getScheduler());
 	}

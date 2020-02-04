@@ -134,7 +134,7 @@ public class RepositoryEntityDataMapper {
         return categories;
     }
 
-    public static Item transform (ItemEntity itemEntity){
+    public Item transform (ItemEntity itemEntity){
         Item item = null;
         if (itemEntity != null) {
             item = new Item();
@@ -146,12 +146,13 @@ public class RepositoryEntityDataMapper {
             item.setLink(itemEntity.getLink());
             item.setPubDate(itemEntity.getPubDate());
             item.setRead(itemEntity.getRead());
+            item.setFavorite(itemEntity.getFavorite());
         }
 
         return item;
     }
 
-    public static ItemEntity transform (Item item){
+    public ItemEntity transform (Item item){
         ItemEntity itemEntity = null;
         if (item != null) {
             itemEntity = new ItemEntity();
@@ -163,12 +164,13 @@ public class RepositoryEntityDataMapper {
             itemEntity.setLink(item.getLink());
             itemEntity.setPubDate(item.getPubDate());
             itemEntity.setRead(item.getRead());
+            itemEntity.setFavorite(item.getFavorite());
         }
 
         return itemEntity;
     }
 
-    public static List<Item> transformItems(List<ItemEntity> itemEntities){
+    public List<Item> transformItems(List<ItemEntity> itemEntities){
         List<Item> items = new ArrayList<>();
         for (ItemEntity itemEntity: itemEntities) {
             if (itemEntity != null){

@@ -1,5 +1,6 @@
 package com.example.rss.data.database.mapper;
 
+import com.example.rss.data.database.FileDAO;
 import com.example.rss.data.database.dto.CategoryDTO;
 import com.example.rss.data.database.dto.ChannelDTO;
 import com.example.rss.data.database.dto.FileDTO;
@@ -139,6 +140,7 @@ public class ChannelDatabaseMapper {
 			itemDTO.setLink(itemEntity.getLink());
 			itemDTO.setPubDate(itemEntity.getPubDate());
 			itemDTO.setRead(itemEntity.getRead());
+			itemDTO.setFavorite(itemEntity.getFavorite());
 		}
 
 		return itemDTO;
@@ -156,6 +158,7 @@ public class ChannelDatabaseMapper {
 			itemEntity.setLink(itemDTO.getLink());
 			itemEntity.setPubDate(itemDTO.getPubDate());
 			itemEntity.setRead(itemDTO.getRead());
+			itemEntity.setFavorite(itemDTO.getFavorite());
 		}
 
 		return itemEntity;

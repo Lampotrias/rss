@@ -14,6 +14,9 @@ public class ItemDTO {
     @ColumnInfo(name = "id")
     private Long itemId;
 
+    @ColumnInfo(name = "channel_id")
+    private Long channelId;
+
     @NonNull
     @ColumnInfo(name = "guid")
     private Long guid;
@@ -43,12 +46,25 @@ public class ItemDTO {
     private Boolean isRead;
 
     @NonNull
+    @ColumnInfo(name = "is_favorite")
+    private Boolean isFavorite;
+
+    @NonNull
     public Long getItemId() {
         return itemId;
     }
 
     public void setItemId(@NonNull Long itemId) {
         this.itemId = itemId;
+    }
+
+    @NonNull
+    public Boolean getFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(@NonNull Boolean favorite) {
+        isFavorite = favorite;
     }
 
     @NonNull
@@ -105,6 +121,13 @@ public class ItemDTO {
         this.pubDate = pubDate;
     }
 
+    public Long getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(Long channelId) {
+        this.channelId = channelId;
+    }
     @NonNull
     public Long getEnclosure() {
         return enclosure;

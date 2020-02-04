@@ -1,16 +1,17 @@
-package com.example.rss.data.entity;
+package com.example.rss.presentation.itemList.adapter;
 
-public class ItemEntity {
+import com.example.rss.domain.Item;
+
+public class ItemModel {
     private Long itemId;
-    private Long channelId;
     private Long guid;
     private String title;
     private String description;
     private String link;
     private String pubDate;
-    private Long enclosure;
+    private String enclosure;
     private Boolean isRead;
-    private Boolean isFavorite;
+    private Boolean isStar;
 
     public Long getItemId() {
         return itemId;
@@ -18,22 +19,6 @@ public class ItemEntity {
 
     public void setItemId(Long itemId) {
         this.itemId = itemId;
-    }
-
-    public Long getChannelId() {
-        return channelId;
-    }
-
-    public void setChannelId(Long channelId) {
-        this.channelId = channelId;
-    }
-
-    public Boolean getFavorite() {
-        return isFavorite;
-    }
-
-    public void setFavorite(Boolean favorite) {
-        isFavorite = favorite;
     }
 
     public Long getGuid() {
@@ -76,11 +61,11 @@ public class ItemEntity {
         this.pubDate = pubDate;
     }
 
-    public Long getEnclosure() {
+    public String getEnclosure() {
         return enclosure;
     }
 
-    public void setEnclosure(Long enclosure) {
+    public void setEnclosure(String enclosure) {
         this.enclosure = enclosure;
     }
 
@@ -91,4 +76,13 @@ public class ItemEntity {
     public void setRead(Boolean read) {
         isRead = read;
     }
+
+    public Boolean getStar() {
+        return isStar;
+    }
+
+    public void setStar(Boolean star) {
+        isStar = star;
+    }
+
 }

@@ -7,6 +7,7 @@ import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.ItemEntity;
 import com.example.rss.data.repository.datasource.IDataStore;
+import com.example.rss.domain.File;
 
 import java.io.InputStream;
 import java.util.List;
@@ -33,8 +34,8 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Single<List<ItemEntity>> getItemsByChannelId(Long id) {
-		return null;
+	public Flowable<List<ItemEntity>> getItemsByChannelId(Long id) {
+		return appDatabase.itemDAO().getItemsByChannelId(id).map(ChannelDatabaseMapper::transformItems);
 	}
 
 	@Override
@@ -50,6 +51,11 @@ public class DatabaseDataStore implements IDataStore {
 	@Override
 	public Single<Long> addFile(FileEntity fileEntity) {
 		return appDatabase.fileDAO().insert(ChannelDatabaseMapper.transform(fileEntity));
+	}
+
+	@Override
+	public Single<FileEntity> getFileById(Long id) {
+		return appDatabase.fileDAO().getFileById(id).map(ChannelDatabaseMapper::transform);
 	}
 
 	@Override

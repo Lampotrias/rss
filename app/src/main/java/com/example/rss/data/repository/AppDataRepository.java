@@ -60,8 +60,9 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
-	public Single<List<Item>> getItemsByChannelId(Long id) {
-		return null;
+	public Flowable<List<Item>> getItemsByChannelId(Long id) {
+		final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
+		return dataStore.getItemsByChannelId(id).map(repositoryEntityDataMapper::transformItems);
 	}
 
 	@Override
@@ -79,8 +80,13 @@ public class AppDataRepository implements IRepository {
 	@Override
 	public Single<Long> addFile(File file) {
 		final IDataStore dataStore = channelDataStoreFactory.createPut();
-		//TODO addChannel cache
-		FileEntity fileEntity = repositoryEntityDataMapper.transform(file);
-		return dataStore.addFile(fileEntity);
+		return dataStore.addFile(repositoryEntityDataMapper.transform(file));
+	}
+
+	@Override
+	public Single<File> getFileById(Long id) {
+		final IDataStore dataStore = channelDataStoreFactory.createForFile(id);
+		return dataStore.getFileById(id).map(repositoryEntityDataMapper::transform);
+
 	}
 }

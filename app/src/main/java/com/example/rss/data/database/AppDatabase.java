@@ -25,6 +25,8 @@ public abstract class AppDatabase extends RoomDatabase {
 	public abstract FileDAO fileDAO();
 	public abstract ChannelDAO channelDAO();
 	public abstract CategoryDAO categoryDAO();
+	public abstract ItemDAO itemDAO();
+	public abstract FavoriteDAO favoriteDAO();
 
 
 	@Override

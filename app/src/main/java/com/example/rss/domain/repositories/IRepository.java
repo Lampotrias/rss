@@ -21,7 +21,7 @@ public interface IRepository {
 	Flowable<List<Channel>> getAllChannels();
 
 
-	Single<List<Item>> getItemsByChannelId(Long id);
+	Flowable<List<Item>> getItemsByChannelId(Long id);
 
 	Single<Channel> getChannelByUrl(String url);
 
@@ -31,4 +31,5 @@ public interface IRepository {
 
 	//File
 	Single<Long> addFile(File file);
+	Single<File> getFileById(Long id);
 }

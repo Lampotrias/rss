@@ -49,7 +49,11 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
 		app.getFragmentModule(this).inject(this);
 	}
 
-
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		mPresenter.setView(this);
+	}
 
 	@Nullable
 	@Override
@@ -57,17 +61,14 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
 		android.view.View rootView = inflater.inflate(R.layout.items_list_fragment, container, false);
 		ButterKnife.bind(this, rootView);
 
-		refreshLayout.setOnRefreshListener(() -> test());
+		refreshLayout.setOnRefreshListener(() -> mPresenter.refreshList());
+
 		refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
 				android.R.color.holo_green_light,
 				android.R.color.holo_orange_light,
 				android.R.color.holo_red_light);
 
 		return rootView;
-	}
-
-	private void test() {
-		Toast.makeText(context(), "test", Toast.LENGTH_SHORT).show();
 	}
 
 
@@ -87,5 +88,15 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
 	@Override
 	public Context context() {
 		return this.getActivity();
+	}
+
+	@Override
+	public void displayError(String error) {
+		showToastMessage(error);
+	}
+
+	@Override
+	public void stopRefresh() {
+		refreshLayout.setRefreshing(false);
 	}
 }

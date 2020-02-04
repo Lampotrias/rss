@@ -45,7 +45,7 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Single<List<ItemEntity>> getItemsByChannelId(Long id) {
+    public Flowable<List<ItemEntity>> getItemsByChannelId(Long id) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
@@ -61,6 +61,11 @@ public class NetworkDataStore implements IDataStore {
 
     @Override
     public Single<Long> addFile(FileEntity fileEntity) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Single<FileEntity> getFileById(Long id) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 

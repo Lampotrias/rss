@@ -8,6 +8,7 @@ import com.example.rss.data.repository.datasource.IDataStore;
 import java.io.InputStream;
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 public abstract class DiskDataStore implements IDataStore {
@@ -33,7 +34,7 @@ public abstract class DiskDataStore implements IDataStore {
     }
 
     @Override
-    public Single<List<ItemEntity>> getItemsByChannelId(Long id) {
+    public Flowable<List<ItemEntity>> getItemsByChannelId(Long id) {
         return null;
     }
 
