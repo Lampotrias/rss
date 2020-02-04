@@ -1,13 +1,9 @@
-package com.example.rss.presentation.channelControl;
+package com.example.rss.presentation.channelEdit;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,12 +11,14 @@ import androidx.annotation.Nullable;
 import com.example.rss.AndroidApplication;
 import com.example.rss.R;
 import com.example.rss.presentation.BaseFragment;
-import com.example.rss.presentation.di.module.FragmentModule;
 import com.example.rss.presentation.di.scope.ChannelScope;
+import com.example.rss.presentation.global.GlobalActions;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -28,12 +26,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 @ChannelScope
-public class ChannelFragment extends BaseFragment implements ChannelContract.V {
+public class ChannelEditFragment extends BaseFragment implements ChannelEditContract.V {
 
-	private static ChannelFragment instance = null;
+	private static ChannelEditFragment instance;
+	private AndroidApplication app;
 
 	@Inject
-	public ChannelPresenter mPresenter;
+	public ChannelEditPresenter mPresenter;
+
+	@Inject
+	public GlobalActions globalActions;
 
 	@BindView(R.id.btnAddChannel)
 	MaterialButton btnAdd;
@@ -59,8 +61,8 @@ public class ChannelFragment extends BaseFragment implements ChannelContract.V {
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		AndroidApplication app = (AndroidApplication) getActivity().getApplication();
-		app.getAppComponent().plusFragmentComponent(new FragmentModule(this)).inject(this);
+		app = (AndroidApplication) Objects.requireNonNull(getActivity()).getApplication();
+		app.getFragmentModule(this).inject(this);
 	}
 
 
@@ -83,9 +85,7 @@ public class ChannelFragment extends BaseFragment implements ChannelContract.V {
 			return false;
 		});
 
-		btnCancel.setOnClickListener(v -> {
-			mPresenter.onCancelButtonClicked();
-		});
+		btnCancel.setOnClickListener(v -> mPresenter.onCancelButtonClicked());
 		return rootView;
 	}
 
@@ -101,9 +101,9 @@ public class ChannelFragment extends BaseFragment implements ChannelContract.V {
 		}
 	}
 
-	public static ChannelFragment getInstance(){
+	public static ChannelEditFragment getInstance(){
 		if (instance == null) {
-			instance = new ChannelFragment();
+			instance = new ChannelEditFragment();
 		}
 		return instance;
 	}
@@ -137,7 +137,9 @@ public class ChannelFragment extends BaseFragment implements ChannelContract.V {
 
 	@Override
 	public void onDestroy() {
-		super.onDestroy();
+		instance = null;
 		mPresenter.destroy();
+		app.releaseFragmentModule();
+		super.onDestroy();
 	}
 }

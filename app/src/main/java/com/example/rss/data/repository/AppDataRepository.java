@@ -60,7 +60,7 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
-	public Single<List<Item>> getRowsByChannelId(Long id) {
+	public Single<List<Item>> getItemsByChannelId(Long id) {
 		return null;
 	}
 

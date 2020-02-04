@@ -10,11 +10,11 @@
         android:name="com.example.rss.presentation.main.MainFragment"
         android:label="main_fragment"
         tools:layout="@layout/main_fragment" />
-                    <fragment
-                    android:id="@+id/nav_channel_edit_fragment"
-                    android:name="com.example.rss.presentation.channelControl.ChannelFragment"
-                    android:label="channel_edit_fragment"
-                    tools:layout="@layout/channel_edit_fragment" />
+    <fragment
+        android:id="@+id/nav_channel_edit_fragment"
+        android:name="com.example.rss.presentation.channelEdit.ChannelEditFragment"
+        android:label="channel_edit_fragment"
+        tools:layout="@layout/channel_edit_fragment" />
     <fragment
         android:id="@+id/nav_settingsFragment"
         android:name="com.example.rss.settingsFragment"

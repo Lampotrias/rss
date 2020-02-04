@@ -15,7 +15,7 @@ public interface IDataStore {
 	Single<Long> addChannel(ChannelEntity channel);
 	Single<InputStream> getRssFeedContent(String path);
 	Single<ChannelEntity> getChannelById(Long id);
-	Single<List<ItemEntity>> getRowsByChannelId(Long id);
+	Single<List<ItemEntity>> getItemsByChannelId(Long id);
 
 	Single<ChannelEntity> getChannelByUrl(String url);
 	Flowable<List<ChannelEntity>> getAllChannels();

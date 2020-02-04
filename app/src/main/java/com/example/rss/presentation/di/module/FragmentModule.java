@@ -7,7 +7,7 @@ import dagger.Module;
 @Module
 public class FragmentModule {
 
-    Fragment mFragment;
+    private final Fragment mFragment;
 
     public FragmentModule(Fragment mFragment) {
         this.mFragment = mFragment;

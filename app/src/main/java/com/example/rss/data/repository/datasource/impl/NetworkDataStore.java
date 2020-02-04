@@ -45,7 +45,7 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Single<List<ItemEntity>> getRowsByChannelId(Long id) {
+    public Single<List<ItemEntity>> getItemsByChannelId(Long id) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 

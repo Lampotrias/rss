@@ -33,7 +33,7 @@ public abstract class DiskDataStore implements IDataStore {
     }
 
     @Override
-    public Single<List<ItemEntity>> getRowsByChannelId(Long id) {
+    public Single<List<ItemEntity>> getItemsByChannelId(Long id) {
         return null;
     }
 

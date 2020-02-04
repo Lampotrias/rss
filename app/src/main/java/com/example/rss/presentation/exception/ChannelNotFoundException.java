@@ -1,6 +1,6 @@
 package com.example.rss.presentation.exception;
 
-public class ChannelNotFoundException extends Exception{
+class ChannelNotFoundException extends Exception{
 	public ChannelNotFoundException() {
 		super();
 	}

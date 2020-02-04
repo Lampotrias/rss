@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import com.example.rss.R;
 import com.example.rss.presentation.BaseFragment;
 
-public class MainFragment extends BaseFragment {
+class MainFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

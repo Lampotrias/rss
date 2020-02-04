@@ -7,8 +7,6 @@ import androidx.room.Query;
 
 import com.example.rss.data.database.dto.ChannelDTO;
 
-import org.intellij.lang.annotations.Flow;
-
 import java.util.List;
 
 import io.reactivex.Flowable;

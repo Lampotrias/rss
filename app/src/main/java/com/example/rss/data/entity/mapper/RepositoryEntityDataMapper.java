@@ -3,9 +3,11 @@ package com.example.rss.data.entity.mapper;
 import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
+import com.example.rss.data.entity.ItemEntity;
 import com.example.rss.domain.Category;
 import com.example.rss.domain.Channel;
 import com.example.rss.domain.File;
+import com.example.rss.domain.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,4 +134,47 @@ public class RepositoryEntityDataMapper {
         return categories;
     }
 
+    public static Item transform (ItemEntity itemEntity){
+        Item item = null;
+        if (itemEntity != null) {
+            item = new Item();
+            item.setItemId(itemEntity.getItemId());
+            item.setTitle(itemEntity.getTitle());
+            item.setDescription(itemEntity.getDescription());
+            item.setEnclosure(itemEntity.getEnclosure());
+            item.setGuid(itemEntity.getGuid());
+            item.setLink(itemEntity.getLink());
+            item.setPubDate(itemEntity.getPubDate());
+            item.setRead(itemEntity.getRead());
+        }
+
+        return item;
+    }
+
+    public static ItemEntity transform (Item item){
+        ItemEntity itemEntity = null;
+        if (item != null) {
+            itemEntity = new ItemEntity();
+            itemEntity.setItemId(item.getItemId());
+            itemEntity.setTitle(item.getTitle());
+            itemEntity.setDescription(item.getDescription());
+            itemEntity.setEnclosure(item.getEnclosure());
+            itemEntity.setGuid(item.getGuid());
+            itemEntity.setLink(item.getLink());
+            itemEntity.setPubDate(item.getPubDate());
+            itemEntity.setRead(item.getRead());
+        }
+
+        return itemEntity;
+    }
+
+    public static List<Item> transformItems(List<ItemEntity> itemEntities){
+        List<Item> items = new ArrayList<>();
+        for (ItemEntity itemEntity: itemEntities) {
+            if (itemEntity != null){
+                items.add(transform(itemEntity));
+            }
+        }
+        return items;
+    }
 }

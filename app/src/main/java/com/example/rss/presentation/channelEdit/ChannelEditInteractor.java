@@ -1,4 +1,4 @@
-package com.example.rss.presentation.channelControl;
+package com.example.rss.presentation.channelEdit;
 
 
 import com.example.rss.domain.exception.XmlParseException;
@@ -22,14 +22,14 @@ import javax.inject.Inject;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
-public class ChannelInteractor {
+class ChannelEditInteractor {
 
 	private final IThreadExecutor threadExecutor;
 	private final IPostExecutionThread postExecutionThread;
 	private final IRepository channelRepository;
 
 	@Inject
-	public ChannelInteractor(IRepository channelRepository, IThreadExecutor threadExecutor, IPostExecutionThread postExecutionThread){
+	public ChannelEditInteractor(IRepository channelRepository, IThreadExecutor threadExecutor, IPostExecutionThread postExecutionThread){
 		this.threadExecutor = threadExecutor;
 		this.postExecutionThread = postExecutionThread;
 		this.channelRepository = channelRepository;

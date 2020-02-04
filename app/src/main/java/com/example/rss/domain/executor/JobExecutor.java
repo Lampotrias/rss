@@ -2,7 +2,6 @@ package com.example.rss.domain.executor;
 
 import androidx.annotation.NonNull;
 
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
@@ -21,7 +20,7 @@ public class JobExecutor implements IThreadExecutor {
 		threadPoolExecutor = new ThreadPoolExecutor(
 				3, 5, 10,
 				TimeUnit.SECONDS,
-				new LinkedBlockingQueue<Runnable>(),
+				new LinkedBlockingQueue<>(),
 				new JobThreadFactory(),
 				new JobRejectedExecutionHandler()
 		);

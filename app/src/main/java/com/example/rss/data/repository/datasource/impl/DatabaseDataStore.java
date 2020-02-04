@@ -16,7 +16,7 @@ import io.reactivex.Single;
 
 public class DatabaseDataStore implements IDataStore {
 
-	private AppDatabase appDatabase;
+	private final AppDatabase appDatabase;
 
 	public DatabaseDataStore(AppDatabase appDatabase) {
 		this.appDatabase = appDatabase;
@@ -33,7 +33,7 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Single<List<ItemEntity>> getRowsByChannelId(Long id) {
+	public Single<List<ItemEntity>> getItemsByChannelId(Long id) {
 		return null;
 	}
 

@@ -1,11 +1,5 @@
 package com.example.rss.data.entity;
 
-import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
-import androidx.room.PrimaryKey;
-
-//import com.google.gson.annotations.SerializedName;
-
 public class CategoryEntity {
 	//@SerializedName("id")
 	private Long categoryId;
