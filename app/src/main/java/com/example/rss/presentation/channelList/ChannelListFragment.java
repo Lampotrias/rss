@@ -12,17 +12,21 @@ import androidx.annotation.Nullable;
 import com.example.rss.R;
 import com.example.rss.presentation.BaseFragment;
 
-public class ChannelListFragment extends BaseFragment implements ChannelListContract.V {
+import butterknife.ButterKnife;
 
-    @Override
-    public Context context() {
-        return null;
-    }
+public class ChannelListFragment extends BaseFragment implements ChannelListContract.V {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.channel_list_fragment, container, false);
+        ButterKnife.bind(this, view);
 
-        return inflater.inflate(R.layout.channel_list_fragment, container, false);
+        return view;
+    }
+
+    @Override
+    public Context context() {
+        return null;
     }
 }

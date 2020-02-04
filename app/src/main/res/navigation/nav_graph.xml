@@ -4,12 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/nav_main_fragment">
+    app:startDestination="@id/nav_item_list_fragment">
     <fragment
-        android:id="@+id/nav_main_fragment"
-        android:name="com.example.rss.presentation.main.MainFragment"
-        android:label="main_fragment"
-        tools:layout="@layout/main_fragment" />
+        android:id="@+id/nav_item_list_fragment"
+        android:name="com.example.rss.presentation.itemList.ItemListFragment"
+        android:label="item_list_fragment"
+        tools:layout="@layout/items_list_fragment" />
     <fragment
         android:id="@+id/nav_channel_edit_fragment"
         android:name="com.example.rss.presentation.channelEdit.ChannelEditFragment"
@@ -17,7 +17,7 @@
         tools:layout="@layout/channel_edit_fragment" />
     <fragment
         android:id="@+id/nav_settingsFragment"
-        android:name="com.example.rss.settingsFragment"
+        android:name="com.example.rss.presentation.settings.settingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>
