@@ -27,7 +27,6 @@ public class ChannelDTO {
 	@ColumnInfo(name = "category_id")
 	private Long categoryId;
 
-	@NonNull
 	@ColumnInfo(name = "file_id")
 	private Long fileId;
 

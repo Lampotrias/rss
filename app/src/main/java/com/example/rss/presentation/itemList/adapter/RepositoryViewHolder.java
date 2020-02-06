@@ -58,11 +58,11 @@ public class RepositoryViewHolder extends RecyclerView.ViewHolder implements Rep
     }
 
     @Override
-    public void setStar(Boolean isStar) {
-        if(isStar){
-            imgStar.setImageResource(android.R.drawable.star_big_on);
-        }else{
+    public void setStar(@NonNull Boolean isStar) {
+        if(!isStar){
             imgStar.setImageResource(android.R.drawable.star_big_off);
+        }else if (isStar){
+            imgStar.setImageResource(android.R.drawable.star_big_on);
         }
     }
 

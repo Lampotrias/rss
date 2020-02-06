@@ -3,7 +3,7 @@ package com.example.rss.domain;
 public class Item {
     private Long itemId;
     private Long channelId;
-    private Long guid;
+    private String guid;
     private String title;
     private String description;
     private String link;
@@ -20,11 +20,11 @@ public class Item {
         this.itemId = itemId;
     }
 
-    public Long getGuid() {
+    public String getGuid() {
         return guid;
     }
 
-    public void setGuid(Long guid) {
+    public void setGuid(String guid) {
         this.guid = guid;
     }
 

@@ -1,5 +1,6 @@
 package com.example.rss.presentation.itemList.adapter;
 
+
 import com.bumptech.glide.RequestManager;
 
 import java.util.List;
@@ -7,7 +8,6 @@ import java.util.List;
 public class RepositoriesListPresenter {
     private List<ItemModel> items;
     private final RequestManager glide;
-
 
     public RepositoriesListPresenter(RequestManager glide, List<ItemModel> items) {
         this.glide = glide;
@@ -20,8 +20,8 @@ public class RepositoriesListPresenter {
         rowView.setDescription(item.getDescription());
         rowView.setDate(item.getPubDate());
         rowView.setLogo(glide, item.getEnclosure());
-        rowView.setStar(item.getStar());
-        rowView.setRead(item.getRead());
+        rowView.setStar((item.getStar() == null)?false:item.getStar());
+        rowView.setRead((item.getRead() == null)?false:item.getRead());
     }
 
     int getRepositoriesRowsCount() {

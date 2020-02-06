@@ -2,6 +2,8 @@ package com.example.rss.presentation.itemList;
 
 import android.content.Context;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.rss.presentation.Presenter;
 
 public interface ItemListContract {
@@ -9,6 +11,7 @@ public interface ItemListContract {
 		Context context();
 		void displayError(String error);
 		void stopRefresh();
+		RecyclerView getRecycler();
 	}
 
 	interface P<T> extends Presenter {

@@ -21,7 +21,9 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
 import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
@@ -38,15 +40,34 @@ class ItemListInteractor {
 		this.channelRepository = channelRepository;
 	}
 
-	Flowable<List<Item>> getItemsByChannelId (Long id) {
+	Maybe<List<Item>> getItemsByChannelId (Long id) {
 		return channelRepository.getItemsByChannelId(id)
 				.subscribeOn(Schedulers.from(threadExecutor))
 				.observeOn(postExecutionThread.getScheduler());
 	}
 
-	Single<File> getFileById (Long id) {
+	Flowable<File> getFileById (Long id) {
 		return channelRepository.getFileById(id)
 				.subscribeOn(Schedulers.from(threadExecutor))
 				.observeOn(postExecutionThread.getScheduler());
 	}
+
+	Completable InsertItems(List<Item> items){
+		return channelRepository.InsertManyItems(items)
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
+	}
+
+//	Flowable<List<Item>> fffff (Long id) {
+//		return	channelRepository.getChannelById(id)
+//				.flatMap(channel -> channelRepository.getRssFeedContent(channel.getLink()))
+//				.map()
+//				;
+//	}
+//
+//	void parse(InputStream stream){
+//		XmlParser xmlParser = new XmlParser(stream);
+//		xmlParser.
+//	}
+
 }

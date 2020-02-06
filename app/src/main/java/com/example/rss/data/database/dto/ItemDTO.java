@@ -19,7 +19,7 @@ public class ItemDTO {
 
     @NonNull
     @ColumnInfo(name = "guid")
-    private Long guid;
+    private String guid;
 
     @NonNull
     @ColumnInfo(name = "title")
@@ -37,15 +37,13 @@ public class ItemDTO {
     @ColumnInfo(name = "pub_date")
     private String pubDate;
 
-    @NonNull
+
     @ColumnInfo(name = "enclosure")
     private Long enclosure;
 
-    @NonNull
     @ColumnInfo(name = "is_read")
     private Boolean isRead;
 
-    @NonNull
     @ColumnInfo(name = "is_favorite")
     private Boolean isFavorite;
 
@@ -77,11 +75,11 @@ public class ItemDTO {
     }
 
     @NonNull
-    public Long getGuid() {
+    public String getGuid() {
         return guid;
     }
 
-    public void setGuid(@NonNull Long guid) {
+    public void setGuid(@NonNull String guid) {
         this.guid = guid;
     }
 

@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 public abstract class DiskDataStore implements IDataStore {
@@ -34,7 +35,7 @@ public abstract class DiskDataStore implements IDataStore {
     }
 
     @Override
-    public Flowable<List<ItemEntity>> getItemsByChannelId(Long id) {
+    public Maybe<List<ItemEntity>> getItemsByChannelId(Long id) {
         return null;
     }
 

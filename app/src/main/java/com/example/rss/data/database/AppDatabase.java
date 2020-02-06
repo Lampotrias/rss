@@ -16,7 +16,7 @@ import com.example.rss.data.database.dto.ItemDTO;
 import com.example.rss.data.database.сonverters.ConverterDate;
 import com.example.rss.data.database.dto.ChannelDTO;
 
-@Database(entities = {ChannelDTO.class, FileDTO.class, FavoritesDTO.class, ItemDTO.class, CategoryDTO.class}, version = 2, exportSchema = false)
+@Database(entities = {ChannelDTO.class, FileDTO.class, FavoritesDTO.class, ItemDTO.class, CategoryDTO.class}, version = 3, exportSchema = false)
 @TypeConverters({ConverterDate.class})
 public abstract class AppDatabase extends RoomDatabase {
 	private static AppDatabase singleton;

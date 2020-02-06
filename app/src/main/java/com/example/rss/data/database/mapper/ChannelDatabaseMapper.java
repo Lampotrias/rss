@@ -138,6 +138,7 @@ public class ChannelDatabaseMapper {
 			itemDTO.setEnclosure(itemEntity.getEnclosure());
 			itemDTO.setGuid(itemEntity.getGuid());
 			itemDTO.setLink(itemEntity.getLink());
+			itemDTO.setChannelId(itemEntity.getChannelId());
 			itemDTO.setPubDate(itemEntity.getPubDate());
 			itemDTO.setRead(itemEntity.getRead());
 			itemDTO.setFavorite(itemEntity.getFavorite());
@@ -154,6 +155,7 @@ public class ChannelDatabaseMapper {
 			itemEntity.setTitle(itemDTO.getTitle());
 			itemEntity.setDescription(itemDTO.getDescription());
 			itemEntity.setEnclosure(itemDTO.getEnclosure());
+			itemEntity.setChannelId(itemDTO.getChannelId());
 			itemEntity.setGuid(itemDTO.getGuid());
 			itemEntity.setLink(itemDTO.getLink());
 			itemEntity.setPubDate(itemDTO.getPubDate());
@@ -164,7 +166,7 @@ public class ChannelDatabaseMapper {
 		return itemEntity;
 	}
 
-	public static List<ItemEntity> transformItems(List<ItemDTO> itemDTOS){
+	public static List<ItemEntity> transformItemsDtoToEntity(List<ItemDTO> itemDTOS){
 		List<ItemEntity> itemEntities = new ArrayList<>();
 		for (ItemDTO categoryDTO: itemDTOS) {
 			if (categoryDTO != null){
@@ -172,5 +174,15 @@ public class ChannelDatabaseMapper {
 			}
 		}
 		return itemEntities;
+	}
+
+	public static List<ItemDTO> transformItems(List<ItemEntity> itemEntities){
+		List<ItemDTO> itemDTOS = new ArrayList<>();
+		for (ItemEntity itemEntity: itemEntities) {
+			if (itemEntity != null){
+				itemDTOS.add(transform(itemEntity));
+			}
+		}
+		return itemDTOS;
 	}
 }

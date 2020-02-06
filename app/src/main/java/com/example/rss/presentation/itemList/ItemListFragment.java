@@ -99,4 +99,9 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
 	public void stopRefresh() {
 		refreshLayout.setRefreshing(false);
 	}
+
+	@Override
+	public RecyclerView getRecycler() {
+		return itemListRecycler;
+	}
 }

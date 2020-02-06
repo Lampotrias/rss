@@ -12,7 +12,9 @@ import com.example.rss.domain.File;
 import java.io.InputStream;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 public class DatabaseDataStore implements IDataStore {
@@ -34,8 +36,13 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Flowable<List<ItemEntity>> getItemsByChannelId(Long id) {
-		return appDatabase.itemDAO().getItemsByChannelId(id).map(ChannelDatabaseMapper::transformItems);
+	public Maybe<List<ItemEntity>> getItemsByChannelId(Long id) {
+		return appDatabase.itemDAO().getItemsByChannelId(id).map(ChannelDatabaseMapper::transformItemsDtoToEntity);
+	}
+
+	@Override
+	public Completable InsertManyItems(List<ItemEntity> itemEntities) {
+		return appDatabase.itemDAO().insertAll(ChannelDatabaseMapper.transformItems(itemEntities));
 	}
 
 	@Override
@@ -54,7 +61,7 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Single<FileEntity> getFileById(Long id) {
+	public Flowable<FileEntity> getFileById(Long id) {
 		return appDatabase.fileDAO().getFileById(id).map(ChannelDatabaseMapper::transform);
 	}
 

@@ -18,7 +18,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Completable;
 import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 @Singleton
@@ -43,8 +45,7 @@ public class AppDataRepository implements IRepository {
 	@Override
 	public Single<Long> addChannel(Channel channel) {
 		final IDataStore dataStore = channelDataStoreFactory.createPut();
-		ChannelEntity channelEntity = repositoryEntityDataMapper.transform(channel);
-		return dataStore.addChannel(channelEntity);
+		return dataStore.addChannel(repositoryEntityDataMapper.transform(channel));
 	}
 
 	@Override
@@ -60,9 +61,15 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
-	public Flowable<List<Item>> getItemsByChannelId(Long id) {
+	public Maybe<List<Item>> getItemsByChannelId(Long id) {
 		final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
-		return dataStore.getItemsByChannelId(id).map(repositoryEntityDataMapper::transformItems);
+		return dataStore.getItemsByChannelId(id).map(repositoryEntityDataMapper::transformEntityToItems);
+	}
+
+	@Override
+	public Completable InsertManyItems(List<Item> items) {
+		final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
+		return dataStore.InsertManyItems(repositoryEntityDataMapper.transformItemsToEntity(items));
 	}
 
 	@Override
@@ -84,7 +91,7 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
-	public Single<File> getFileById(Long id) {
+	public Flowable<File> getFileById(Long id) {
 		final IDataStore dataStore = channelDataStoreFactory.createForFile(id);
 		return dataStore.getFileById(id).map(repositoryEntityDataMapper::transform);
 

@@ -12,7 +12,9 @@ import java.net.URL;
 import java.util.List;
 
 
+import io.reactivex.Completable;
 import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 public class NetworkDataStore implements IDataStore {
@@ -45,7 +47,12 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Flowable<List<ItemEntity>> getItemsByChannelId(Long id) {
+    public Maybe<List<ItemEntity>> getItemsByChannelId(Long id) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Completable InsertManyItems(List<ItemEntity> itemEntities) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
@@ -65,7 +72,7 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Single<FileEntity> getFileById(Long id) {
+    public Flowable<FileEntity> getFileById(Long id) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 

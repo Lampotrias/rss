@@ -9,20 +9,29 @@ import com.example.rss.domain.File;
 import java.io.InputStream;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 public interface IDataStore {
-	Single<Long> addChannel(ChannelEntity channel);
+	//Network
 	Single<InputStream> getRssFeedContent(String path);
-	Single<ChannelEntity> getChannelById(Long id);
-	Flowable<List<ItemEntity>> getItemsByChannelId(Long id);
 
+	//Channel
+	Single<Long> addChannel(ChannelEntity channel);
+	Single<ChannelEntity> getChannelById(Long id);
 	Single<ChannelEntity> getChannelByUrl(String url);
 	Flowable<List<ChannelEntity>> getAllChannels();
 
-	Single<Long> addFile (FileEntity fileEntity);
-	Single<FileEntity> getFileById(Long id);
+	//Items
+	Maybe<List<ItemEntity>> getItemsByChannelId(Long id);
+	Completable InsertManyItems(List<ItemEntity> itemEntities);
 
+	//Files
+	Single<Long> addFile (FileEntity fileEntity);
+	Flowable<FileEntity> getFileById(Long id);
+
+	//Category
 	Flowable<List<CategoryEntity>> getCategoriesByType(String mType);
 }

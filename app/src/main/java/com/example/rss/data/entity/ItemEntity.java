@@ -3,7 +3,7 @@ package com.example.rss.data.entity;
 public class ItemEntity {
     private Long itemId;
     private Long channelId;
-    private Long guid;
+    private String guid;
     private String title;
     private String description;
     private String link;
@@ -36,11 +36,11 @@ public class ItemEntity {
         isFavorite = favorite;
     }
 
-    public Long getGuid() {
+    public String getGuid() {
         return guid;
     }
 
-    public void setGuid(Long guid) {
+    public void setGuid(String guid) {
         this.guid = guid;
     }
 

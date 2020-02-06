@@ -143,6 +143,7 @@ public class RepositoryEntityDataMapper {
             item.setDescription(itemEntity.getDescription());
             item.setEnclosure(itemEntity.getEnclosure());
             item.setGuid(itemEntity.getGuid());
+            item.setChannelId(itemEntity.getChannelId());
             item.setLink(itemEntity.getLink());
             item.setPubDate(itemEntity.getPubDate());
             item.setRead(itemEntity.getRead());
@@ -161,6 +162,7 @@ public class RepositoryEntityDataMapper {
             itemEntity.setDescription(item.getDescription());
             itemEntity.setEnclosure(item.getEnclosure());
             itemEntity.setGuid(item.getGuid());
+            itemEntity.setChannelId(item.getChannelId());
             itemEntity.setLink(item.getLink());
             itemEntity.setPubDate(item.getPubDate());
             itemEntity.setRead(item.getRead());
@@ -170,7 +172,7 @@ public class RepositoryEntityDataMapper {
         return itemEntity;
     }
 
-    public List<Item> transformItems(List<ItemEntity> itemEntities){
+    public List<Item> transformEntityToItems(List<ItemEntity> itemEntities){
         List<Item> items = new ArrayList<>();
         for (ItemEntity itemEntity: itemEntities) {
             if (itemEntity != null){
@@ -178,5 +180,15 @@ public class RepositoryEntityDataMapper {
             }
         }
         return items;
+    }
+
+    public List<ItemEntity> transformItemsToEntity(List<Item> items){
+        List<ItemEntity> itemEntities = new ArrayList<>();
+        for (Item item: items) {
+            if (items != null){
+                itemEntities.add(transform(item));
+            }
+        }
+        return itemEntities;
     }
 }

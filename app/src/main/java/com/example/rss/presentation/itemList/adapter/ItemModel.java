@@ -4,7 +4,7 @@ import com.example.rss.domain.Item;
 
 public class ItemModel {
     private Long itemId;
-    private Long guid;
+    private String guid;
     private String title;
     private String description;
     private String link;
@@ -21,11 +21,11 @@ public class ItemModel {
         this.itemId = itemId;
     }
 
-    public Long getGuid() {
+    public String getGuid() {
         return guid;
     }
 
-    public void setGuid(Long guid) {
+    public void setGuid(String guid) {
         this.guid = guid;
     }
 

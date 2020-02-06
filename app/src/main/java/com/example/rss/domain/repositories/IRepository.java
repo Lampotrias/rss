@@ -8,7 +8,9 @@ import com.example.rss.domain.Item;
 import java.io.InputStream;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 public interface IRepository {
@@ -19,17 +21,16 @@ public interface IRepository {
 	Single<Long> addChannel(Channel channel);
 	Single<Channel> getChannelById(Long id);
 	Flowable<List<Channel>> getAllChannels();
-
-
-	Flowable<List<Item>> getItemsByChannelId(Long id);
-
 	Single<Channel> getChannelByUrl(String url);
 
-	//Category
+	//Items
+	Maybe<List<Item>> getItemsByChannelId(Long id);
+	Completable InsertManyItems(List<Item> items);
 
+	//Category
 	Flowable<List<Category>> getCategoriesByType(String mType);
 
 	//File
 	Single<Long> addFile(File file);
-	Single<File> getFileById(Long id);
+	Flowable<File> getFileById(Long id);
 }
