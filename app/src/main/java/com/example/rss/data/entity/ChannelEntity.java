@@ -25,10 +25,10 @@ public class ChannelEntity {
 	private String sourceLink;
 
 	//@SerializedName("last_build")
-	private String lastBuild;
+	private Long lastBuildDate;
 
 	//@SerializedName("nextSyncDate")
-	private String nextSyncDate;
+	private Long nextSyncDate;
 
 	//@SerializedName("cache_image")
 	private Boolean cacheImage;
@@ -47,11 +47,11 @@ public class ChannelEntity {
 		this.cacheImage = cacheImage;
 	}
 
-	public String getNextSyncDate() {
+	public Long getNextSyncDate() {
 		return nextSyncDate;
 	}
 
-	public void setNextSyncDate(String nextSyncDate) {
+	public void setNextSyncDate(Long nextSyncDate) {
 		this.nextSyncDate = nextSyncDate;
 	}
 
@@ -131,11 +131,11 @@ public class ChannelEntity {
 		this.link = link;
 	}
 
-	public String getLastBuild() {
-		return lastBuild;
+	public Long getLastBuildDate() {
+		return lastBuildDate;
 	}
 
-	public void setLastBuild(String lastBuild) {
-		this.lastBuild = lastBuild;
+	public void setLastBuildDate(Long lastBuildDate) {
+		this.lastBuildDate = lastBuildDate;
 	}
 }

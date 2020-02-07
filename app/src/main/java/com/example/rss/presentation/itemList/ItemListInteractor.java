@@ -52,22 +52,10 @@ class ItemListInteractor {
 				.observeOn(postExecutionThread.getScheduler());
 	}
 
-	Completable InsertItems(List<Item> items){
+	Maybe<List<Long>> InsertItems(List<Item> items){
 		return channelRepository.InsertManyItems(items)
 				.subscribeOn(Schedulers.from(threadExecutor))
 				.observeOn(postExecutionThread.getScheduler());
 	}
-
-//	Flowable<List<Item>> fffff (Long id) {
-//		return	channelRepository.getChannelById(id)
-//				.flatMap(channel -> channelRepository.getRssFeedContent(channel.getLink()))
-//				.map()
-//				;
-//	}
-//
-//	void parse(InputStream stream){
-//		XmlParser xmlParser = new XmlParser(stream);
-//		xmlParser.
-//	}
 
 }

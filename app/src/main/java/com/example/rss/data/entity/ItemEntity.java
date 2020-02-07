@@ -7,7 +7,7 @@ public class ItemEntity {
     private String title;
     private String description;
     private String link;
-    private String pubDate;
+    private Long pubDate;
     private Long enclosure;
     private Boolean isRead;
     private Boolean isFavorite;
@@ -68,11 +68,11 @@ public class ItemEntity {
         this.link = link;
     }
 
-    public String getPubDate() {
+    public Long getPubDate() {
         return pubDate;
     }
 
-    public void setPubDate(String pubDate) {
+    public void setPubDate(Long pubDate) {
         this.pubDate = pubDate;
     }
 

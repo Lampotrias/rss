@@ -1,6 +1,5 @@
 package com.example.rss.data.database.mapper;
 
-import com.example.rss.data.database.FileDAO;
 import com.example.rss.data.database.dto.CategoryDTO;
 import com.example.rss.data.database.dto.ChannelDTO;
 import com.example.rss.data.database.dto.FileDTO;
@@ -30,7 +29,7 @@ public class ChannelDatabaseMapper {
 			channelDTO.setCacheImage(channelEntity.getCacheImage());
 			channelDTO.setDownloadFullText(channelEntity.getDownloadFullText());
 			channelDTO.setOnlyWifi(channelEntity.getOnlyWifi());
-			channelDTO.setLastBuild(channelEntity.getLastBuild());
+			channelDTO.setLastBuild(channelEntity.getLastBuildDate());
 			channelDTO.setNextSyncDate(channelEntity.getNextSyncDate());
 		}
 		return channelDTO;
@@ -49,7 +48,7 @@ public class ChannelDatabaseMapper {
 			channelEntity.setCacheImage(channelDTO.getCacheImage());
 			channelEntity.setDownloadFullText(channelDTO.getDownloadFullText());
 			channelEntity.setOnlyWifi(channelDTO.getOnlyWifi());
-			channelEntity.setLastBuild(channelDTO.getLastBuild());
+			channelEntity.setLastBuildDate(channelDTO.getLastBuild());
 			channelEntity.setNextSyncDate(channelDTO.getNextSyncDate());
 		}
 		return channelEntity;

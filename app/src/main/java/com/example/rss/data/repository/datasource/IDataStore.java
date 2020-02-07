@@ -5,6 +5,7 @@ import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.ItemEntity;
 import com.example.rss.domain.File;
+import com.example.rss.domain.Item;
 
 import java.io.InputStream;
 import java.util.List;
@@ -12,21 +13,23 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public interface IDataStore {
 	//Network
-	Single<InputStream> getRssFeedContent(String path);
+	Maybe<InputStream> getRssFeedContent(String path);
 
 	//Channel
-	Single<Long> addChannel(ChannelEntity channel);
+	Maybe<Long> addChannel(ChannelEntity channel);
 	Single<ChannelEntity> getChannelById(Long id);
 	Single<ChannelEntity> getChannelByUrl(String url);
-	Flowable<List<ChannelEntity>> getAllChannels();
+	Maybe<List<ChannelEntity>> getAllChannels();
 
 	//Items
 	Maybe<List<ItemEntity>> getItemsByChannelId(Long id);
-	Completable InsertManyItems(List<ItemEntity> itemEntities);
+	Maybe<List<Long>> InsertManyItems(List<ItemEntity> itemEntities);
+	Observable<ItemEntity> getItemByUniqueId(String hash);
 
 	//Files
 	Single<Long> addFile (FileEntity fileEntity);

@@ -54,7 +54,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     @Override
     public void setView(GlobalContract.V view) {
         mView = view;
-
+        mView.openDrawer();
         prepareDataForMenu();
     }
 
@@ -141,4 +141,8 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     }
 
 
+    public void OnClickChannelTest(View v) {
+        navController.navigate(R.id.nav_testFragment);
+        mView.closeDrawer();
+    }
 }

@@ -8,6 +8,7 @@ import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.ItemEntity;
 import com.example.rss.data.repository.datasource.IDataStore;
 import com.example.rss.domain.File;
+import com.example.rss.domain.Item;
 
 import java.io.InputStream;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public class DatabaseDataStore implements IDataStore {
@@ -26,7 +28,7 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Single<Long> addChannel(ChannelEntity channel) {
+	public Maybe<Long> addChannel(ChannelEntity channel) {
 		return appDatabase.channelDAO().insert(ChannelDatabaseMapper.transform(channel));
 	}
 
@@ -41,8 +43,13 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Completable InsertManyItems(List<ItemEntity> itemEntities) {
+	public Maybe<List<Long>> InsertManyItems(List<ItemEntity> itemEntities) {
 		return appDatabase.itemDAO().insertAll(ChannelDatabaseMapper.transformItems(itemEntities));
+	}
+
+	@Override
+	public Observable<ItemEntity> getItemByUniqueId(String hash) {
+		return appDatabase.itemDAO().getItemByUniqueId(hash).map(ChannelDatabaseMapper::transform);
 	}
 
 	@Override
@@ -51,7 +58,7 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Flowable<List<ChannelEntity>> getAllChannels() {
+	public Maybe<List<ChannelEntity>> getAllChannels() {
 		return appDatabase.channelDAO().getAllChannels().map(ChannelDatabaseMapper::transformChannels);
 	}
 
@@ -71,7 +78,7 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Single<InputStream> getRssFeedContent(String path) {
+	public Maybe<InputStream> getRssFeedContent(String path) {
 		throw new UnsupportedOperationException("Operation is not available!!!");
 	}
 }

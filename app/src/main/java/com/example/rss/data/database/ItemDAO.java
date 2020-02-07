@@ -5,12 +5,12 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.example.rss.data.database.dto.ItemDTO;
+import com.example.rss.domain.Item;
 
 import java.util.List;
 
-import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
 
 @Dao
 public interface ItemDAO {
@@ -18,5 +18,8 @@ public interface ItemDAO {
     Maybe<List<ItemDTO>> getItemsByChannelId(Long id);
 
     @Insert
-    Completable insertAll(List<ItemDTO> itemDTOS);
+    Maybe<List<Long>> insertAll(List<ItemDTO> itemDTOS);
+
+    @Query("SELECT * FROM item where guid = :hash")
+    Observable<ItemDTO> getItemByUniqueId(String hash);
 }

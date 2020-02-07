@@ -21,6 +21,7 @@ import javax.inject.Singleton;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 @Singleton
@@ -37,13 +38,13 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
-	public Single<InputStream> getRssFeedContent(String path) {
+	public Maybe<InputStream> getRssFeedContent(String path) {
 		final IDataStore dataStore = channelDataStoreFactory.createNetwork();
 		return dataStore.getRssFeedContent(path);
 	}
 
 	@Override
-	public Single<Long> addChannel(Channel channel) {
+	public Maybe<Long> addChannel(Channel channel) {
 		final IDataStore dataStore = channelDataStoreFactory.createPut();
 		return dataStore.addChannel(repositoryEntityDataMapper.transform(channel));
 	}
@@ -55,7 +56,7 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
-	public Flowable<List<Channel>> getAllChannels() {
+	public Maybe<List<Channel>> getAllChannels() {
 		final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
 		return dataStore.getAllChannels().map(repositoryEntityDataMapper::transformChannels);
 	}
@@ -67,9 +68,15 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
-	public Completable InsertManyItems(List<Item> items) {
+	public Maybe<List<Long>> InsertManyItems(List<Item> items) {
 		final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
 		return dataStore.InsertManyItems(repositoryEntityDataMapper.transformItemsToEntity(items));
+	}
+
+	@Override
+	public Observable<Item> getItemByUniqueId(String hash) {
+		final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
+		return dataStore.getItemByUniqueId(hash).map(repositoryEntityDataMapper::transform);
 	}
 
 	@Override

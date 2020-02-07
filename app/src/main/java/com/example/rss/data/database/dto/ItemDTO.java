@@ -17,7 +17,6 @@ public class ItemDTO {
     @ColumnInfo(name = "channel_id")
     private Long channelId;
 
-    @NonNull
     @ColumnInfo(name = "guid")
     private String guid;
 
@@ -35,7 +34,7 @@ public class ItemDTO {
 
     @NonNull
     @ColumnInfo(name = "pub_date")
-    private String pubDate;
+    private Long pubDate;
 
 
     @ColumnInfo(name = "enclosure")
@@ -111,11 +110,11 @@ public class ItemDTO {
     }
 
     @NonNull
-    public String getPubDate() {
+    public Long getPubDate() {
         return pubDate;
     }
 
-    public void setPubDate(@NonNull String pubDate) {
+    public void setPubDate(@NonNull Long pubDate) {
         this.pubDate = pubDate;
     }
 

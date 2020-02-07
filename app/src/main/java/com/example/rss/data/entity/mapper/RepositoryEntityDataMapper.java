@@ -37,7 +37,7 @@ public class RepositoryEntityDataMapper {
             channelEntity.setCacheImage(channel.getCacheImage());
             channelEntity.setDownloadFullText(channel.getDownloadFullText());
             channelEntity.setOnlyWifi(channel.getOnlyWifi());
-            channelEntity.setLastBuild(channel.getLastBuild());
+            channelEntity.setLastBuildDate(channel.getLastBuild());
             channelEntity.setNextSyncDate(channel.getNextSyncDate());
         }
         return channelEntity;
@@ -58,7 +58,7 @@ public class RepositoryEntityDataMapper {
             channel.setCacheImage(channelEntity.getCacheImage());
             channel.setDownloadFullText(channelEntity.getDownloadFullText());
             channel.setOnlyWifi(channelEntity.getOnlyWifi());
-            channel.setLastBuild(channelEntity.getLastBuild());
+            channel.setLastBuild(channelEntity.getLastBuildDate());
             channel.setNextSyncDate(channelEntity.getNextSyncDate());
         }
         return channel;

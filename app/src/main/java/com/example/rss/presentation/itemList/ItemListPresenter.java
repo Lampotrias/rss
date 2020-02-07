@@ -17,8 +17,11 @@ import com.example.rss.presentation.itemList.adapter.ItemModel;
 import com.example.rss.presentation.itemList.adapter.RepositoriesListPresenter;
 import com.example.rss.presentation.itemList.adapter.RepositoriesRecyclerAdapter;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -93,13 +96,15 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 	}
 
 	private ItemModel transform(Item item){
+		DateFormat format = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.getDefault());
+
 		ItemModel model = new ItemModel();
 		model.setItemId(item.getItemId());
 		model.setGuid(item.getGuid());
 		model.setTitle(item.getTitle());
 		model.setDescription(item.getDescription());
 		model.setLink(item.getLink());
-		model.setPubDate(item.getPubDate());
+		model.setPubDate(format.format(item.getPubDate() * 1000));
 		model.setRead(item.getRead());
 		model.setStar(item.getFavorite());
 		return model;

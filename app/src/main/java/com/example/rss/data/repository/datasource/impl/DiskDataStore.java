@@ -20,12 +20,12 @@ public abstract class DiskDataStore implements IDataStore {
     }
 
     @Override
-    public Single<Long> addChannel(ChannelEntity channel) {
+    public Maybe<Long> addChannel(ChannelEntity channel) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
     @Override
-    public Single<InputStream> getRssFeedContent(String path) {
+    public Maybe<InputStream> getRssFeedContent(String path) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 

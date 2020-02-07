@@ -12,6 +12,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import io.reactivex.schedulers.Schedulers;
 
 class GlobalInteractor {
@@ -27,7 +28,7 @@ class GlobalInteractor {
         this.channelRepository = channelRepository;
     }
 
-    Flowable<List<Channel>> getAllChannels(){
+    Maybe<List<Channel>> getAllChannels(){
         return channelRepository.getAllChannels()
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(postExecutionThread.getScheduler());

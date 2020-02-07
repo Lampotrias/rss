@@ -19,6 +19,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
@@ -47,12 +48,12 @@ class ChannelEditInteractor {
 				.observeOn(postExecutionThread.getScheduler());
 	}
 
-	Single<Long> addChannel(String url, Long categoryId, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi){
+	Maybe<Long> addChannel(String url, Long categoryId, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi){
 
 		return	channelRepository.getRssFeedContent(url)
 				.map(this::parseChannel)
-						.flatMap(xmlChannelRawObject -> saveFile(prepareFile(xmlChannelRawObject))
-								.map(fileId -> prepareChannelObj(xmlChannelRawObject, url, fileId, categoryId, bCacheImage, bDownloadFull, bOnlyWifi)))
+				.flatMap(xmlChannelRawObject -> saveFile(prepareFile(xmlChannelRawObject)).toMaybe()
+						.map(fileId -> prepareChannelObj(xmlChannelRawObject, url, fileId, categoryId, bCacheImage, bDownloadFull, bOnlyWifi)))
 				.flatMap(channelRepository::addChannel)
 				.subscribeOn(Schedulers.from(threadExecutor))
 				.observeOn(postExecutionThread.getScheduler());
@@ -73,13 +74,13 @@ class ChannelEditInteractor {
 		channel.setOnlyWifi(bOnlyWifi);
 
 		try {
-			SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
+			SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
 			Date dateLastSync, dateNextExec = new Date();
 			dateLastSync = format.parse(xmlChannelRawObject.getLastBuild());
 			if (dateLastSync != null) {
-				channel.setLastBuild(String.valueOf(dateLastSync.getTime()));
+				channel.setLastBuild(dateLastSync.getTime());
 			}
-			channel.setNextSyncDate(String.valueOf(dateNextExec.getTime()));
+			channel.setNextSyncDate(dateNextExec.getTime() + 3600);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

@@ -10,13 +10,14 @@ import com.example.rss.data.database.dto.ChannelDTO;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 @Dao
 public interface ChannelDAO {
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	Single<Long> insert(ChannelDTO channelDTO);
+	Maybe<Long> insert(ChannelDTO channelDTO);
 
 	@Query("SELECT * FROM channel WHERE source_link = :url")
 	Single<ChannelDTO> getChannelByUrl(String url);
@@ -25,5 +26,5 @@ public interface ChannelDAO {
 	Single<ChannelDTO> getChannelById(Long id);
 
 	@Query("SELECT * FROM channel")
-	Flowable<List<ChannelDTO>> getAllChannels();
+	Maybe<List<ChannelDTO>> getAllChannels();
 }

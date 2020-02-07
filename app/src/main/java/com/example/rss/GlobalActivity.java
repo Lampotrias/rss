@@ -87,6 +87,9 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 
 		Button btnAdd = findViewById(R.id.btnAddChannelDrawer);
 		btnAdd.setOnClickListener(v -> mPresenter.OnClickChannelAdd(v));
+
+		Button btnService = findViewById(R.id.btnTestService);
+		btnService.setOnClickListener(v -> mPresenter.OnClickChannelTest(v));
 	}
 
 	@Override

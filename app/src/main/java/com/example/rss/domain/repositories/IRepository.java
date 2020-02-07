@@ -11,21 +11,23 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public interface IRepository {
 	//Network only
-	Single<InputStream> getRssFeedContent(String path);
+	Maybe<InputStream> getRssFeedContent(String path);
 
 	//Channel
-	Single<Long> addChannel(Channel channel);
+	Maybe<Long> addChannel(Channel channel);
 	Single<Channel> getChannelById(Long id);
-	Flowable<List<Channel>> getAllChannels();
+	Maybe<List<Channel>> getAllChannels();
 	Single<Channel> getChannelByUrl(String url);
 
 	//Items
 	Maybe<List<Item>> getItemsByChannelId(Long id);
-	Completable InsertManyItems(List<Item> items);
+	Maybe<List<Long>> InsertManyItems(List<Item> items);
+	Observable<Item> getItemByUniqueId(String hash);
 
 	//Category
 	Flowable<List<Category>> getCategoriesByType(String mType);

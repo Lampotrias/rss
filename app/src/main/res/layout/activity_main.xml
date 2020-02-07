@@ -33,6 +33,11 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btnAddChannelDrawer"
                 android:text="@string/add_new_channel"/>
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnTestService"
+                android:text="Test Service"/>
 
             <ExpandableListView
                 android:id="@+id/expandableListView"

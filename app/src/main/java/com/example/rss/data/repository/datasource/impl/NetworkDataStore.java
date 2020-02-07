@@ -15,6 +15,7 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public class NetworkDataStore implements IDataStore {
@@ -24,8 +25,8 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Single<InputStream> getRssFeedContent(String path) {
-        return Single.create(emitter -> {
+    public Maybe<InputStream> getRssFeedContent(String path) {
+        return Maybe.create(emitter -> {
             InputStream stream;
             try {
                 stream = new URL(path).openStream();
@@ -37,7 +38,7 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Single<Long> addChannel(ChannelEntity channel) {
+    public Maybe<Long> addChannel(ChannelEntity channel) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
@@ -52,7 +53,12 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Completable InsertManyItems(List<ItemEntity> itemEntities) {
+    public Maybe<List<Long>> InsertManyItems(List<ItemEntity> itemEntities) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Observable<ItemEntity> getItemByUniqueId(String hash) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
@@ -62,7 +68,7 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Flowable<List<ChannelEntity>> getAllChannels() {
+    public Maybe<List<ChannelEntity>> getAllChannels() {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 

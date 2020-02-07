@@ -5,7 +5,7 @@ public class XmlItemRawObject {
     private String link;
     private String description;
     private String pubDate;
-    private String guid;
+    private String uniqueId;
     private XmlFileRawObject enclosure;
 
     public String getTitle() {
@@ -41,11 +41,11 @@ public class XmlItemRawObject {
     }
 
     public String getGuid() {
-        return guid;
+        return uniqueId;
     }
 
     public void setGuid(String guid) {
-        this.guid = guid;
+        this.uniqueId = guid;
     }
 
     public XmlFileRawObject getEnclosure() {

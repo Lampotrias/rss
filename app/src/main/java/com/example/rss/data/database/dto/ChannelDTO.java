@@ -40,7 +40,7 @@ public class ChannelDTO {
 
 	@NonNull
 	@ColumnInfo(name = "last_build")
-	private String lastBuild;
+	private Long lastBuild;
 
 	//*****************
 	//System fields ***
@@ -59,7 +59,7 @@ public class ChannelDTO {
 
 	@NonNull
 	@ColumnInfo(name = "next_sync_date")
-	private String nextSyncDate;
+	private Long nextSyncDate;
 
 	@NonNull
 	public Long getChannelId() {
@@ -124,11 +124,11 @@ public class ChannelDTO {
 	}
 
 	@NonNull
-	public String getLastBuild() {
+	public Long getLastBuild() {
 		return lastBuild;
 	}
 
-	public void setLastBuild(@NonNull String lastBuild) {
+	public void setLastBuild(@NonNull Long lastBuild) {
 		this.lastBuild = lastBuild;
 	}
 
@@ -160,11 +160,11 @@ public class ChannelDTO {
 	}
 
 	@NonNull
-	public String getNextSyncDate() {
+	public Long getNextSyncDate() {
 		return nextSyncDate;
 	}
 
-	public void setNextSyncDate(@NonNull String nextSyncDate) {
+	public void setNextSyncDate(@NonNull Long nextSyncDate) {
 		this.nextSyncDate = nextSyncDate;
 	}
 }

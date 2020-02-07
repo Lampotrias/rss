@@ -12,7 +12,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -86,9 +91,6 @@ public class XmlParser {
                             case "pubDate":
                                 item.setPubDate(element.getFirstChild().getNodeValue());
                                 break;
-                            case "guid":
-                                item.setGuid(element.getFirstChild().getNodeValue());
-                                break;
                             case "enclosure":
                                 String url = element.getAttribute("url");
                                 if (url.length() > 0){
@@ -105,6 +107,7 @@ public class XmlParser {
                         }
                     }
                 }
+                item.setGuid(makeMd5(item.getTitle() + item.getLink()));
                 items.add(item);
             }
         }
@@ -162,7 +165,16 @@ public class XmlParser {
                 }
             }
         }
-
         return channelEntity;
+    }
+
+    private String makeMd5(String s){
+        try {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            byte[] hashBytes = digest.digest(s.getBytes(StandardCharsets.UTF_8));
+            return Base64.getEncoder().encodeToString(hashBytes);
+        } catch (NoSuchAlgorithmException e) {
+            return "";
+        }
     }
 }
