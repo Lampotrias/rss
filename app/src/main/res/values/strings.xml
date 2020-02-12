@@ -27,4 +27,5 @@
     <string name="star_image">Star image</string>
     <string name="logo_channel">Logo channel</string>
     <string name="all_items">Все</string>
+    <string name="exception_detail_item">Не найдена новость</string>
 </resources>

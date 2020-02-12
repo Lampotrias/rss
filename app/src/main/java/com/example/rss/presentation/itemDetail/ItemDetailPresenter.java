@@ -2,15 +2,15 @@ package com.example.rss.presentation.itemDetail;
 
 import android.util.Log;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.navigation.NavController;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.example.rss.R;
 import com.example.rss.domain.Item;
 import com.example.rss.domain.exception.DefaultErrorBundle;
 import com.example.rss.domain.exception.IErrorBundle;
+import com.example.rss.presentation.exception.ErrorDetailItemException;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
 import com.example.rss.presentation.global.GlobalActions;
 import com.example.rss.presentation.itemList.adapter.ItemModel;
@@ -28,14 +28,17 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 
 
-public class ItemDetailPresenter implements ItemDetailContract.P<ItemDetailContract.V>
-{
+public class ItemDetailPresenter extends ViewPager2.OnPageChangeCallback implements ItemDetailContract.P<ItemDetailContract.V> {
 	private ItemDetailContract.V mView;
 	private final ItemDetailInteractor ItemDetailInteractor;
 	private final CompositeDisposable compositeDisposable;
-
+	private List<ItemModel> itemModels;
+	private int needShowItemId;
 	@Inject
 	GlobalActions globalActions;
+
+	@Inject
+	NavController navController;
 
 	@Inject
 	ItemDetailPresenter(ItemDetailInteractor itemListInteractor) {
@@ -43,14 +46,53 @@ public class ItemDetailPresenter implements ItemDetailContract.P<ItemDetailContr
 		compositeDisposable = new CompositeDisposable();
 	}
 
+	void initRecycler(){
+		itemModels = new ArrayList<>();
+		compositeDisposable.add(ItemDetailInteractor.getItemsByChannelId(1L)
+				.concatMapIterable(items -> items)
+				.subscribe(item -> {
+							ItemModel itemModel = transform(item);
+							compositeDisposable.add(
+									ItemDetailInteractor.getFileById(item.getEnclosure())
+											.subscribe(file -> itemModel.setEnclosure(file.getPath()), throwable -> Log.e("myApp", "error")));
+							itemModels.add(itemModel);
+
+						}, throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable)),
+						() -> {
+							RequestManager requestManager = Glide.with(mView.context());
+							RepositoriesListPresenter repositoriesListPresenter = new RepositoriesListPresenter(requestManager, itemModels, mView.getResourceIdRowView());
+							RepositoriesRecyclerAdapter recyclerAdapter = new RepositoriesRecyclerAdapter(repositoriesListPresenter);
+							mView.getViewPager().registerOnPageChangeCallback(this);
+							mView.getViewPager().setAdapter(recyclerAdapter);
+							mView.getViewPager().setCurrentItem(needShowItemId, false);
+
+
+						})
+		);
+
+	}
+
+	private ItemModel transform(Item item){
+		DateFormat format = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.getDefault());
+
+		ItemModel model = new ItemModel();
+		model.setItemId(item.getItemId());
+		model.setGuid(item.getGuid());
+		model.setTitle(item.getTitle());
+		model.setDescription(item.getDescription());
+		model.setLink(item.getLink());
+		model.setPubDate(format.format(item.getPubDate() * 1000));
+		model.setRead(item.getRead());
+		model.setStar(item.getFavorite());
+		return model;
+	}
+
 	@Override
 	public void resume() {
-		globalActions.setTitle("");
 	}
 
 	@Override
 	public void pause() {
-
 	}
 
 	@Override
@@ -58,8 +100,6 @@ public class ItemDetailPresenter implements ItemDetailContract.P<ItemDetailContr
 		if (!compositeDisposable.isDisposed())
 			compositeDisposable.dispose();
 	}
-
-
 
 	private void showErrorMessage(IErrorBundle errorBundle) {
 		String errorMessage = ErrorMessageFactory.create(this.mView.context(), errorBundle.getException());
@@ -69,5 +109,20 @@ public class ItemDetailPresenter implements ItemDetailContract.P<ItemDetailContr
 	@Override
 	public void setView(ItemDetailContract.V view) {
 		this.mView = view;
+		needShowItemId = mView.getItemId();
+
+		if (needShowItemId == -1){
+			showErrorMessage(new DefaultErrorBundle(new ErrorDetailItemException()));
+			navController.navigateUp();
+		}else{
+			initRecycler();
+		}
+	}
+
+	@Override
+	public void onPageSelected(int position) {
+		super.onPageSelected(position);
+		//String builder
+		globalActions.setTitle(position+1 + "/" + itemModels.size() + "  " + itemModels.get(position).getTitle());
 	}
 }

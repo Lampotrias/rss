@@ -6,8 +6,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.rss.R;
-
 public class RepositoriesRecyclerAdapter  extends RecyclerView.Adapter<RepositoryViewHolder>{
     private final RepositoriesListPresenter presenter;
 
@@ -19,7 +17,7 @@ public class RepositoriesRecyclerAdapter  extends RecyclerView.Adapter<Repositor
     @Override
     public RepositoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new RepositoryViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_list_item_row, parent, false));
+                .inflate(presenter.getResourceId(), parent, false));
     }
 
     @Override

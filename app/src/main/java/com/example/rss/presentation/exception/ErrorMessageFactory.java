@@ -27,6 +27,8 @@ public class ErrorMessageFactory {
 				message = context.getString(R.string.exception_channel_exists);
 		} else if (exception instanceof DatabaseConnectionException) {
 			message = context.getString(R.string.exception_database_connect);
+		} else if (exception instanceof ErrorDetailItemException) {
+			message = context.getString(R.string.exception_detail_item);
 		}else{
 			Log.e("MyApp", exception.toString());
 		}

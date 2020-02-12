@@ -12,6 +12,7 @@ public interface ItemListContract {
 		void displayError(String error);
 		void stopRefresh();
 		RecyclerView getRecycler();
+		int getResourceIdRowView();
 	}
 
 	interface P<T> extends Presenter {

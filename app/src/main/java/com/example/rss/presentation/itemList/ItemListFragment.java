@@ -104,4 +104,9 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
 	public RecyclerView getRecycler() {
 		return itemListRecycler;
 	}
+
+	@Override
+	public int getResourceIdRowView() {
+		return R.layout.card_list_item_row;
+	}
 }

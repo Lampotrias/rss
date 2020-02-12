@@ -1,5 +1,6 @@
 package com.example.rss.presentation.global;
 
+import android.os.Bundle;
 import android.view.View;
 
 import com.example.rss.data.exception.DatabaseConnectionException;
@@ -140,9 +141,11 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
         globalActions = null;
     }
 
-
     public void OnClickChannelTest(View v) {
-        navController.navigate(R.id.nav_testFragment);
+        //navController.navigate(R.id.nav_testFragment);
+        Bundle bundle = new Bundle();
+        bundle.putInt("itemId", 0);
+        navController.navigate(R.id.nav_itemDetailFragment, bundle);
         mView.closeDrawer();
     }
 }
