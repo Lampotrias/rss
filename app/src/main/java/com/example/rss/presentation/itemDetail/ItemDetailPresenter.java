@@ -13,9 +13,10 @@ import com.example.rss.domain.exception.IErrorBundle;
 import com.example.rss.presentation.exception.ErrorDetailItemException;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
 import com.example.rss.presentation.global.GlobalActions;
+import com.example.rss.presentation.itemDetail.adapter.ViewDetailAdapter;
+import com.example.rss.presentation.itemDetail.adapter.ViewDetailPresenter;
 import com.example.rss.presentation.itemList.adapter.ItemModel;
-import com.example.rss.presentation.itemList.adapter.RepositoriesListPresenter;
-import com.example.rss.presentation.itemList.adapter.RepositoriesRecyclerAdapter;
+import com.example.rss.presentation.itemList.adapter.RecyclerListAdapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -60,10 +61,10 @@ public class ItemDetailPresenter extends ViewPager2.OnPageChangeCallback impleme
 						}, throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable)),
 						() -> {
 							RequestManager requestManager = Glide.with(mView.context());
-							RepositoriesListPresenter repositoriesListPresenter = new RepositoriesListPresenter(requestManager, itemModels, mView.getResourceIdRowView());
-							RepositoriesRecyclerAdapter recyclerAdapter = new RepositoriesRecyclerAdapter(repositoriesListPresenter);
+							ViewDetailPresenter viewDetailPresenter = new ViewDetailPresenter(requestManager, itemModels, mView.getResourceIdRowView());
+							ViewDetailAdapter viewDetailAdapter = new ViewDetailAdapter(viewDetailPresenter);
 							mView.getViewPager().registerOnPageChangeCallback(this);
-							mView.getViewPager().setAdapter(recyclerAdapter);
+							mView.getViewPager().setAdapter(viewDetailAdapter);
 							mView.getViewPager().setCurrentItem(needShowItemId, false);
 
 

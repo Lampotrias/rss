@@ -2,7 +2,7 @@ package com.example.rss.presentation.itemList.adapter;
 
 import com.bumptech.glide.RequestManager;
 
-public interface RepositoryRowView {
+public interface ListRowView {
     void setTitle(String title);
     void setDescription(String description);
     void setDate(String date);

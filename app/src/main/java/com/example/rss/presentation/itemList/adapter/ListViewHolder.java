@@ -14,7 +14,7 @@ import com.example.rss.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RepositoryViewHolder extends RecyclerView.ViewHolder implements RepositoryRowView{
+public class ListViewHolder extends RecyclerView.ViewHolder implements ListRowView {
 
     @BindView(R.id.txTitle)
     TextView txTitle;
@@ -32,7 +32,7 @@ public class RepositoryViewHolder extends RecyclerView.ViewHolder implements Rep
     ImageView imgChannelLogo;
 
 
-    public RepositoryViewHolder(@NonNull View itemView) {
+    public ListViewHolder(@NonNull View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
