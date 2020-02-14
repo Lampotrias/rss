@@ -33,8 +33,8 @@ class ItemDetailInteractor {
 		return Observable.create(emitter -> {
 			Item item = new Item();
 			item.setItemId(1L);
-			item.setTitle("title1");
-			item.setDescription("des1");
+			item.setTitle("Раскрыто состояние зараженного коронавирусом гражданина Китая в России");
+			item.setDescription("Вирус 2019-nCoV передается от человека к человеку. К основным симптомам инфекции относят повышенную температуру, утомляемость и кашель с небольшой мокротой. Помимо КНР, заболевание бы");
 			item.setEnclosure(1L);
 			item.setGuid("");
 			item.setChannelId(1L);

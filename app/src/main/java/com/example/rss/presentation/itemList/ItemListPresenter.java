@@ -16,8 +16,8 @@ import com.example.rss.domain.exception.IErrorBundle;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
 import com.example.rss.presentation.global.GlobalActions;
 import com.example.rss.presentation.itemList.adapter.ItemModel;
-import com.example.rss.presentation.itemList.adapter.RepositoriesListPresenter;
-import com.example.rss.presentation.itemList.adapter.RepositoriesRecyclerAdapter;
+import com.example.rss.presentation.itemList.adapter.RecyclerListPresenter;
+import com.example.rss.presentation.itemList.adapter.RecyclerListAdapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -76,8 +76,8 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 				}, throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable)),
 						() -> {
 							RequestManager requestManager = Glide.with(mView.context());
-							RepositoriesListPresenter repositoriesListPresenter = new RepositoriesListPresenter(requestManager, itemModels, mView.getResourceIdRowView());
-							RepositoriesRecyclerAdapter recyclerAdapter = new RepositoriesRecyclerAdapter(repositoriesListPresenter);
+							RecyclerListPresenter recyclerListPresenter = new RecyclerListPresenter(requestManager, itemModels, mView.getResourceIdRowView());
+							RecyclerListAdapter recyclerAdapter = new RecyclerListAdapter(recyclerListPresenter);
 							RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mView.context());
 							mView.getRecycler().setLayoutManager(layoutManager);
 							mView.getRecycler().setAdapter(recyclerAdapter);

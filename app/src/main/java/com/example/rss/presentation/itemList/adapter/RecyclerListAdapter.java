@@ -6,22 +6,22 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RepositoriesRecyclerAdapter  extends RecyclerView.Adapter<RepositoryViewHolder>{
-    private final RepositoriesListPresenter presenter;
+public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder>{
+    private final RecyclerListPresenter presenter;
 
-    public RepositoriesRecyclerAdapter(RepositoriesListPresenter presenter) {
+    public RecyclerListAdapter(RecyclerListPresenter presenter) {
         this.presenter = presenter;
     }
 
     @NonNull
     @Override
-    public RepositoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new RepositoryViewHolder(LayoutInflater.from(parent.getContext())
+    public ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ListViewHolder(LayoutInflater.from(parent.getContext())
                 .inflate(presenter.getResourceId(), parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RepositoryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListViewHolder holder, int position) {
         presenter.onBindRepositoryRowViewAtPosition(position, holder);
     }
 
