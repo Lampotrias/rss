@@ -1,6 +1,7 @@
 package com.example.rss.data.database;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -9,8 +10,10 @@ import com.example.rss.domain.Item;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 @Dao
 public interface ItemDAO {
@@ -21,5 +24,8 @@ public interface ItemDAO {
     Maybe<List<Long>> insertAll(List<ItemDTO> itemDTOS);
 
     @Query("SELECT * FROM item where guid = :hash")
-    Observable<ItemDTO> getItemByUniqueId(String hash);
+    Single<ItemDTO> getItemByUniqueId(String hash);
+
+    @Query("DELETE FROM item")
+    Completable deleteAllItems();
 }

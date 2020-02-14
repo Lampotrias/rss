@@ -9,6 +9,7 @@ public interface ChannelEditContract {
 		void displayError (String throwable);
 		void displaySuccess(String message);
 		Context context();
+		void disableBtnAdd(Boolean bDisable);
 	}
 
 	interface P<T> extends Presenter {

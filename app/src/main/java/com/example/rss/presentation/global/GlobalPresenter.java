@@ -57,6 +57,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
         mView = view;
         mView.openDrawer();
         prepareDataForMenu();
+
     }
 
     private void prepareDataForMenu() {
@@ -142,10 +143,10 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     }
 
     public void OnClickChannelTest(View v) {
-        //navController.navigate(R.id.nav_testFragment);
-        Bundle bundle = new Bundle();
+        navController.navigate(R.id.nav_testFragment);
+       /* Bundle bundle = new Bundle();
         bundle.putInt("itemId", 0);
-        navController.navigate(R.id.nav_itemDetailFragment, bundle);
+        navController.navigate(R.id.nav_itemDetailFragment, bundle);*/
         mView.closeDrawer();
     }
 }

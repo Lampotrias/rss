@@ -1,8 +1,6 @@
 package com.example.rss.data.repository;
 
 
-import com.example.rss.data.entity.ChannelEntity;
-import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.mapper.RepositoryEntityDataMapper;
 import com.example.rss.data.repository.datasource.ChannelDataStoreFactory;
 import com.example.rss.data.repository.datasource.IDataStore;
@@ -21,7 +19,6 @@ import javax.inject.Singleton;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Maybe;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 
 @Singleton
@@ -74,15 +71,33 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
-	public Observable<Item> getItemByUniqueId(String hash) {
+	public Single<Item> getItemByUniqueId(String hash) {
 		final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
 		return dataStore.getItemByUniqueId(hash).map(repositoryEntityDataMapper::transform);
+	}
+
+	@Override
+	public Completable deleteAllItems() {
+		final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
+		return dataStore.deleteAllItems();
 	}
 
 	@Override
 	public Single<Channel> getChannelByUrl(String url) {
 		final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
 		return dataStore.getChannelByUrl(url).map(repositoryEntityDataMapper::transform);
+	}
+
+	@Override
+	public Single<Integer> updateChannel(Channel channel) {
+		final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
+		return dataStore.updateChannel(repositoryEntityDataMapper.transform(channel));
+	}
+
+	@Override
+	public Completable deleteAllChannels() {
+		final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
+		return dataStore.deleteAllChannels();
 	}
 
 	@Override

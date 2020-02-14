@@ -75,12 +75,12 @@ class ChannelEditInteractor {
 
 		try {
 			SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
-			Date dateLastSync, dateNextExec = new Date();
+			Date dateLastSync;
 			dateLastSync = format.parse(xmlChannelRawObject.getLastBuild());
 			if (dateLastSync != null) {
-				channel.setLastBuild(dateLastSync.getTime());
+				channel.setLastBuild(dateLastSync.getTime() / 1000);
 			}
-			channel.setNextSyncDate(dateNextExec.getTime() + 3600);
+			channel.setNextSyncDate(0L);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

@@ -101,7 +101,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 		model.setTitle(item.getTitle());
 		model.setDescription(item.getDescription());
 		model.setLink(item.getLink());
-		model.setPubDate(format.format(item.getPubDate() * 1000));
+		model.setPubDate(format.format(item.getPubDate()));
 		model.setRead(item.getRead());
 		model.setStar(item.getFavorite());
 		return model;
@@ -115,7 +115,12 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 
 	@Override
 	public void refreshList() {
-		mView.stopRefresh();
+		compositeDisposable.add(itemListInteractor.deleteAllChannels().subscribe(() -> {
+			compositeDisposable.add(itemListInteractor.deleteAllItems().subscribe(() -> {
+				mView.stopRefresh();
+			}, throwable -> mView.stopRefresh()));
+		}, throwable -> mView.stopRefresh()));
+		//mView.stopRefresh();
 	}
 
 	private class OnItemTouchListener implements RecyclerView.OnItemTouchListener {

@@ -58,7 +58,12 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Observable<ItemEntity> getItemByUniqueId(String hash) {
+    public Single<ItemEntity> getItemByUniqueId(String hash) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Completable deleteAllItems() {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
@@ -69,6 +74,16 @@ public class NetworkDataStore implements IDataStore {
 
     @Override
     public Maybe<List<ChannelEntity>> getAllChannels() {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Single<Integer> updateChannel(ChannelEntity channelEntity) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Completable deleteAllChannels() {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 

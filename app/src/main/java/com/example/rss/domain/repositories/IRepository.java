@@ -1,5 +1,6 @@
 package com.example.rss.domain.repositories;
 
+import com.example.rss.data.database.dto.ChannelDTO;
 import com.example.rss.domain.Category;
 import com.example.rss.domain.Channel;
 import com.example.rss.domain.File;
@@ -23,11 +24,14 @@ public interface IRepository {
 	Single<Channel> getChannelById(Long id);
 	Maybe<List<Channel>> getAllChannels();
 	Single<Channel> getChannelByUrl(String url);
+	Single<Integer> updateChannel(Channel channel);
+	Completable deleteAllChannels();
 
 	//Items
 	Maybe<List<Item>> getItemsByChannelId(Long id);
 	Maybe<List<Long>> InsertManyItems(List<Item> items);
-	Observable<Item> getItemByUniqueId(String hash);
+	Single<Item> getItemByUniqueId(String hash);
+	Completable deleteAllItems();
 
 	//Category
 	Flowable<List<Category>> getCategoriesByType(String mType);

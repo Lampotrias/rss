@@ -123,6 +123,11 @@ public class ChannelEditFragment extends BaseFragment implements ChannelEditCont
 	}
 
 	@Override
+	public void disableBtnAdd(Boolean bDisable) {
+		btnAdd.setEnabled(bDisable);
+	}
+
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		mPresenter.setView(this);

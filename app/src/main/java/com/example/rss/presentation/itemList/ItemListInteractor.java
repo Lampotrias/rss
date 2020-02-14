@@ -58,4 +58,16 @@ class ItemListInteractor {
 				.observeOn(postExecutionThread.getScheduler());
 	}
 
+	Completable deleteAllItems(){
+		return channelRepository.deleteAllItems()
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
+	}
+
+	Completable deleteAllChannels(){
+		return channelRepository.deleteAllChannels()
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
+	}
+
 }

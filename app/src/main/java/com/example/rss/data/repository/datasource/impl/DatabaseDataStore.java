@@ -7,8 +7,6 @@ import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.ItemEntity;
 import com.example.rss.data.repository.datasource.IDataStore;
-import com.example.rss.domain.File;
-import com.example.rss.domain.Item;
 
 import java.io.InputStream;
 import java.util.List;
@@ -16,7 +14,6 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Maybe;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public class DatabaseDataStore implements IDataStore {
@@ -48,8 +45,13 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Observable<ItemEntity> getItemByUniqueId(String hash) {
+	public Single<ItemEntity> getItemByUniqueId(String hash) {
 		return appDatabase.itemDAO().getItemByUniqueId(hash).map(ChannelDatabaseMapper::transform);
+	}
+
+	@Override
+	public Completable deleteAllItems() {
+		return appDatabase.itemDAO().deleteAllItems();
 	}
 
 	@Override
@@ -60,6 +62,16 @@ public class DatabaseDataStore implements IDataStore {
 	@Override
 	public Maybe<List<ChannelEntity>> getAllChannels() {
 		return appDatabase.channelDAO().getAllChannels().map(ChannelDatabaseMapper::transformChannels);
+	}
+
+	@Override
+	public Single<Integer> updateChannel(ChannelEntity channelEntity) {
+		return appDatabase.channelDAO().updateChannel(ChannelDatabaseMapper.transform(channelEntity));
+	}
+
+	@Override
+	public Completable deleteAllChannels() {
+		return appDatabase.channelDAO().deleteAllChannels();
 	}
 
 	@Override

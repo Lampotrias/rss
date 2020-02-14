@@ -1,5 +1,7 @@
 package com.example.rss.data.entity.mapper;
 
+import android.util.Log;
+
 import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
@@ -11,6 +13,7 @@ import com.example.rss.domain.Item;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -149,7 +152,6 @@ public class RepositoryEntityDataMapper {
             item.setRead(itemEntity.getRead());
             item.setFavorite(itemEntity.getFavorite());
         }
-
         return item;
     }
 

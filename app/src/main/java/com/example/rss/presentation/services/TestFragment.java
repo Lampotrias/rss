@@ -8,12 +8,14 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.EmptyResultSetException;
 
 import com.example.rss.AndroidApplication;
 import com.example.rss.R;
 import com.example.rss.domain.sync.WorkManagerInteractor;
 import com.example.rss.presentation.BaseFragment;
 
+import java.util.Date;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -39,13 +41,47 @@ public class TestFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         android.view.View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
-        Log.e("myApp", "start");
         disposable.add(
-                interactor.getChannelForSync(3600)
-                .subscribe(channel -> {
-                    disposable.add(interactor.getItemsByChannel(channel)
-                    .subscribe(longs -> Log.e("myApp", longs.toString())));
-                })
+                interactor.getChannelForSync(0)
+                        .subscribe(channel -> {
+                            Log.e("myApp", "current sync channel = " + channel.getChannelId());
+                            disposable.add(interactor.syncItemsByChannel(channel)
+                                    .subscribe(
+                                            xmlItemRawObject -> {
+                                                Log.e("myApp", "get item = " + xmlItemRawObject.getTitle());
+                                                disposable.add(interactor.checkModify(xmlItemRawObject.getGuid()).subscribe(
+                                                        item -> {
+                                                            Log.e("myApp", "item exists = " + item.getTitle());
+                                                        },
+                                                        throwable -> {
+                                                            if (throwable instanceof EmptyResultSetException){
+                                                                Log.e("myApp", "item not exists = " + xmlItemRawObject.getTitle());
+                                                                //item not exists
+                                                                disposable.add(interactor.processItemXml(xmlItemRawObject, channel.getChannelId()).subscribe(
+                                                                        longs -> {
+                                                                            Log.e("myApp", "add Id = " + longs.get(0));
+                                                                        })
+                                                                );
+                                                            }
+                                                        })
+                                                );
+                                            },
+                                            throwable -> {},
+                                            () -> {
+                                                //TODO make full update channel
+                                                Long currentTs = new Date().getTime() / 1000;
+                                                channel.setNextSyncDate(currentTs + 0);
+                                                disposable.add(
+                                                        interactor.updateChannel(channel).subscribe(aLong -> {
+                                                            Log.e("myApp", "finish sync channel = " + channel.getChannelId() + " next sync" + (currentTs + 3600));
+                                                        })
+                                                );
+                                            }
+
+                                    )
+                            );
+
+                        })
         );
         return rootView;
     }

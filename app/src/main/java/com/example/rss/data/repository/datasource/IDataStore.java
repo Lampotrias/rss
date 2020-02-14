@@ -25,11 +25,14 @@ public interface IDataStore {
 	Single<ChannelEntity> getChannelById(Long id);
 	Single<ChannelEntity> getChannelByUrl(String url);
 	Maybe<List<ChannelEntity>> getAllChannels();
+	Single<Integer> updateChannel(ChannelEntity channelEntity);
+	Completable deleteAllChannels();
 
 	//Items
 	Maybe<List<ItemEntity>> getItemsByChannelId(Long id);
 	Maybe<List<Long>> InsertManyItems(List<ItemEntity> itemEntities);
-	Observable<ItemEntity> getItemByUniqueId(String hash);
+	Single<ItemEntity> getItemByUniqueId(String hash);
+	Completable deleteAllItems();
 
 	//Files
 	Single<Long> addFile (FileEntity fileEntity);
