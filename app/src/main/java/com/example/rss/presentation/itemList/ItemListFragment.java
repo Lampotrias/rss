@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,10 +15,6 @@ import com.example.rss.R;
 import com.example.rss.presentation.BaseFragment;
 import com.example.rss.presentation.di.scope.ChannelScope;
 import com.example.rss.presentation.global.GlobalActions;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
 
@@ -31,10 +26,10 @@ import butterknife.ButterKnife;
 @ChannelScope
 public class ItemListFragment extends BaseFragment implements ItemListContract.V {
 	private AndroidApplication app;
+	private Long curChannelId = 0L;
 
 	@Inject	public ItemListPresenter mPresenter;
 	@Inject	public GlobalActions globalActions;
-
 
 	@BindView(R.id.swipe_refresh_layout)
 	SwipeRefreshLayout refreshLayout;
@@ -45,6 +40,9 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (getArguments() != null){
+			curChannelId = getArguments().getLong("channelId", 0);
+		}
 		app = (AndroidApplication) Objects.requireNonNull(getActivity()).getApplication();
 		app.getFragmentModule(this).inject(this);
 	}
@@ -108,5 +106,10 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
 	@Override
 	public int getResourceIdRowView() {
 		return R.layout.card_list_item_row;
+	}
+
+	@Override
+	public Long getCurChannelId() {
+		return curChannelId;
 	}
 }

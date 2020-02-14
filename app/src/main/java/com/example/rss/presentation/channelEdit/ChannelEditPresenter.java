@@ -38,9 +38,6 @@ public class ChannelEditPresenter implements ChannelEditContract.P<ChannelEditCo
 		compositeDisposable = new CompositeDisposable();
 	}
 
-
-
-
 	@Override
 	public void onSaveButtonClicked(String url, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi){
 		//ToDo addChannel category logic
@@ -57,6 +54,8 @@ public class ChannelEditPresenter implements ChannelEditContract.P<ChannelEditCo
 												aLong -> {
 														mView.displaySuccess("new id: " + aLong);
 														mView.disableBtnAdd(false);
+														globalActions.updDrawerMenu();
+
 													},
 												throwable1 -> showErrorMessage(new DefaultErrorBundle((Exception) throwable1))));
 							}else{

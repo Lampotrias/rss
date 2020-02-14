@@ -35,7 +35,7 @@ class GlobalInteractor {
                 .observeOn(postExecutionThread.getScheduler());
     }
 
-    Flowable<List<Category>> getCategoriesByType(String mType){
+    Maybe<List<Category>> getCategoriesByType(String mType){
         return channelRepository.getCategoriesByType(mType)
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(postExecutionThread.getScheduler());

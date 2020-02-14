@@ -6,6 +6,7 @@ import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.ItemEntity;
 import com.example.rss.data.exception.NetworkConnectionException;
 import com.example.rss.data.repository.datasource.IDataStore;
+import com.example.rss.domain.Item;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -49,6 +50,11 @@ public class NetworkDataStore implements IDataStore {
 
     @Override
     public Maybe<List<ItemEntity>> getItemsByChannelId(Long id) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Maybe<List<ItemEntity>> getAllItems() {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
@@ -98,7 +104,7 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Flowable<List<CategoryEntity>> getCategoriesByType(String mType) {
+    public Maybe<List<CategoryEntity>> getCategoriesByType(String mType) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 }

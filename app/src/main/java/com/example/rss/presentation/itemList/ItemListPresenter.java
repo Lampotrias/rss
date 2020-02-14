@@ -27,6 +27,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import io.reactivex.Maybe;
 import io.reactivex.disposables.CompositeDisposable;
 
 
@@ -35,6 +36,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 	private ItemListContract.V mView;
 	private final ItemListInteractor itemListInteractor;
 	private final CompositeDisposable compositeDisposable;
+	RecyclerListPresenter recyclerListPresenter;
 
 	@Inject
 	GlobalActions globalActions;
@@ -61,9 +63,15 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 			compositeDisposable.dispose();
 	}
 
-	void initRecycler(){
+	private Maybe<List<Item>> switchChannel(Long channelId){
+		if (channelId > 0)
+			return itemListInteractor.getItemsByChannelId(channelId);
+		return itemListInteractor.getAllItems();
+	}
+
+	void initRecycler(Long channelId){
 		List<ItemModel> itemModels= new ArrayList<>();
-		compositeDisposable.add(itemListInteractor.getItemsByChannelId(1L)
+		compositeDisposable.add(switchChannel(channelId)
 				.toFlowable()
 				.concatMapIterable(items -> items)
 				.subscribe(item -> {
@@ -72,15 +80,17 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 							itemListInteractor.getFileById(item.getEnclosure())
 							.subscribe(file -> itemModel.setEnclosure(file.getPath()), throwable -> Log.e("myApp", "error")));
 					itemModels.add(itemModel);
-
 				}, throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable)),
 						() -> {
 							RequestManager requestManager = Glide.with(mView.context());
-							RecyclerListPresenter recyclerListPresenter = new RecyclerListPresenter(requestManager, itemModels, mView.getResourceIdRowView());
+							recyclerListPresenter = new RecyclerListPresenter(requestManager, mView.getResourceIdRowView());
 							RecyclerListAdapter recyclerAdapter = new RecyclerListAdapter(recyclerListPresenter);
+							recyclerListPresenter.setAdapter(recyclerAdapter);
+							recyclerListPresenter.submitList(itemModels);
 							RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mView.context());
 							mView.getRecycler().setLayoutManager(layoutManager);
 							mView.getRecycler().setAdapter(recyclerAdapter);
+
 							mView.getRecycler().addOnItemTouchListener(new OnItemTouchListener());
 				})
 		);
@@ -110,7 +120,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 	@Override
 	public void setView(ItemListContract.V view) {
 		this.mView = view;
-		initRecycler();
+		initRecycler(mView.getCurChannelId());
 	}
 
 	@Override
@@ -118,6 +128,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 		compositeDisposable.add(itemListInteractor.deleteAllChannels().subscribe(() -> {
 			compositeDisposable.add(itemListInteractor.deleteAllItems().subscribe(() -> {
 				mView.stopRefresh();
+				globalActions.updDrawerMenu();
 			}, throwable -> mView.stopRefresh()));
 		}, throwable -> mView.stopRefresh()));
 		//mView.stopRefresh();

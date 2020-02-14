@@ -40,6 +40,12 @@ class ItemListInteractor {
 		this.channelRepository = channelRepository;
 	}
 
+	Maybe<List<Item>> getAllItems () {
+		return channelRepository.getAllItems()
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
+	}
+
 	Maybe<List<Item>> getItemsByChannelId (Long id) {
 		return channelRepository.getItemsByChannelId(id)
 				.subscribeOn(Schedulers.from(threadExecutor))

@@ -10,6 +10,7 @@ import com.example.rss.domain.exception.DefaultErrorBundle;
 import com.example.rss.domain.exception.IErrorBundle;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
 
     private List<Channel> mChannels = null;
     private List<Category> mCategories = null;
+    private List<List<Map<String, String>>> channelTreeData;
 
     private void setCategories(List<Category> mCategories) {
         this.mCategories = mCategories;
@@ -56,8 +58,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     public void setView(GlobalContract.V view) {
         mView = view;
         mView.openDrawer();
-        prepareDataForMenu();
-
+        globalActions.updDrawerMenu();
     }
 
     private void prepareDataForMenu() {
@@ -70,44 +71,68 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
                             .subscribe(channels -> {
                                 setChannels(channels);
                                 initChannelListMenu();
-                            }, throwable -> showErrorMessage(new DefaultErrorBundle(new DatabaseConnectionException())))
+                            }, throwable -> showErrorMessage(new DefaultErrorBundle(new DatabaseConnectionException()))
+                            ,() -> initChannelListMenu())
                     );
-                }, throwable -> showErrorMessage(new DefaultErrorBundle(new DatabaseConnectionException())))
+                }, throwable -> showErrorMessage(new DefaultErrorBundle(new DatabaseConnectionException()))
+                , () -> initChannelListMenu())
         );
     }
 
     private void initChannelListMenu(){
-        if (!mChannels.isEmpty() && !mCategories.isEmpty()){
-            final String attrParentTitle = "attrParentTitle";
-            final String attrChildTitle = "attrChildTitle";
+        final String attrParentTitle = "attrParentTitle";
+        final String attrChildTitle = "attrChildTitle";
+        final String attrChildId = "attrChildId";
 
-            List<Map<String, String>> groupData = new ArrayList<>();
-            List<List<Map<String, String>>> childData = new ArrayList<>();
+        channelTreeData = new ArrayList<>();
+        List<Map<String, String>> groupData = new ArrayList<>();
+
+        if (!mChannels.isEmpty() && !mCategories.isEmpty()){
+            Category category1 = new Category();
+            category1.setCategoryId(33L);
+            category1.setName("test2");
+            category1.setType(CATEGORY_TYPE);
+
+            Channel channel1 = new Channel();
+            channel1.setChannelId(55L);
+            channel1.setTitle("test123");
+            channel1.setCategoryId(33L);
+
+            Channel channel2 = new Channel();
+            channel2.setChannelId(66L);
+            channel2.setTitle("ewrfewrfewrfre");
+            channel2.setCategoryId(33L);
+
+            mChannels.add(channel1);
+            mChannels.add(channel2);
+
+            mCategories.add(category1);
 
             Map<String, String> mCategoryTitle;
-            Map<String, String> mChildTitle;
+            Map<String, String> mChildAttrArr;
+
             List<Map<String, String>> tmpChild;
 
             for (Category category: mCategories) {
-
+                tmpChild = new ArrayList<>();
                 for (Channel channel: mChannels) {
-                    tmpChild = new ArrayList<>();
-                    if (category.getCategoryId().equals(channel.getCategoryId())){
-                        mChildTitle = new HashMap<>();
-                        mChildTitle.put(attrChildTitle, channel.getTitle());
-                        tmpChild.add(mChildTitle);
-                    }
-                    if (!tmpChild.isEmpty())
-                        childData.add(tmpChild);
-                }
 
+
+                    if (category.getCategoryId().equals(channel.getCategoryId())){
+                        mChildAttrArr = new HashMap<>();
+                        mChildAttrArr.put(attrChildTitle, channel.getTitle());
+                        mChildAttrArr.put(attrChildId, channel.getChannelId().toString());
+                        tmpChild.add(mChildAttrArr);
+                    }
+                }
+                if (!tmpChild.isEmpty())
+                    channelTreeData.add(tmpChild);
                 mCategoryTitle = new HashMap<>();
                 mCategoryTitle.put(attrParentTitle, category.getName());
                 groupData.add(mCategoryTitle);
             }
-
-            mView.ShowChannelListMenu(groupData, childData, attrParentTitle, attrChildTitle);
         }
+        mView.ShowChannelListMenu(groupData, channelTreeData, attrParentTitle, attrChildTitle);
     }
 
     private void showErrorMessage(IErrorBundle errorBundle) {
@@ -124,6 +149,20 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     @Override
     public void openSettingsFragment() {
         navController.navigate(R.id.nav_settingsFragment);
+    }
+
+    @Override
+    public void selectTreeItemChannel(int groupPos, int childPos) {
+        String index = channelTreeData.get(groupPos).get(childPos).get("attrChildId");
+        Bundle bundle = new Bundle();
+        bundle.putLong("channelId", Long.parseLong(index));
+        navController.navigate(R.id.nav_item_list_fragment, bundle);
+        mView.closeDrawer();
+    }
+
+    @Override
+    public void updLeftMenu() {
+        prepareDataForMenu();
     }
 
     @Override

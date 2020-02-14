@@ -13,6 +13,7 @@ public interface ItemListContract {
 		void stopRefresh();
 		RecyclerView getRecycler();
 		int getResourceIdRowView();
+		Long getCurChannelId();
 	}
 
 	interface P<T> extends Presenter {

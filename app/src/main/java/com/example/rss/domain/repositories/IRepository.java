@@ -29,12 +29,13 @@ public interface IRepository {
 
 	//Items
 	Maybe<List<Item>> getItemsByChannelId(Long id);
+	Maybe<List<Item>> getAllItems();
 	Maybe<List<Long>> InsertManyItems(List<Item> items);
 	Single<Item> getItemByUniqueId(String hash);
 	Completable deleteAllItems();
 
 	//Category
-	Flowable<List<Category>> getCategoriesByType(String mType);
+	Maybe<List<Category>> getCategoriesByType(String mType);
 
 	//File
 	Single<Long> addFile(File file);

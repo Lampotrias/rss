@@ -48,6 +48,7 @@ public class WorkManagerInteractor {
                 .filter(channel -> {
                     Long next = channel.getNextSyncDate();
                     Long last = channel.getLastBuild();
+                    next = 0L;
                     if (next == 0)
                         return true;
 

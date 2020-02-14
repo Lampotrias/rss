@@ -2,6 +2,8 @@ package com.example.rss.presentation.itemList.adapter;
 
 import com.example.rss.domain.Item;
 
+import java.util.Objects;
+
 public class ItemModel {
     private Long itemId;
     private String guid;
@@ -85,4 +87,17 @@ public class ItemModel {
         isStar = star;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ItemModel itemModel = (ItemModel) o;
+        return itemId.equals(itemModel.itemId) &&
+                title.equals(itemModel.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(itemId, title);
+    }
 }

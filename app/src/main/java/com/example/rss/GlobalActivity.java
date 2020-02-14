@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
@@ -30,7 +31,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-public class GlobalActivity extends BaseActivity implements GlobalContract.V, GlobalActions {
+public class GlobalActivity extends BaseActivity implements GlobalContract.V, GlobalActions, ExpandableListView.OnChildClickListener {
 
 	private ActionBar actionBar;
 	private FloatingActionButton fab;
@@ -64,6 +65,7 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 		app.setGlobalActivity(this);
 		app.getAppComponent().inject(this);
 
+		expandableListView = findViewById(R.id.expandableListView);
 
 		container = findViewById(R.id.container);
 		Toolbar toolbar = findViewById(R.id.toolbar);
@@ -94,8 +96,6 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 
 	@Override
 	public void ShowChannelListMenu(List<Map<String, String>> groupData, List<List<Map<String, String>>> childData, String attrParentTitle, String attrChildTitle) {
-		expandableListView = findViewById(R.id.expandableListView);
-
 		String[] groupFrom = new String[]{attrParentTitle};
 		int[] groupTo = new int[]{android.R.id.text1};
 
@@ -114,6 +114,13 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 				childTo);
 
 		expandableListView.setAdapter(adapter);
+		expandableListView.setOnChildClickListener(this);
+	}
+
+	@Override
+	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+		mPresenter.selectTreeItemChannel(groupPosition, childPosition);
+		return true;
 	}
 
 	@Override
@@ -192,6 +199,11 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 	@Override
 	public void setTitle(String title) {
 		actionBar.setTitle(title);
+	}
+
+	@Override
+	public void updDrawerMenu() {
+		mPresenter.updLeftMenu();
 	}
 
 	@Override

@@ -9,7 +9,12 @@
         android:id="@+id/nav_item_list_fragment"
         android:name="com.example.rss.presentation.itemList.ItemListFragment"
         android:label="item_list_fragment"
-        tools:layout="@layout/items_list_fragment" />
+        tools:layout="@layout/items_list_fragment" >
+        <argument
+            android:name="channelId"
+            app:argType="long"
+            android:defaultValue="0L" />
+    </fragment>
     <fragment
         android:id="@+id/nav_channel_edit_fragment"
         android:name="com.example.rss.presentation.channelEdit.ChannelEditFragment"

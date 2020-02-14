@@ -11,11 +11,12 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 
 @Dao
 public interface CategoryDAO {
     @Query("SELECT * FROM category WHERE type = :type OR type = ''")
-    Flowable<List<CategoryDTO>> getCategoriesByType(String type);
+    Maybe<List<CategoryDTO>> getCategoriesByType(String type);
 
     @Insert @Transaction
     Completable insert(CategoryDTO categoryDTO);

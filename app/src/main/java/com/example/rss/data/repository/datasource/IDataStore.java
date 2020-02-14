@@ -30,6 +30,7 @@ public interface IDataStore {
 
 	//Items
 	Maybe<List<ItemEntity>> getItemsByChannelId(Long id);
+	Maybe<List<ItemEntity>> getAllItems();
 	Maybe<List<Long>> InsertManyItems(List<ItemEntity> itemEntities);
 	Single<ItemEntity> getItemByUniqueId(String hash);
 	Completable deleteAllItems();
@@ -39,5 +40,5 @@ public interface IDataStore {
 	Flowable<FileEntity> getFileById(Long id);
 
 	//Category
-	Flowable<List<CategoryEntity>> getCategoriesByType(String mType);
+	Maybe<List<CategoryEntity>> getCategoriesByType(String mType);
 }

@@ -65,6 +65,12 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
+	public Maybe<List<Item>> getAllItems() {
+		final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
+		return dataStore.getAllItems().map(repositoryEntityDataMapper::transformEntityToItems);
+	}
+
+	@Override
 	public Maybe<List<Long>> InsertManyItems(List<Item> items) {
 		final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
 		return dataStore.InsertManyItems(repositoryEntityDataMapper.transformItemsToEntity(items));
@@ -101,7 +107,7 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
-	public Flowable<List<Category>> getCategoriesByType(String mType) {
+	public Maybe<List<Category>> getCategoriesByType(String mType) {
 		final IDataStore dataStore = channelDataStoreFactory.createForCategory(null);
 		return dataStore.getCategoriesByType(mType).map(repositoryEntityDataMapper::transformCategories);
 	}
