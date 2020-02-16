@@ -88,6 +88,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 							recyclerListPresenter.setAdapter(recyclerAdapter);
 							recyclerListPresenter.submitList(itemModels);
 							RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mView.context());
+
 							mView.getRecycler().setLayoutManager(layoutManager);
 							mView.getRecycler().setAdapter(recyclerAdapter);
 
