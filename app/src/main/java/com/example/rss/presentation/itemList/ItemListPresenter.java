@@ -1,9 +1,12 @@
 package com.example.rss.presentation.itemList;
 
+import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +19,7 @@ import com.example.rss.domain.exception.IErrorBundle;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
 import com.example.rss.presentation.global.GlobalActions;
 import com.example.rss.presentation.itemList.adapter.ItemModel;
+import com.example.rss.presentation.itemList.adapter.RecyclerItemClickListener;
 import com.example.rss.presentation.itemList.adapter.RecyclerListPresenter;
 import com.example.rss.presentation.itemList.adapter.RecyclerListAdapter;
 
@@ -36,10 +40,14 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 	private ItemListContract.V mView;
 	private final ItemListInteractor itemListInteractor;
 	private final CompositeDisposable compositeDisposable;
+	private RecyclerItemClickListener.OnItemClickListener onItemClickListener;
 	RecyclerListPresenter recyclerListPresenter;
 
 	@Inject
 	GlobalActions globalActions;
+
+	@Inject
+	NavController navController;
 
 	@Inject
 	ItemListPresenter(ItemListInteractor itemListInteractor) {
@@ -92,7 +100,20 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 							mView.getRecycler().setLayoutManager(layoutManager);
 							mView.getRecycler().setAdapter(recyclerAdapter);
 
-							mView.getRecycler().addOnItemTouchListener(new OnItemTouchListener());
+							mView.getRecycler().addOnItemTouchListener(new RecyclerItemClickListener(null, mView.getRecycler(), new RecyclerItemClickListener.OnItemClickListener() {
+								@Override
+								public void onItemClick(View view, int position) {
+									Bundle bundle = new Bundle();
+									bundle.putInt("DETAIL_POSITION", position);
+									bundle.putLong("DETAIL_CHANNEL_ID", channelId);
+									navController.navigate(R.id.nav_itemDetailFragment, bundle);
+								}
+
+								@Override
+								public void onLongItemClick(View view, int position) {
+
+								}
+							}));
 				})
 		);
 
@@ -133,23 +154,5 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 			}, throwable -> mView.stopRefresh()));
 		}, throwable -> mView.stopRefresh()));
 		//mView.stopRefresh();
-	}
-
-	private class OnItemTouchListener implements RecyclerView.OnItemTouchListener {
-
-		@Override
-		public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-			return true;
-		}
-
-		@Override
-		public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-
-		}
-
-		@Override
-		public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-		}
 	}
 }

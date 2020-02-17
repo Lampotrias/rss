@@ -28,6 +28,7 @@ import butterknife.ButterKnife;
 public class ItemDetailFragment extends BaseFragment implements ItemDetailContract.V {
 	private AndroidApplication app;
 	private int itemId = -1;
+	private Long channelId;
 	@Inject	public ItemDetailPresenter mPresenter;
 	@Inject	public GlobalActions globalActions;
 
@@ -38,7 +39,8 @@ public class ItemDetailFragment extends BaseFragment implements ItemDetailContra
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
-			itemId = getArguments().getInt("itemId", -1);
+			itemId = getArguments().getInt("DETAIL_POSITION", -1);
+			channelId = getArguments().getLong("DETAIL_CHANNEL_ID", -1);
 		}
 		app = (AndroidApplication) Objects.requireNonNull(getActivity()).getApplication();
 		app.getFragmentModule(this).inject(this);
@@ -96,5 +98,10 @@ public class ItemDetailFragment extends BaseFragment implements ItemDetailContra
 	@Override
 	public int getItemId() {
 		return itemId;
+	}
+
+	@Override
+	public Long getChannelId() {
+		return channelId;
 	}
 }

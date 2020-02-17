@@ -17,7 +17,7 @@ import io.reactivex.Single;
 
 @Dao
 public interface ItemDAO {
-    @Query("SELECT item.id, item.channel_id, item.guid, item.title, item.description, item.link,  item.pub_date, item.enclosure, item.is_read, favorite.item_id as is_favorite FROM item LEFT JOIN favorite WHERE item.channel_id = :id ORDER BY item.id DESC")
+    @Query("SELECT item.id, item.channel_id, item.guid, item.title, item.description, item.link,  item.pub_date, item.enclosure, item.is_read, favorite.item_id as is_favorite FROM item LEFT JOIN favorite WHERE item.channel_id = :id ORDER BY item.pub_date DESC")
     Maybe<List<ItemDTO>> getItemsByChannelId(Long id);
 
     @Query("SELECT * FROM item")

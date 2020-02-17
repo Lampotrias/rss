@@ -22,7 +22,7 @@ public class ViewDetailPresenter {
         rowView.setTitle(item.getTitle());
         rowView.setDescription(item.getDescription());
         rowView.setDate(item.getPubDate());
-        rowView.setLogo(glide, "https://icdn.lenta.ru/images/2020/02/13/21/20200213210621185/pic_989b7e9c88f529c0bbd59d22e36b79e8.png");
+        rowView.setLogo(glide, item.getEnclosure());
         rowView.setStar((item.getStar() == null)?false:item.getStar());
     }
 

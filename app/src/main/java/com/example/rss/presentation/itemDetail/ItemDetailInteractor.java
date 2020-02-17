@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 class ItemDetailInteractor {
 
@@ -29,7 +30,7 @@ class ItemDetailInteractor {
 		this.channelRepository = channelRepository;
 	}
 
-	public Observable<List<Item>> getItemsByChannelId(Long id) {
+	/*public Observable<List<Item>> getItemsByChannelId(Long id) {
 		return Observable.create(emitter -> {
 			Item item = new Item();
 			item.setItemId(1L);
@@ -60,9 +61,17 @@ class ItemDetailInteractor {
 			emitter.onNext(arr);
 			emitter.onComplete();
 		});
+	}*/
+
+	Maybe<List<Item>> getItemsByChannelId (Long id) {
+		return channelRepository.getItemsByChannelId(id)
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
 	}
 
-	public Observable<File> getFileById(Long enclosure) {
-		return Observable.create(emitter -> emitter.onNext(new File()));
+	Flowable<File> getFileById (Long id) {
+		return channelRepository.getFileById(id)
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
 	}
 }

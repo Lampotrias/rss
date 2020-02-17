@@ -49,7 +49,8 @@ public class ItemDetailPresenter extends ViewPager2.OnPageChangeCallback impleme
 
 	void initRecycler(){
 		itemModels = new ArrayList<>();
-		compositeDisposable.add(ItemDetailInteractor.getItemsByChannelId(1L)
+		compositeDisposable.add(ItemDetailInteractor.getItemsByChannelId(mView.getChannelId())
+				.toObservable()
 				.concatMapIterable(items -> items)
 				.subscribe(item -> {
 							ItemModel itemModel = transform(item);

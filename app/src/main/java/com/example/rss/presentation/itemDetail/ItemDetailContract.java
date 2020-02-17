@@ -14,6 +14,7 @@ public interface ItemDetailContract {
 		int getResourceIdRowView();
 		ViewPager2 getViewPager();
 		int getItemId();
+		Long getChannelId();
 	}
 
 	interface P<T> extends Presenter {
