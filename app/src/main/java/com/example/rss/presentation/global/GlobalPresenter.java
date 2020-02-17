@@ -57,7 +57,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     @Override
     public void setView(GlobalContract.V view) {
         mView = view;
-        mView.openDrawer();
+        //mView.openDrawer();
         globalActions.updDrawerMenu();
     }
 
@@ -72,10 +72,10 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
                                 setChannels(channels);
                                 initChannelListMenu();
                             }, throwable -> showErrorMessage(new DefaultErrorBundle(new DatabaseConnectionException()))
-                            ,() -> initChannelListMenu())
+                            , this::initChannelListMenu)
                     );
                 }, throwable -> showErrorMessage(new DefaultErrorBundle(new DatabaseConnectionException()))
-                , () -> initChannelListMenu())
+                , this::initChannelListMenu)
         );
     }
 

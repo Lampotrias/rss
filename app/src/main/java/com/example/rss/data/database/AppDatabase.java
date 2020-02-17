@@ -16,7 +16,7 @@ import com.example.rss.data.database.dto.ItemDTO;
 
 import com.example.rss.data.database.dto.ChannelDTO;
 
-@Database(entities = {ChannelDTO.class, FileDTO.class, FavoritesDTO.class, ItemDTO.class, CategoryDTO.class}, version = 3, exportSchema = false)
+@Database(entities = {ChannelDTO.class, FileDTO.class, FavoritesDTO.class, ItemDTO.class, CategoryDTO.class}, version = 5, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 	private static AppDatabase singleton;
 	private static final String DATABASE_NAME = "rss.db";

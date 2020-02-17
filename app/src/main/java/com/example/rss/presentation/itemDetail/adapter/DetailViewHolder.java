@@ -53,7 +53,11 @@ public class DetailViewHolder extends RecyclerView.ViewHolder implements DetailR
 
     @Override
     public void setLogo(RequestManager glide, String logoPath) {
-        glide.load(logoPath).into(imgChannelLogo);
+        if (logoPath == null || logoPath.equals("")){
+            imgChannelLogo.setVisibility(View.GONE);
+        }else{
+            glide.load(logoPath).into(imgChannelLogo);
+        }
     }
 
     @Override

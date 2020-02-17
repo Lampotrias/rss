@@ -40,8 +40,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 	private ItemListContract.V mView;
 	private final ItemListInteractor itemListInteractor;
 	private final CompositeDisposable compositeDisposable;
-	private RecyclerItemClickListener.OnItemClickListener onItemClickListener;
-	RecyclerListPresenter recyclerListPresenter;
+	private RecyclerListPresenter recyclerListPresenter;
 
 	@Inject
 	GlobalActions globalActions;
@@ -125,7 +124,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 	}
 
 	private ItemModel transform(Item item){
-		DateFormat format = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.getDefault());
+		DateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
 
 		ItemModel model = new ItemModel();
 		model.setItemId(item.getItemId());

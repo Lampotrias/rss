@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:background="#FFEB3B"
+    android:layout_height="180dp"
+    android:layout_margin="5dp"
     android:orientation="vertical">
 
     <ImageView
@@ -13,18 +13,18 @@
         android:layout_height="25dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+        android:contentDescription="@string/logo_channel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/logo_channel" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        tools:text="04.02.2020 08:27"
+        android:layout_marginStart="20dp"
         app:layout_constraintStart_toEndOf="@+id/img_channel_logo"
-        app:layout_constraintTop_toTopOf="@+id/img_channel_logo" />
+        app:layout_constraintTop_toTopOf="@+id/img_channel_logo"
+        tools:text="04.02.2020 08:27" />
 
     <ImageView
         android:id="@+id/img_star"
@@ -32,23 +32,22 @@
         android:layout_height="25dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:contentDescription="@string/star_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/btn_star_big_on"
-        android:contentDescription="@string/star_image" />
+        app:srcCompat="@android:drawable/btn_star_big_on" />
 
     <TextView
         android:id="@+id/txTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
-        tools:text="Раскрыто состояние зараженного коронавирусом гражданина Китая в России"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txDate" />
+        app:layout_constraintTop_toBottomOf="@+id/img_channel_logo"
+        tools:text="Раскрыто состояние зараженного коронавирусом гражданина Китая в России" />
 
     <TextView
         android:id="@+id/txDescription"
@@ -57,9 +56,9 @@
         android:layout_marginTop="10dp"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
-        tools:text="Вирус 2019-nCoV передается от человека к человеку. К основным симптомам инфекции относят повышенную температуру, утомляемость и кашель с небольшой мокротой. Помимо КНР, заболевание бы"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/txTitle"
+        tools:text="Вирус 2019-nCoV передается от человека к человеку. К основным симптомам инфекции относят повышенную температуру, утомляемость и кашель с небольшой мокротой. Помимо КНР, заболевание бы" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

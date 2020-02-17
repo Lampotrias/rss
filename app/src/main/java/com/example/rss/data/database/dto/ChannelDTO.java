@@ -38,7 +38,6 @@ public class ChannelDTO {
 	@ColumnInfo(name = "source_link")
 	private String sourceLink;
 
-	@NonNull
 	@ColumnInfo(name = "last_build")
 	private Long lastBuild;
 

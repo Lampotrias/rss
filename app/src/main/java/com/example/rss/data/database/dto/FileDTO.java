@@ -19,7 +19,6 @@ public class FileDTO {
     @ColumnInfo(name = "path")
     private String path;
 
-    @NonNull
     @ColumnInfo(name = "description")
     private String description;
 

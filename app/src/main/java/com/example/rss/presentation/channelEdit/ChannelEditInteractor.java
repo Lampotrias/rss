@@ -72,19 +72,21 @@ class ChannelEditInteractor {
 		channel.setCacheImage(bCacheImage);
 		channel.setDownloadFullText(bDownloadFull);
 		channel.setOnlyWifi(bOnlyWifi);
+		channel.setNextSyncDate(0L);
 
-		try {
-			SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
-			Date dateLastSync;
-			dateLastSync = format.parse(xmlChannelRawObject.getLastBuild());
-			if (dateLastSync != null) {
-				channel.setLastBuild(dateLastSync.getTime() / 1000);
+		if (xmlChannelRawObject.getLastBuild() != null) {
+			try {
+				SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
+				Date dateLastSync;
+				dateLastSync = format.parse(xmlChannelRawObject.getLastBuild());
+				if (dateLastSync != null) {
+					channel.setLastBuild(dateLastSync.getTime() / 1000);
+				}
+
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
-			channel.setNextSyncDate(0L);
-		} catch (ParseException e) {
-			e.printStackTrace();
 		}
-
 		return channel;
 	}
 
