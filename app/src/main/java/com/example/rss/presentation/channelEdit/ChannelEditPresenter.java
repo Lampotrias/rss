@@ -41,19 +41,19 @@ public class ChannelEditPresenter implements ChannelEditContract.P<ChannelEditCo
 	@Override
 	public void onSaveButtonClicked(String url, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi){
 		//ToDo addChannel category logic
-		mView.disableBtnAdd(true);
+		mView.disableBtnAdd(false);
 		compositeDisposable.add(
 				channelEditInteractor.checkChannelExistsByUrl(url)
 					.subscribe(channel -> {
 						showErrorMessage(new DefaultErrorBundle(new ChannelExistsException()));
-						mView.disableBtnAdd(false);
+						mView.disableBtnAdd(true);
 					}, throwable -> {
 							if (throwable instanceof EmptyResultSetException){
 								compositeDisposable.add(channelEditInteractor.addChannel(url, 1L, bCacheImage, bDownloadFull, bOnlyWifi)
 										.subscribe(
 												aLong -> {
 														mView.displaySuccess("new id: " + aLong);
-														mView.disableBtnAdd(false);
+														mView.disableBtnAdd(true);
 														globalActions.updDrawerMenu();
 
 													},
@@ -61,7 +61,7 @@ public class ChannelEditPresenter implements ChannelEditContract.P<ChannelEditCo
 							}else{
 								showErrorMessage(new DefaultErrorBundle((Exception) throwable));
 							}
-							mView.disableBtnAdd(false);
+							mView.disableBtnAdd(true);
 						}
 		));
 
