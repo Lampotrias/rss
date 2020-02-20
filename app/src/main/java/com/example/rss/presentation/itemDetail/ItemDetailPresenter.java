@@ -56,7 +56,7 @@ public class ItemDetailPresenter extends ViewPager2.OnPageChangeCallback impleme
 							ItemModel itemModel = transform(item);
 							compositeDisposable.add(
 									ItemDetailInteractor.getFileById(item.getEnclosure())
-											.subscribe(file -> itemModel.setEnclosure(file.getPath()), throwable -> Log.e("myApp", "error")));
+											.subscribe(file -> itemModel.setEnclosure(file.getPath()), throwable -> {}));
 							itemModels.add(itemModel);
 
 						}, throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable)),

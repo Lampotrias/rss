@@ -21,5 +21,10 @@ public interface CategoryDAO {
     @Insert @Transaction
     Completable insert(CategoryDTO categoryDTO);
 
+    @Query("SELECT * FROM category WHERE id = :id")
+    Maybe<CategoryDTO> getCategoryById(Long id);
+
+    @Insert
+    Maybe<Long> addCategory(CategoryDTO category);
 
 }

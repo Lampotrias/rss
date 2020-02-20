@@ -72,7 +72,7 @@ public class TestFragment extends BaseFragment {
                                                 Long currentTs = new Date().getTime() / 1000;
                                                 channel.setNextSyncDate(currentTs + 0);
                                                 disposable.add(
-                                                        interactor.updateChannel(channel).subscribe(aLong -> {
+                                                        interactor.updateNextExec(channel.getChannelId(), currentTs).subscribe(aLong -> {
                                                             Log.e("myApp", "finish sync channel = " + channel.getChannelId() + " next sync" + (currentTs + 3600));
                                                         })
                                                 );

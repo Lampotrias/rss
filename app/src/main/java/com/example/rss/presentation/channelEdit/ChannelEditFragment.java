@@ -123,7 +123,7 @@ public class ChannelEditFragment extends BaseFragment implements ChannelEditCont
 	}
 
 	@Override
-	public void disableBtnAdd(Boolean bDisable) {
+	public void isEnable(Boolean bDisable) {
 		btnAdd.setEnabled(bDisable);
 	}
 

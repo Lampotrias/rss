@@ -41,6 +41,7 @@ public class ChannelDatabaseMapper {
 			channelEntity = new ChannelEntity();
 			channelEntity.setChannelId(channelDTO.getChannelId());
 			channelEntity.setTitle(channelDTO.getTitle());
+			channelEntity.setFileId(channelDTO.getFileId());
 			channelEntity.setDescription(channelDTO.getDescription());
 			channelEntity.setCategoryId(channelDTO.getCategoryId());
 			channelEntity.setLink(channelDTO.getLink());

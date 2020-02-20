@@ -1,11 +1,9 @@
 package com.example.rss.presentation.itemList;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
+import android.util.LongSparseArray;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,15 +30,18 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 
 
 public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 {
 	private ItemListContract.V mView;
-	private final ItemListInteractor itemListInteractor;
-	private final CompositeDisposable compositeDisposable;
+	private final ItemListInteractor interactor;
+	private final CompositeDisposable cDisposable;
 	private RecyclerListPresenter recyclerListPresenter;
+
+	private static LongSparseArray<String> channelToImage = new LongSparseArray<>();
 
 	@Inject
 	GlobalActions globalActions;
@@ -49,9 +50,9 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 	NavController navController;
 
 	@Inject
-	ItemListPresenter(ItemListInteractor itemListInteractor) {
-		this.itemListInteractor = itemListInteractor;
-		compositeDisposable = new CompositeDisposable();
+	ItemListPresenter(ItemListInteractor interactor) {
+		this.interactor = interactor;
+		cDisposable = new CompositeDisposable();
 	}
 
 	@Override
@@ -66,28 +67,48 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 
 	@Override
 	public void destroy() {
-		if (!compositeDisposable.isDisposed())
-			compositeDisposable.dispose();
+		if (!cDisposable.isDisposed())
+			cDisposable.dispose();
 	}
 
 	private Maybe<List<Item>> switchChannel(Long channelId){
 		if (channelId > 0)
-			return itemListInteractor.getItemsByChannelId(channelId);
-		return itemListInteractor.getAllItems();
+			return interactor.getItemsByChannelId(channelId);
+		return interactor.getAllItems();
 	}
 
-	void initRecycler(Long channelId){
+	private Observable<ItemModel> prepareItem(Item item, Long channelId) {
+		Long realChannelId = item.getChannelId();
+		return Observable.fromCallable(() -> transform(item))
+				.flatMap(itemModel -> {
+					if (channelId == 0) {
+						String imgPath = channelToImage.get(realChannelId);
+
+						if (imgPath != null){
+							itemModel.setEnclosure(imgPath);
+							return Observable.just(itemModel);
+						}
+
+						return interactor.getChannelById(realChannelId)
+								.flatMap(channel -> interactor.getFileById(channel.getFileId()).map(file -> {
+									channelToImage.put(realChannelId, file.getPath());
+									itemModel.setEnclosure(file.getPath());
+									return itemModel;
+								})).defaultIfEmpty(itemModel).toObservable();
+					} else {
+						itemModel.setEnclosure("");
+						return Observable.just(itemModel);
+					}
+				});
+	}
+
+	private void initRecycler(Long channelId){
 		List<ItemModel> itemModels= new ArrayList<>();
-		compositeDisposable.add(switchChannel(channelId)
-				.toFlowable()
+		cDisposable.add(switchChannel(channelId)
+				.toObservable()
 				.concatMapIterable(items -> items)
-				.subscribe(item -> {
-					ItemModel itemModel = transform(item);
-					compositeDisposable.add(
-							itemListInteractor.getFileById(item.getEnclosure())
-							.subscribe(file -> itemModel.setEnclosure(file.getPath()), throwable -> Log.e("myApp", "error")));
-					itemModels.add(itemModel);
-				}, throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable)),
+				.concatMap(item -> prepareItem(item, channelId))
+				.subscribe(itemModels::add, throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable)),
 						() -> {
 							RequestManager requestManager = Glide.with(mView.context());
 							recyclerListPresenter = new RecyclerListPresenter(requestManager, mView.getResourceIdRowView());
@@ -95,10 +116,8 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 							recyclerListPresenter.setAdapter(recyclerAdapter);
 							recyclerListPresenter.submitList(itemModels);
 							RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mView.context());
-
 							mView.getRecycler().setLayoutManager(layoutManager);
 							mView.getRecycler().setAdapter(recyclerAdapter);
-
 							mView.getRecycler().addOnItemTouchListener(new RecyclerItemClickListener(null, mView.getRecycler(), new RecyclerItemClickListener.OnItemClickListener() {
 								@Override
 								public void onItemClick(View view, int position) {
@@ -146,12 +165,12 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 
 	@Override
 	public void refreshList() {
-		compositeDisposable.add(itemListInteractor.deleteAllChannels().subscribe(() -> {
-			compositeDisposable.add(itemListInteractor.deleteAllItems().subscribe(() -> {
-				mView.stopRefresh();
-				globalActions.updDrawerMenu();
-			}, throwable -> mView.stopRefresh()));
-		}, throwable -> mView.stopRefresh()));
+//		cDisposable.add(interactor.deleteAllChannels().subscribe(() -> {
+//			cDisposable.add(interactor.deleteAllItems().subscribe(() -> {
+//				mView.stopRefresh();
+//				globalActions.updDrawerMenu();
+//			}, throwable -> mView.stopRefresh()));
+//		}, throwable -> mView.stopRefresh()));
 		//mView.stopRefresh();
 	}
 }

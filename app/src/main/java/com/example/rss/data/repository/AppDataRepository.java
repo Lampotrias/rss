@@ -1,6 +1,8 @@
 package com.example.rss.data.repository;
 
 
+import android.util.Log;
+
 import com.example.rss.data.entity.mapper.RepositoryEntityDataMapper;
 import com.example.rss.data.repository.datasource.ChannelDataStoreFactory;
 import com.example.rss.data.repository.datasource.IDataStore;
@@ -47,7 +49,7 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
-	public Single<Channel> getChannelById(Long id) {
+	public Maybe<Channel> getChannelById(Long id) {
 		final IDataStore dataStore = channelDataStoreFactory.createForChannel(id);
 		return dataStore.getChannelById(id).map(repositoryEntityDataMapper::transform);
 	}
@@ -113,15 +115,33 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
+	public Maybe<Category> getCategoryById(Long id) {
+		final IDataStore dataStore = channelDataStoreFactory.createForCategory(null);
+		return dataStore.getCategoryById(id).map(repositoryEntityDataMapper::transform);
+	}
+
+	@Override
+	public Maybe<Long> addCategory(Category category) {
+		final IDataStore dataStore = channelDataStoreFactory.createForCategory(null);
+		return dataStore.addCategory(repositoryEntityDataMapper.transform(category));
+	}
+
+	@Override
 	public Single<Long> addFile(File file) {
 		final IDataStore dataStore = channelDataStoreFactory.createPut();
 		return dataStore.addFile(repositoryEntityDataMapper.transform(file));
 	}
 
 	@Override
-	public Flowable<File> getFileById(Long id) {
+	public Maybe<File> getFileById(Long id) {
 		final IDataStore dataStore = channelDataStoreFactory.createForFile(id);
 		return dataStore.getFileById(id).map(repositoryEntityDataMapper::transform);
 
+	}
+
+	@Override
+	public Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp) {
+		final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
+		return dataStore.updateNextExec(channelId, nextTimestamp);
 	}
 }

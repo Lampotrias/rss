@@ -1,6 +1,7 @@
 package com.example.rss.presentation.channelEdit;
 
 
+import com.example.rss.domain.Category;
 import com.example.rss.domain.exception.XmlParseException;
 import com.example.rss.domain.xml.XmlChannelRawObject;
 import com.example.rss.domain.xml.XmlParser;
@@ -42,13 +43,26 @@ class ChannelEditInteractor {
 				.observeOn(postExecutionThread.getScheduler());
 	}
 
-	Single<Channel> getChannelById(Long id){
+	Maybe<Channel> getChannelById(Long id){
 		return channelRepository.getChannelById(id)
 				.subscribeOn(Schedulers.from(threadExecutor))
 				.observeOn(postExecutionThread.getScheduler());
 	}
 
-	Maybe<Long> addChannel(String url, Long categoryId, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi){
+	Maybe<Category> getCategoryById(Long id){
+		return channelRepository.getCategoryById(id)
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
+	}
+	Maybe<Long> addCategory(Category category){
+		return channelRepository.addCategory(category)
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
+	}
+
+
+
+	Maybe<Long> addChannelAndFile(String url, Long categoryId, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi){
 
 		return	channelRepository.getRssFeedContent(url)
 				.map(this::parseChannel)

@@ -5,6 +5,7 @@ import com.example.rss.data.entity.ChannelEntity;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 @Singleton
@@ -24,7 +25,7 @@ public class CacheApp implements ICacheApp {
     }
 
     @Override
-    public Single<ChannelEntity> getChannel(Long id) {
-        return Single.create(emitter -> emitter.onSuccess(new ChannelEntity()));
+    public Maybe<ChannelEntity> getChannel(Long id) {
+        return Maybe.create(emitter -> emitter.onSuccess(new ChannelEntity()));
     }
 }

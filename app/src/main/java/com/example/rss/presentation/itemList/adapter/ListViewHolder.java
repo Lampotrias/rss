@@ -54,7 +54,11 @@ public class ListViewHolder extends RecyclerView.ViewHolder implements ListRowVi
 
     @Override
     public void setLogo(RequestManager glide, String logoPath) {
-        glide.load(logoPath).into(imgChannelLogo);
+        if (logoPath == null || logoPath.equals("")){
+         imgChannelLogo.setVisibility(View.INVISIBLE);
+        }else {
+            glide.load(logoPath).into(imgChannelLogo);
+        }
     }
 
     @Override

@@ -114,8 +114,6 @@ public class WorkManagerInteractor {
     }
 
     private Item prepareItem(XmlItemRawObject xmlItemRawObject, Long fileId, Long channelId) {
-        Log.e("myApp", "add item " + xmlItemRawObject.getTitle() + " ---- " + fileId);
-
         SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
         Date pubDate = new Date();
 
@@ -137,6 +135,12 @@ public class WorkManagerInteractor {
 
     public Single<Integer> updateChannel(Channel channel){
         return channelRepository.updateChannel(channel)
+                .subscribeOn(Schedulers.from(threadExecutor))
+                .observeOn(postExecutionThread.getScheduler());
+    }
+
+    public Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp){
+        return channelRepository.updateNextExec(channelId, nextTimestamp)
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(postExecutionThread.getScheduler());
     }

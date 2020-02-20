@@ -44,7 +44,7 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Single<ChannelEntity> getChannelById(Long id) {
+    public Maybe<ChannelEntity> getChannelById(Long id) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
@@ -99,12 +99,27 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Flowable<FileEntity> getFileById(Long id) {
+    public Maybe<FileEntity> getFileById(Long id) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
     @Override
     public Maybe<List<CategoryEntity>> getCategoriesByType(String mType) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Maybe<CategoryEntity> getCategoryById(Long id) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Maybe<Long> addCategory(CategoryEntity categoryEntity) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 }

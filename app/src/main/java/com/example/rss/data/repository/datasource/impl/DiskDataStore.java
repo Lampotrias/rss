@@ -30,7 +30,7 @@ public abstract class DiskDataStore implements IDataStore {
     }
 
     @Override
-    public Single<ChannelEntity> getChannelById(Long id) {
+    public Maybe<ChannelEntity> getChannelById(Long id) {
         return cache.getChannel(id);
     }
 

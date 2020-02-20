@@ -25,10 +25,13 @@ public interface ChannelDAO {
 	Single<ChannelDTO> getChannelByUrl(String url);
 
 	@Query("SELECT * FROM channel WHERE id = :id")
-	Single<ChannelDTO> getChannelById(Long id);
+	Maybe<ChannelDTO> getChannelById(Long id);
 
 	@Query("SELECT * FROM channel")
 	Maybe<List<ChannelDTO>> getAllChannels();
+
+	@Query("UPDATE channel set next_sync_date = :nextTimestamp WHERE id = :channelId")
+	Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp);
 
 	@Update
 	Single<Integer> updateChannel(ChannelDTO channelDTO);

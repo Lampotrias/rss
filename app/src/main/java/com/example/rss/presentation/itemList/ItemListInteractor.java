@@ -1,6 +1,8 @@
 package com.example.rss.presentation.itemList;
 
 
+import android.util.Log;
+
 import com.example.rss.domain.Channel;
 import com.example.rss.domain.File;
 import com.example.rss.domain.Item;
@@ -52,10 +54,17 @@ class ItemListInteractor {
 				.observeOn(postExecutionThread.getScheduler());
 	}
 
-	Flowable<File> getFileById (Long id) {
+	Maybe<File> getFileById (Long id) {
 		return channelRepository.getFileById(id)
 				.subscribeOn(Schedulers.from(threadExecutor))
 				.observeOn(postExecutionThread.getScheduler());
+	}
+
+	Maybe<Channel> getChannelById(Long id){
+		return channelRepository.getChannelById(id)
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
+
 	}
 
 	Maybe<List<Long>> InsertItems(List<Item> items){

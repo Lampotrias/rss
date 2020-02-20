@@ -1,6 +1,8 @@
 package com.example.rss.presentation.itemList.adapter;
 
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.AsyncListDiffer;
@@ -60,6 +62,6 @@ public class RecyclerListPresenter implements ListPresenter {
     @Override
     public void setAdapter(RecyclerView.Adapter adapter){
         this.adapter = adapter;
-        mDiffer = new AsyncListDiffer(this.adapter, DIFF_CALLBACK);
+        mDiffer = new AsyncListDiffer<>(this.adapter, DIFF_CALLBACK);
     }
 }

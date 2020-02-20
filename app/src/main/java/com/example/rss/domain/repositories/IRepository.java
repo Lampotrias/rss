@@ -21,7 +21,7 @@ public interface IRepository {
 
 	//Channel
 	Maybe<Long> addChannel(Channel channel);
-	Single<Channel> getChannelById(Long id);
+	Maybe<Channel> getChannelById(Long id);
 	Maybe<List<Channel>> getAllChannels();
 	Single<Channel> getChannelByUrl(String url);
 	Single<Integer> updateChannel(Channel channel);
@@ -36,8 +36,12 @@ public interface IRepository {
 
 	//Category
 	Maybe<List<Category>> getCategoriesByType(String mType);
+	Maybe<Category> getCategoryById(Long id);
+	Maybe<Long> addCategory(Category category);
 
 	//File
 	Single<Long> addFile(File file);
-	Flowable<File> getFileById(Long id);
+	Maybe<File> getFileById(Long id);
+
+    Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp);
 }

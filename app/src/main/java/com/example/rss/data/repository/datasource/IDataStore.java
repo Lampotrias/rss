@@ -4,6 +4,7 @@ import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.ItemEntity;
+import com.example.rss.domain.Category;
 import com.example.rss.domain.File;
 import com.example.rss.domain.Item;
 
@@ -22,7 +23,7 @@ public interface IDataStore {
 
 	//Channel
 	Maybe<Long> addChannel(ChannelEntity channel);
-	Single<ChannelEntity> getChannelById(Long id);
+	Maybe<ChannelEntity> getChannelById(Long id);
 	Single<ChannelEntity> getChannelByUrl(String url);
 	Maybe<List<ChannelEntity>> getAllChannels();
 	Single<Integer> updateChannel(ChannelEntity channelEntity);
@@ -37,8 +38,12 @@ public interface IDataStore {
 
 	//Files
 	Single<Long> addFile (FileEntity fileEntity);
-	Flowable<FileEntity> getFileById(Long id);
+	Maybe<FileEntity> getFileById(Long id);
 
 	//Category
 	Maybe<List<CategoryEntity>> getCategoriesByType(String mType);
+	Maybe<CategoryEntity> getCategoryById(Long id);
+	Maybe<Long> addCategory(CategoryEntity categoryEntity);
+
+    Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp);
 }

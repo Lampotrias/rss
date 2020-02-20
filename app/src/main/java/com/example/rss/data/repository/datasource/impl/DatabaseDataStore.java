@@ -31,7 +31,7 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Single<ChannelEntity> getChannelById(Long id) {
+	public Maybe<ChannelEntity> getChannelById(Long id) {
 		return appDatabase.channelDAO().getChannelById(id).map(ChannelDatabaseMapper::transform);
 	}
 
@@ -86,13 +86,28 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Flowable<FileEntity> getFileById(Long id) {
+	public Maybe<FileEntity> getFileById(Long id) {
 		return appDatabase.fileDAO().getFileById(id).map(ChannelDatabaseMapper::transform);
 	}
 
 	@Override
 	public Maybe<List<CategoryEntity>> getCategoriesByType(String mType) {
 		return appDatabase.categoryDAO().getCategoriesByType(mType).map(ChannelDatabaseMapper::transformCategories);
+	}
+
+	@Override
+	public Maybe<CategoryEntity> getCategoryById(Long id) {
+		return appDatabase.categoryDAO().getCategoryById(id).map(ChannelDatabaseMapper::transform);
+	}
+
+	@Override
+	public Maybe<Long> addCategory(CategoryEntity categoryEntity) {
+		return appDatabase.categoryDAO().addCategory(ChannelDatabaseMapper.transform(categoryEntity));
+	}
+
+	@Override
+	public Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp) {
+		return appDatabase.channelDAO().updateNextExec(channelId, nextTimestamp);
 	}
 
 	@Override

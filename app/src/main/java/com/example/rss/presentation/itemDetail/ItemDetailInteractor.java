@@ -69,7 +69,7 @@ class ItemDetailInteractor {
 				.observeOn(postExecutionThread.getScheduler());
 	}
 
-	Flowable<File> getFileById (Long id) {
+	Maybe<File> getFileById (Long id) {
 		return channelRepository.getFileById(id)
 				.subscribeOn(Schedulers.from(threadExecutor))
 				.observeOn(postExecutionThread.getScheduler());
