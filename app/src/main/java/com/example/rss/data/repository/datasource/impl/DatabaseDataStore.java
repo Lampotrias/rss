@@ -1,5 +1,7 @@
 package com.example.rss.data.repository.datasource.impl;
 
+import com.example.rss.data.cache.CacheApp;
+import com.example.rss.data.cache.ICacheApp;
 import com.example.rss.data.database.AppDatabase;
 import com.example.rss.data.database.mapper.ChannelDatabaseMapper;
 import com.example.rss.data.entity.CategoryEntity;
@@ -20,9 +22,11 @@ import io.reactivex.Single;
 public class DatabaseDataStore implements IDataStore {
 
 	private final AppDatabase appDatabase;
+	private final ICacheApp cacheApp;
 
-	public DatabaseDataStore(AppDatabase appDatabase) {
+	public DatabaseDataStore(AppDatabase appDatabase, ICacheApp cacheApp) {
 		this.appDatabase = appDatabase;
+		this.cacheApp = cacheApp;
 	}
 
 	@Override
@@ -32,7 +36,7 @@ public class DatabaseDataStore implements IDataStore {
 
 	@Override
 	public Maybe<ChannelEntity> getChannelById(Long id) {
-		return appDatabase.channelDAO().getChannelById(id).map(ChannelDatabaseMapper::transform);
+		return appDatabase.channelDAO().getChannelById(id).map(ChannelDatabaseMapper::transform).doOnSuccess(this.cacheApp::putChannel);
 	}
 
 	@Override

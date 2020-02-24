@@ -6,7 +6,8 @@ import androidx.annotation.NonNull;
 
 import com.example.rss.data.database.AppDatabase;
 import com.example.rss.data.repository.datasource.impl.DatabaseDataStore;
-import com.example.rss.data.repository.datasource.impl.ICacheApp;
+import com.example.rss.data.cache.ICacheApp;
+import com.example.rss.data.repository.datasource.impl.DiskDataStore;
 import com.example.rss.data.repository.datasource.impl.NetworkDataStore;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +34,7 @@ public class ChannelDataStoreFactory {
 	@NotNull
 	private IDataStore createDatabaseDataStore() {
 		AppDatabase appDatabase = AppDatabase.getInstance(context);
-		return new DatabaseDataStore(appDatabase);
+		return new DatabaseDataStore(appDatabase, cacheDataStore);
 	}
 
 	public IDataStore createNetwork(){
@@ -44,9 +45,9 @@ public class ChannelDataStoreFactory {
 		IDataStore dataStore;
 
 		if (id != null){
-			/*if (!cacheDataStore.isExpired() && cacheDataStore.isCachedChannel(id))
-				//dataStore = new DiskDataStore(cacheDataStore);
-			else*/
+			if (!cacheDataStore.isExpired() && cacheDataStore.isCachedChannel(id))
+				dataStore = new DiskDataStore(cacheDataStore);
+			else
 				dataStore = createDatabaseDataStore();
 		}else
 		{

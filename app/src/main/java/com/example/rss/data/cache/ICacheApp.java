@@ -1,4 +1,4 @@
-package com.example.rss.data.repository.datasource.impl;
+package com.example.rss.data.cache;
 
 import com.example.rss.data.entity.ChannelEntity;
 
@@ -8,5 +8,6 @@ import io.reactivex.Single;
 public interface ICacheApp {
     Boolean isExpired();
     Boolean isCachedChannel(Long id);
-    Maybe<ChannelEntity> getChannel(Long id);
+    Maybe<ChannelEntity> getChannelById(Long id);
+    void putChannel(ChannelEntity channelEntity);
 }

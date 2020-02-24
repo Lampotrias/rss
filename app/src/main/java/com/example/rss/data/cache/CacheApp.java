@@ -1,12 +1,12 @@
-package com.example.rss.data.repository.datasource.impl;
+package com.example.rss.data.cache;
 
+import com.example.rss.data.cache.ICacheApp;
 import com.example.rss.data.entity.ChannelEntity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Maybe;
-import io.reactivex.Single;
 
 @Singleton
 public class CacheApp implements ICacheApp {
@@ -25,7 +25,13 @@ public class CacheApp implements ICacheApp {
     }
 
     @Override
-    public Maybe<ChannelEntity> getChannel(Long id) {
+    public Maybe<ChannelEntity> getChannelById(Long id) {
         return Maybe.create(emitter -> emitter.onSuccess(new ChannelEntity()));
+    }
+
+    @Override
+    public void putChannel(ChannelEntity channelEntity) {
+        if (channelEntity != null)
+
     }
 }
