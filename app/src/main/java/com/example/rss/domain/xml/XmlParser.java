@@ -1,22 +1,17 @@
 package com.example.rss.domain.xml;
 
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.XMLFilterImpl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -86,7 +81,18 @@ public class XmlParser {
                                 item.setLink(element.getFirstChild().getNodeValue());
                                 break;
                             case "description":
-                                item.setDescription(element.getFirstChild().getNodeValue());
+                                NodeList subDescription = element.getChildNodes();
+                                if (subDescription.getLength() == 1) {
+                                    item.setDescription(element.getFirstChild().getNodeValue());
+                                    break;
+                                }
+                                for (int sub = 0; sub < subDescription.getLength(); sub++){
+                                    if (subDescription.item(sub).getNodeType() == Node.CDATA_SECTION_NODE){
+                                        item.setDescription(subDescription.item(sub).getNodeValue());
+                                        break;
+                                    }
+                                }
+
                                 break;
                             case "pubDate":
                                 item.setPubDate(element.getFirstChild().getNodeValue());
