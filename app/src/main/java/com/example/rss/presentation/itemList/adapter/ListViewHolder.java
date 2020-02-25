@@ -55,7 +55,7 @@ public class ListViewHolder extends RecyclerView.ViewHolder implements ListRowVi
     @Override
     public void setLogo(RequestManager glide, String logoPath) {
         if (logoPath == null || logoPath.equals("")){
-         imgChannelLogo.setVisibility(View.INVISIBLE);
+         imgChannelLogo.setVisibility(View.GONE);
         }else {
             glide.load(logoPath).into(imgChannelLogo);
         }
@@ -65,7 +65,7 @@ public class ListViewHolder extends RecyclerView.ViewHolder implements ListRowVi
     public void setStar(@NonNull Boolean isStar) {
         if(!isStar){
             imgStar.setImageResource(android.R.drawable.star_big_off);
-        }else if (isStar){
+        }else {
             imgStar.setImageResource(android.R.drawable.star_big_on);
         }
     }

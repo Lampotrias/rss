@@ -171,6 +171,6 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 //				globalActions.updDrawerMenu();
 //			}, throwable -> mView.stopRefresh()));
 //		}, throwable -> mView.stopRefresh()));
-		//mView.stopRefresh();
+		mView.stopRefresh();
 	}
 }
