@@ -128,7 +128,7 @@ public class WorkManagerInteractor {
         } catch (ParseException ignored) {
 
         }
-        item.setPubDate(pubDate.getTime() / 1000);
+        item.setPubDate(pubDate.getTime());
         item.setEnclosure(fileId);
         return item;
     }
