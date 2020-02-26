@@ -20,7 +20,6 @@ import com.example.rss.presentation.exception.ErrorMessageFactory;
 import com.example.rss.presentation.global.GlobalActions;
 import com.example.rss.presentation.itemList.adapter.ItemModel;
 import com.example.rss.presentation.itemList.adapter.RecyclerItemClickListener;
-import com.example.rss.presentation.itemList.adapter.RecyclerListPresenter;
 import com.example.rss.presentation.itemList.adapter.RecyclerListAdapter;
 
 import java.text.DateFormat;
@@ -41,7 +40,6 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 	private ItemListContract.V mView;
 	private final ItemListInteractor interactor;
 	private final CompositeDisposable cDisposable;
-	private RecyclerListPresenter recyclerListPresenter;
 	private Long channelId;
 
 	private static LongSparseArray<String> channelToImage = new LongSparseArray<>();
@@ -121,14 +119,13 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 
 	private void InitializeRecycler(List<ItemModel> itemModels){
 		RequestManager requestManager = Glide.with(mView.context());
-		recyclerListPresenter = new RecyclerListPresenter(requestManager, mView.getResourceIdRowView(), mView.context());
-		RecyclerListAdapter recyclerAdapter = new RecyclerListAdapter(recyclerListPresenter);
-		recyclerListPresenter.setAdapter(recyclerAdapter);
-		recyclerListPresenter.submitList(itemModels);
+
+		RecyclerListAdapter recyclerAdapter = new RecyclerListAdapter(requestManager, mView.getResourceIdRowView(), mView.context());
+		recyclerAdapter.submitList(itemModels);
 		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mView.context());
 		mView.getRecycler().setLayoutManager(layoutManager);
 		mView.getRecycler().setAdapter(recyclerAdapter);
-		RecyclerListPresenter.SwipeHelper swipeHelper= recyclerListPresenter.new SwipeHelper(new ListSwipeCallback(), mView.context().getDrawable(R.drawable.ic_star_yellow_50dp));
+		RecyclerListAdapter.SwipeHelper swipeHelper= recyclerAdapter.new SwipeHelper(new ListSwipeCallback(), mView.context().getDrawable(R.drawable.ic_star_yellow_50dp));
 		ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelper);
 		itemTouchHelper.attachToRecyclerView(mView.getRecycler());
 		mView.getRecycler().addOnItemTouchListener(new RecyclerItemClickListener(null, mView.getRecycler(), new RecyclerItemClickListener.OnItemClickListener() {
@@ -185,7 +182,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 		mView.stopRefresh();
 	}
 
-	private class ListSwipeCallback implements RecyclerListPresenter.SwipeCallback {
+	private class ListSwipeCallback implements RecyclerListAdapter.SwipeCallback {
 
 		@Override
 		public void onSwiped(int position, int direction) {
