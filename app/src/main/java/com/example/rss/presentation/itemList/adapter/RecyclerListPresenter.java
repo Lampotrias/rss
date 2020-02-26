@@ -1,29 +1,37 @@
 package com.example.rss.presentation.itemList.adapter;
 
+import android.content.Context;
+import android.graphics.Canvas;
 
-import android.util.Log;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
+
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
+import com.example.rss.R;
 
 import java.util.List;
 import java.util.Objects;
 
 public class RecyclerListPresenter implements ListPresenter {
     private final RequestManager glide;
+    private final Context context;
     private int resId;
     private AsyncListDiffer<ItemModel> mDiffer;
 
     private RecyclerView.Adapter adapter;
 
-    public RecyclerListPresenter(RequestManager glide, int resId) {
+    public RecyclerListPresenter(RequestManager glide, int resId, Context context) {
         this.glide = glide;
         this.resId = resId;
+        this.context = context;
     }
 
     void onBindRepositoryRowViewAtPosition(int position, ListRowView rowView) {
@@ -63,5 +71,53 @@ public class RecyclerListPresenter implements ListPresenter {
     public void setAdapter(RecyclerView.Adapter adapter){
         this.adapter = adapter;
         mDiffer = new AsyncListDiffer<>(this.adapter, DIFF_CALLBACK);
+    }
+
+    public class SwipeHelper extends ItemTouchHelper.SimpleCallback {
+
+        private final SwipeCallback callback;
+        private final Drawable ico;
+
+        public SwipeHelper(SwipeCallback callback, Drawable ico) {
+            super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+            this.callback = callback;
+            this.ico = ico;
+        }
+
+        @Override
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+            c.clipRect(0f, viewHolder.itemView.getTop(), dX, viewHolder.itemView.getBottom());
+            if (dX < c.getWidth())
+                c.drawColor(context.getResources().getColor(R.color.swipe_favorites));
+            else
+                c.drawColor(context.getResources().getColor(R.color.swipe_favorites));
+            int paddingStart = viewHolder.itemView.getWidth() / 10;
+            int topStarPos = viewHolder.itemView.getTop() + (viewHolder.itemView.getHeight() / 2) - (ico.getIntrinsicHeight() / 2);
+            ico.setBounds(new Rect(paddingStart, topStarPos, paddingStart + ico.getIntrinsicWidth(), topStarPos + ico.getIntrinsicHeight()));
+            ico.draw(c);
+
+//            Log.e("logo",   "iVW: " + viewHolder.itemView.getWidth() + " iVH: " + viewHolder.itemView.getHeight()
+//                    + " iVT: " + viewHolder.itemView.getTop() + " iVB: " + viewHolder.itemView.getBottom());
+//            Log.e("logo", "iW: " + ico.getIntrinsicWidth() + " iH: " + ico.getIntrinsicHeight());
+
+        }
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            int position = viewHolder.getAdapterPosition();
+            adapter.notifyItemChanged(position);
+            callback.onSwiped(position, direction);
+        }
+    }
+
+    public interface SwipeCallback {
+        void onSwiped (int position, int direction);
     }
 }

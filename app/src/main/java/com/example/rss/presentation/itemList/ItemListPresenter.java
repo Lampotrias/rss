@@ -3,8 +3,10 @@ package com.example.rss.presentation.itemList;
 import android.os.Bundle;
 import android.util.LongSparseArray;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.navigation.NavController;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,6 +42,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 	private final ItemListInteractor interactor;
 	private final CompositeDisposable cDisposable;
 	private RecyclerListPresenter recyclerListPresenter;
+	private Long channelId;
 
 	private static LongSparseArray<String> channelToImage = new LongSparseArray<>();
 
@@ -102,7 +105,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 				});
 	}
 
-	private void initRecycler(Long channelId){
+	private void SetItemsForRecycler(Long channelId){
 		List<ItemModel> itemModels= new ArrayList<>();
 		cDisposable.add(switchChannel(channelId)
 				.toObservable()
@@ -110,31 +113,38 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 				.concatMap(item -> prepareItem(item, channelId))
 				.subscribe(itemModels::add, throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable)),
 						() -> {
-							RequestManager requestManager = Glide.with(mView.context());
-							recyclerListPresenter = new RecyclerListPresenter(requestManager, mView.getResourceIdRowView());
-							RecyclerListAdapter recyclerAdapter = new RecyclerListAdapter(recyclerListPresenter);
-							recyclerListPresenter.setAdapter(recyclerAdapter);
-							recyclerListPresenter.submitList(itemModels);
-							RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mView.context());
-							mView.getRecycler().setLayoutManager(layoutManager);
-							mView.getRecycler().setAdapter(recyclerAdapter);
-							mView.getRecycler().addOnItemTouchListener(new RecyclerItemClickListener(null, mView.getRecycler(), new RecyclerItemClickListener.OnItemClickListener() {
-								@Override
-								public void onItemClick(View view, int position) {
-									Bundle bundle = new Bundle();
-									bundle.putInt("DETAIL_POSITION", position);
-									bundle.putLong("DETAIL_CHANNEL_ID", channelId);
-									navController.navigate(R.id.nav_itemDetailFragment, bundle);
-								}
-
-								@Override
-								public void onLongItemClick(View view, int position) {
-
-								}
-							}));
+							InitializeRecycler(itemModels);
 				})
 		);
 
+	}
+
+	private void InitializeRecycler(List<ItemModel> itemModels){
+		RequestManager requestManager = Glide.with(mView.context());
+		recyclerListPresenter = new RecyclerListPresenter(requestManager, mView.getResourceIdRowView(), mView.context());
+		RecyclerListAdapter recyclerAdapter = new RecyclerListAdapter(recyclerListPresenter);
+		recyclerListPresenter.setAdapter(recyclerAdapter);
+		recyclerListPresenter.submitList(itemModels);
+		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mView.context());
+		mView.getRecycler().setLayoutManager(layoutManager);
+		mView.getRecycler().setAdapter(recyclerAdapter);
+		RecyclerListPresenter.SwipeHelper swipeHelper= recyclerListPresenter.new SwipeHelper(new ListSwipeCallback(), mView.context().getDrawable(R.drawable.ic_star_yellow_50dp));
+		ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelper);
+		itemTouchHelper.attachToRecyclerView(mView.getRecycler());
+		mView.getRecycler().addOnItemTouchListener(new RecyclerItemClickListener(null, mView.getRecycler(), new RecyclerItemClickListener.OnItemClickListener() {
+			@Override
+			public void onItemClick(View view, int position) {
+				Bundle bundle = new Bundle();
+				bundle.putInt("DETAIL_POSITION", position);
+				bundle.putLong("DETAIL_CHANNEL_ID", channelId);
+				navController.navigate(R.id.nav_itemDetailFragment, bundle);
+			}
+
+			@Override
+			public void onLongItemClick(View view, int position) {
+
+			}
+		}));
 	}
 
 	private void showErrorMessage(IErrorBundle errorBundle) {
@@ -160,7 +170,8 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 	@Override
 	public void setView(ItemListContract.V view) {
 		this.mView = view;
-		initRecycler(mView.getCurChannelId());
+		this.channelId = mView.getCurChannelId();
+		SetItemsForRecycler(this.channelId);
 	}
 
 	@Override
@@ -172,5 +183,13 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 //			}, throwable -> mView.stopRefresh()));
 //		}, throwable -> mView.stopRefresh()));
 		mView.stopRefresh();
+	}
+
+	private class ListSwipeCallback implements RecyclerListPresenter.SwipeCallback {
+
+		@Override
+		public void onSwiped(int position, int direction) {
+			Toast.makeText(mView.context(), String.valueOf(position), Toast.LENGTH_LONG).show();
+		}
 	}
 }

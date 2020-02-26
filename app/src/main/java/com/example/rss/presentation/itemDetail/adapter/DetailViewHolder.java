@@ -63,9 +63,9 @@ public class DetailViewHolder extends RecyclerView.ViewHolder implements DetailR
     @Override
     public void setStar(@NonNull Boolean isStar) {
         if(!isStar){
-            imgStar.setImageResource(android.R.drawable.star_big_off);
+            imgStar.setImageResource(R.drawable.ic_star_border_24dp);
         }else if (isStar){
-            imgStar.setImageResource(android.R.drawable.star_big_on);
+            imgStar.setImageResource(R.drawable.ic_star_yellow_24dp);
         }
     }
 }
