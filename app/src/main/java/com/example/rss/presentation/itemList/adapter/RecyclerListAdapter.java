@@ -136,7 +136,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder>{
             }
             else if (direction == ItemTouchHelper.RIGHT){
                 itemModel.setRead(!itemModel.getRead());
-                direction = RecyclerListAdapter.SWIPE_READ;;
+                direction = RecyclerListAdapter.SWIPE_READ;
             }
 
             RecyclerListAdapter.this.notifyItemChanged(position);

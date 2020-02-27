@@ -33,6 +33,8 @@ public interface IRepository {
 	Maybe<List<Long>> InsertManyItems(List<Item> items);
 	Single<Item> getItemByUniqueId(String hash);
 	Completable deleteAllItems();
+	Completable updateReadById(Long id, Boolean isRead);
+	Completable updateFavoriteById(Long id, Boolean isFavorite);
 
 	//Category
 	Maybe<List<Category>> getCategoriesByType(String mType);

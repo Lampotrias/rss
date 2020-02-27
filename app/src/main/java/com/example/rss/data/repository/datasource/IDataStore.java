@@ -35,6 +35,8 @@ public interface IDataStore {
 	Maybe<List<Long>> InsertManyItems(List<ItemEntity> itemEntities);
 	Single<ItemEntity> getItemByUniqueId(String hash);
 	Completable deleteAllItems();
+	Completable updateReadById(Long id, Boolean isRead);
+	Completable updateFavoriteById(Long id, Boolean isFavorite);
 
 	//Files
 	Single<Long> addFile (FileEntity fileEntity);

@@ -74,6 +74,16 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
+    public Completable updateReadById(Long id, Boolean isRead) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Completable updateFavoriteById(Long id, Boolean isFavorite) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
     public Single<ChannelEntity> getChannelByUrl(String url) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }

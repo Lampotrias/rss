@@ -61,6 +61,16 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
+	public Completable updateReadById(Long id, Boolean isRead) {
+		return appDatabase.itemDAO().updateReadById(id, isRead);
+	}
+
+	@Override
+	public Completable updateFavoriteById(Long id, Boolean isFavorite) {
+		return appDatabase.itemDAO().updateFavoriteById(id, isFavorite);
+	}
+
+	@Override
 	public Single<ChannelEntity> getChannelByUrl(String url) {
 		return appDatabase.channelDAO().getChannelByUrl(url).map(ChannelDatabaseMapper::transform);
 	}

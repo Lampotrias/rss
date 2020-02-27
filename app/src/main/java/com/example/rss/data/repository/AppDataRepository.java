@@ -91,6 +91,18 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
+	public Completable updateReadById(Long id, Boolean isRead) {
+		final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
+		return dataStore.updateReadById(id, isRead);
+	}
+
+	@Override
+	public Completable updateFavoriteById(Long id, Boolean isFavorite) {
+		final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
+		return dataStore.updateFavoriteById(id, isFavorite);
+	}
+
+	@Override
 	public Single<Channel> getChannelByUrl(String url) {
 		final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
 		return dataStore.getChannelByUrl(url).map(repositoryEntityDataMapper::transform);

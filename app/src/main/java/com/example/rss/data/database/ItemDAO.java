@@ -31,4 +31,10 @@ public interface ItemDAO {
 
     @Query("DELETE FROM item")
     Completable deleteAllItems();
+
+    @Query("UPDATE item set is_read = :isRead WHERE id = :id")
+    Completable updateReadById(Long id, Boolean isRead);
+
+    @Query("UPDATE item set is_favorite = :isFavorite WHERE id = :id")
+    Completable updateFavoriteById(Long id, Boolean isFavorite);
 }
