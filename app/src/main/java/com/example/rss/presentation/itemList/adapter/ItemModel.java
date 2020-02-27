@@ -12,8 +12,8 @@ public class ItemModel {
     private String link;
     private String pubDate;
     private String enclosure;
-    private Boolean isRead;
-    private Boolean isStar;
+    private Boolean isRead = false;
+    private Boolean isStar = false;
 
     public Long getItemId() {
         return itemId;

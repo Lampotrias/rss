@@ -125,7 +125,10 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mView.context());
 		mView.getRecycler().setLayoutManager(layoutManager);
 		mView.getRecycler().setAdapter(recyclerAdapter);
-		RecyclerListAdapter.SwipeHelper swipeHelper= recyclerAdapter.new SwipeHelper(new ListSwipeCallback(), mView.context().getDrawable(R.drawable.ic_star_yellow_50dp));
+		RecyclerListAdapter.SwipeHelper swipeHelper= recyclerAdapter.new SwipeHelper(
+				new ListSwipeCallback(),
+				mView.context().getDrawable(R.drawable.ic_star_yellow_30dp),
+				mView.context().getDrawable(R.drawable.ic_read_black_30dp));
 		ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelper);
 		itemTouchHelper.attachToRecyclerView(mView.getRecycler());
 		mView.getRecycler().addOnItemTouchListener(new RecyclerItemClickListener(null, mView.getRecycler(), new RecyclerItemClickListener.OnItemClickListener() {
@@ -159,8 +162,8 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 		model.setDescription(item.getDescription());
 		model.setLink(item.getLink());
 		model.setPubDate(format.format(item.getPubDate()));
-		model.setRead(item.getRead());
-		model.setStar(item.getFavorite());
+		model.setStar((item.getFavorite() == null)?false:item.getFavorite());
+		model.setRead((item.getRead() == null)?false:item.getRead());
 		return model;
 	}
 
@@ -185,8 +188,15 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 	private class ListSwipeCallback implements RecyclerListAdapter.SwipeCallback {
 
 		@Override
-		public void onSwiped(int position, int direction) {
-			Toast.makeText(mView.context(), String.valueOf(position), Toast.LENGTH_LONG).show();
+		public void onSwiped(Long  itemId, int direction) {
+			String direct = null;
+			if (direction == RecyclerListAdapter.SWIPE_FAVORITE){
+				direct = "Left";
+			}else if(direction == RecyclerListAdapter.SWIPE_READ){
+				direct = "Right";
+			}
+
+			Toast.makeText(mView.context(), itemId + "   -   " + direct, Toast.LENGTH_SHORT).show();
 		}
 	}
 }

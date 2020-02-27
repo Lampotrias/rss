@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#90ee02</color>
     <color name="colorAccent">#D81B60</color>
     <color name="channel_edit_background_color">#FFFFFF</color>
-    <color name="swipe_favorites">#008b00</color>
+    <color name="swipe_favorites">#defabb</color>
+    <color name="swipe_read">#ffddb0</color>
 </resources>

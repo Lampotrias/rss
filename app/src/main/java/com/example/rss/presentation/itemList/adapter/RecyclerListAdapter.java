@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -21,7 +22,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder>{
-
+    public static final int SWIPE_FAVORITE = 0;
+    public static final int SWIPE_READ = 1;
     private final AsyncListDiffer<ItemModel> mDiffer;
     private final RequestManager glide;
     private final Context context;
@@ -75,32 +77,47 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder>{
     public class SwipeHelper extends ItemTouchHelper.SimpleCallback {
 
         private final SwipeCallback callback;
-        private final Drawable ico;
+        private final Drawable icoRead;
+        private final Drawable icoFavorites;
 
-        public SwipeHelper(SwipeCallback callback, Drawable ico) {
+        public SwipeHelper(SwipeCallback callback, Drawable icoFavorites, Drawable icoRead) {
             super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
             this.callback = callback;
-            this.ico = ico;
+            this.icoRead = icoRead;
+            this.icoFavorites = icoFavorites;
         }
 
         @Override
         public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                int horizontalPos = viewHolder.itemView.getTop() + (viewHolder.itemView.getHeight() / 2) - (icoRead.getIntrinsicHeight() / 2);
+                int paddingStart = viewHolder.itemView.getWidth() / 10;
+                if (dX > 0) {
+                    c.clipRect(0, viewHolder.itemView.getTop(), dX, viewHolder.itemView.getBottom());
+                    /*if (dX < c.getWidth())
+                        c.drawColor(context.getResources().getColor(R.color.swipe_favorites));
+                    else*/
+                        c.drawColor(context.getResources().getColor(R.color.swipe_read));
+
+                    icoRead.setBounds(new Rect(paddingStart, horizontalPos, paddingStart + icoRead.getIntrinsicWidth(), horizontalPos + icoRead.getIntrinsicHeight()));
+                    icoRead.draw(c);
+                }else{
+                    c.clipRect(
+                            viewHolder.itemView.getWidth() + dX,
+                            viewHolder.itemView.getTop(),
+                            viewHolder.itemView.getRight(),
+                            viewHolder.itemView.getBottom());
+                    c.drawColor(context.getResources().getColor(R.color.swipe_favorites));
+
+                    icoFavorites.setBounds(new Rect(
+                            viewHolder.itemView.getWidth() - paddingStart - icoFavorites.getIntrinsicWidth(),
+                            horizontalPos,
+                            viewHolder.itemView.getWidth() - paddingStart,
+                            horizontalPos + icoFavorites.getIntrinsicHeight()));
+                    icoFavorites.draw(c);
+                }
+            }
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-
-            c.clipRect(0f, viewHolder.itemView.getTop(), dX, viewHolder.itemView.getBottom());
-            if (dX < c.getWidth())
-                c.drawColor(context.getResources().getColor(R.color.swipe_favorites));
-            else
-                c.drawColor(context.getResources().getColor(R.color.swipe_favorites));
-            int paddingStart = viewHolder.itemView.getWidth() / 10;
-            int topStarPos = viewHolder.itemView.getTop() + (viewHolder.itemView.getHeight() / 2) - (ico.getIntrinsicHeight() / 2);
-            ico.setBounds(new Rect(paddingStart, topStarPos, paddingStart + ico.getIntrinsicWidth(), topStarPos + ico.getIntrinsicHeight()));
-            ico.draw(c);
-
-//            Log.e("logo",   "iVW: " + viewHolder.itemView.getWidth() + " iVH: " + viewHolder.itemView.getHeight()
-//                    + " iVT: " + viewHolder.itemView.getTop() + " iVB: " + viewHolder.itemView.getBottom());
-//            Log.e("logo", "iW: " + ico.getIntrinsicWidth() + " iH: " + ico.getIntrinsicHeight());
-
         }
 
         @Override
@@ -111,11 +128,22 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder>{
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
+
+            ItemModel itemModel =  mDiffer.getCurrentList().get(position);
+            if (direction == ItemTouchHelper.LEFT) {
+                itemModel.setStar(!itemModel.getStar());
+                direction = RecyclerListAdapter.SWIPE_FAVORITE;
+            }
+            else if (direction == ItemTouchHelper.RIGHT){
+                itemModel.setRead(!itemModel.getRead());
+                direction = RecyclerListAdapter.SWIPE_READ;;
+            }
+
             RecyclerListAdapter.this.notifyItemChanged(position);
-            callback.onSwiped(position, direction);
+            callback.onSwiped(itemModel.getItemId(), direction);
         }
     }
     public interface SwipeCallback {
-        void onSwiped (int position, int direction);
+        void onSwiped (Long  itemId, int direction);
     }
 }
