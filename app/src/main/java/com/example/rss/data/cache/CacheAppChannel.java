@@ -9,29 +9,27 @@ import javax.inject.Singleton;
 import io.reactivex.Maybe;
 
 @Singleton
-public class CacheApp implements ICacheApp {
+public class CacheAppChannel implements ICacheApp<ChannelEntity> {
 
-    @Inject
-    public CacheApp() {
+    public CacheAppChannel() {
     }
 
     public Boolean isExpired(){
         return false;
     }
 
-    public Boolean isCachedChannel(Long id)
+    public Boolean isCached(Long id)
     {
         return false;
     }
 
     @Override
-    public Maybe<ChannelEntity> getChannelById(Long id) {
-        return Maybe.create(emitter -> emitter.onSuccess(new ChannelEntity()));
+    public Maybe getByEntityId(Long id) {
+        return null;
     }
 
     @Override
-    public void putChannel(ChannelEntity channelEntity) {
-        if (channelEntity != null)
+    public void putEntity(ChannelEntity channelEntity) {
 
     }
 }

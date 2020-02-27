@@ -19,7 +19,7 @@ public class ChannelDatabaseMapper {
 
 		if (channelEntity != null){
 			channelDTO = new ChannelDTO();
-			channelDTO.setChannelId(channelEntity.getChannelId());
+			channelDTO.setChannelId(channelEntity.getId());
 			channelDTO.setTitle(channelEntity.getTitle());
 			channelDTO.setDescription(channelEntity.getDescription());
 			channelDTO.setCategoryId(channelEntity.getCategoryId());

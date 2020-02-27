@@ -44,8 +44,10 @@ public class ChannelDataStoreFactory {
 	public IDataStore createForChannel(Long id) {
 		IDataStore dataStore;
 
+
+
 		if (id != null){
-			if (!cacheDataStore.isExpired() && cacheDataStore.isCachedChannel(id))
+			if (!cacheDataStore.isExpired() && cacheDataStore.isCached(id))
 				dataStore = new DiskDataStore(cacheDataStore);
 			else
 				dataStore = createDatabaseDataStore();

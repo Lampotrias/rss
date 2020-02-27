@@ -1,6 +1,6 @@
 package com.example.rss.data.entity;
 
-public class ChannelEntity {
+public class ChannelEntity extends Entity{
 
 	//@SerializedName("id")
 	private Long channelId;
@@ -91,7 +91,7 @@ public class ChannelEntity {
 		this.categoryId = categoryId;
 	}
 
-	public Long getChannelId() {
+	public Long getId() {
 		return channelId;
 	}
 
