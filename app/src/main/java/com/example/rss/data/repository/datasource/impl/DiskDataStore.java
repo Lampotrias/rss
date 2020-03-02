@@ -1,6 +1,6 @@
 package com.example.rss.data.repository.datasource.impl;
 
-import com.example.rss.data.cache.ICacheApp;
+import com.example.rss.data.cache.Cache;
 import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
@@ -15,9 +15,9 @@ import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 public class DiskDataStore implements IDataStore {
-    private final ICacheApp cache;
+    private final Cache cache;
 
-    public DiskDataStore(ICacheApp cache) {
+    public DiskDataStore(Cache cache) {
         this.cache = cache;
     }
 
@@ -34,7 +34,7 @@ public class DiskDataStore implements IDataStore {
 
     @Override
     public Maybe<ChannelEntity> getChannelById(Long id) {
-        return cache.getChannelById(id);
+        return cache.get(id);
     }
 
     @Override

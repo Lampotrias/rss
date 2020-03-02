@@ -1,5 +1,5 @@
 package com.example.rss.data.entity;
 
-public abstract class Entity {
+public interface Entity {
     abstract Long getId();
 }

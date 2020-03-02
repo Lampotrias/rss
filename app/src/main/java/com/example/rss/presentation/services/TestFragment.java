@@ -85,4 +85,13 @@ public class TestFragment extends BaseFragment {
         );
         return rootView;
     }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        disposable.add(interactor.getChannel(1L).subscribe(channel -> {
+            Log.e("logo", channel.getTitle());
+        }));
+    }
 }

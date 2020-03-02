@@ -1,7 +1,7 @@
 package com.example.rss.data.repository.datasource.impl;
 
-import com.example.rss.data.cache.CacheApp;
-import com.example.rss.data.cache.ICacheApp;
+
+import com.example.rss.data.cache.Cache;
 import com.example.rss.data.database.AppDatabase;
 import com.example.rss.data.database.mapper.ChannelDatabaseMapper;
 import com.example.rss.data.entity.CategoryEntity;
@@ -9,24 +9,24 @@ import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.ItemEntity;
 import com.example.rss.data.repository.datasource.IDataStore;
-import com.example.rss.domain.Item;
+
 
 import java.io.InputStream;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
+
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 public class DatabaseDataStore implements IDataStore {
 
 	private final AppDatabase appDatabase;
-	private final ICacheApp cacheApp;
+	private final Cache cache;
 
-	public DatabaseDataStore(AppDatabase appDatabase, ICacheApp cacheApp) {
+	public DatabaseDataStore(AppDatabase appDatabase, Cache cache) {
 		this.appDatabase = appDatabase;
-		this.cacheApp = cacheApp;
+		this.cache = cache;
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class DatabaseDataStore implements IDataStore {
 
 	@Override
 	public Maybe<ChannelEntity> getChannelById(Long id) {
-		return appDatabase.channelDAO().getChannelById(id).map(ChannelDatabaseMapper::transform).doOnSuccess(this.cacheApp::putChannel);
+		return appDatabase.channelDAO().getChannelById(id).map(ChannelDatabaseMapper::transform).doOnSuccess(this.cache::put);
 	}
 
 	@Override

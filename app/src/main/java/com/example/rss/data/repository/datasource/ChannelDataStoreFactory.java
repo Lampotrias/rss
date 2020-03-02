@@ -4,9 +4,10 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.example.rss.data.cache.Cache;
+import com.example.rss.data.cache.CacheEntityFabric;
 import com.example.rss.data.database.AppDatabase;
 import com.example.rss.data.repository.datasource.impl.DatabaseDataStore;
-import com.example.rss.data.cache.ICacheApp;
 import com.example.rss.data.repository.datasource.impl.DiskDataStore;
 import com.example.rss.data.repository.datasource.impl.NetworkDataStore;
 
@@ -18,23 +19,25 @@ import javax.inject.Singleton;
 @Singleton
 public class ChannelDataStoreFactory {
 	private final Context context;
-	private final ICacheApp cacheDataStore;
+	private final CacheEntityFabric cacheEntityFabric;
 
 
 	@Inject
-	public ChannelDataStoreFactory(@NonNull Context context, @NonNull ICacheApp cacheDataStore) {
+	public ChannelDataStoreFactory(@NonNull Context context, @NonNull CacheEntityFabric cacheEntityFabric) {
 		this.context = context;
-		this.cacheDataStore = cacheDataStore;
-	}
-
-	public IDataStore createPut() {
-		return createDatabaseDataStore();
+		this.cacheEntityFabric = cacheEntityFabric;
 	}
 
 	@NotNull
 	private IDataStore createDatabaseDataStore() {
 		AppDatabase appDatabase = AppDatabase.getInstance(context);
-		return new DatabaseDataStore(appDatabase, cacheDataStore);
+		return createDatabaseDataStore(null);
+	}
+
+	@NotNull
+	private IDataStore createDatabaseDataStore(Cache cache) {
+		AppDatabase appDatabase = AppDatabase.getInstance(context);
+		return new DatabaseDataStore(appDatabase, cache);
 	}
 
 	public IDataStore createNetwork(){
@@ -42,21 +45,12 @@ public class ChannelDataStoreFactory {
 	}
 
 	public IDataStore createForChannel(Long id) {
-		IDataStore dataStore;
-
-
-
-		if (id != null){
-			if (!cacheDataStore.isExpired() && cacheDataStore.isCached(id))
-				dataStore = new DiskDataStore(cacheDataStore);
-			else
-				dataStore = createDatabaseDataStore();
-		}else
-		{
-			dataStore = createDatabaseDataStore();
+		Cache cacheObj = cacheEntityFabric.getChannelCache();
+		if (id != null) {
+			if (!cacheObj.isExpired() && cacheObj.isCached(id))
+				return new DiskDataStore(cacheObj);
 		}
-
-		return dataStore;
+		return createDatabaseDataStore(cacheObj);
 	}
 
 	public IDataStore createForCategory(Long id) {
