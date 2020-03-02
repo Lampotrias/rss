@@ -1,8 +1,8 @@
 package com.example.rss.domain.repositories;
 
-import com.example.rss.data.database.dto.ChannelDTO;
 import com.example.rss.domain.Category;
 import com.example.rss.domain.Channel;
+import com.example.rss.domain.Favorite;
 import com.example.rss.domain.File;
 import com.example.rss.domain.Item;
 
@@ -10,9 +10,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Maybe;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public interface IRepository {
@@ -26,6 +24,7 @@ public interface IRepository {
 	Single<Channel> getChannelByUrl(String url);
 	Single<Integer> updateChannel(Channel channel);
 	Completable deleteAllChannels();
+	Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp);
 
 	//Items
 	Maybe<List<Item>> getItemsByChannelId(Long id);
@@ -34,7 +33,6 @@ public interface IRepository {
 	Single<Item> getItemByUniqueId(String hash);
 	Completable deleteAllItems();
 	Completable updateReadById(Long id, Boolean isRead);
-	Completable updateFavoriteById(Long id, Boolean isFavorite);
 
 	//Category
 	Maybe<List<Category>> getCategoriesByType(String mType);
@@ -45,5 +43,8 @@ public interface IRepository {
 	Single<Long> addFile(File file);
 	Maybe<File> getFileById(Long id);
 
-    Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp);
+    //Favorite
+	Completable deleteFavByItemBy(Long id);
+	Completable insertFavorite(Favorite favorite);
+	Completable deleteAllFavorites();
 }

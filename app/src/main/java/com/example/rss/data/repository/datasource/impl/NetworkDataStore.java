@@ -2,27 +2,23 @@ package com.example.rss.data.repository.datasource.impl;
 
 import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
+import com.example.rss.data.entity.FavoriteEntity;
 import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.ItemEntity;
 import com.example.rss.data.exception.NetworkConnectionException;
 import com.example.rss.data.repository.datasource.IDataStore;
-import com.example.rss.domain.Item;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
-
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Maybe;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public class NetworkDataStore implements IDataStore {
 
     public NetworkDataStore() {
-
     }
 
     @Override
@@ -79,11 +75,6 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Completable updateFavoriteById(Long id, Boolean isFavorite) {
-        throw new UnsupportedOperationException("Operation is not available!!!");
-    }
-
-    @Override
     public Single<ChannelEntity> getChannelByUrl(String url) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
@@ -130,6 +121,21 @@ public class NetworkDataStore implements IDataStore {
 
     @Override
     public Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Completable deleteFavByItemBy(Long id) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Completable insertFavorite(FavoriteEntity favoriteEntity) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Completable deleteAllFavorites() {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 }

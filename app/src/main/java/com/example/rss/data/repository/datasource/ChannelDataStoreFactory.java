@@ -70,6 +70,20 @@ public class ChannelDataStoreFactory {
 		return dataStore;
 	}
 
+	public IDataStore createForFavorite(Long id) {
+		IDataStore dataStore;
+
+		if (id != null){
+			//check cache
+			dataStore = createDatabaseDataStore();
+		}else
+		{
+			dataStore = createDatabaseDataStore();
+		}
+
+		return dataStore;
+	}
+
 	public IDataStore createForItems(Long id) {
 		IDataStore dataStore;
 

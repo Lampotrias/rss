@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -132,18 +131,18 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder>{
             ItemModel itemModel =  mDiffer.getCurrentList().get(position);
             if (direction == ItemTouchHelper.LEFT) {
                 itemModel.setStar(!itemModel.getStar());
-                direction = RecyclerListAdapter.SWIPE_FAVORITE;
+                callback.onSwiped(itemModel.getItemId(), RecyclerListAdapter.SWIPE_FAVORITE, itemModel.getStar());
+
             }
             else if (direction == ItemTouchHelper.RIGHT){
                 itemModel.setRead(!itemModel.getRead());
-                direction = RecyclerListAdapter.SWIPE_READ;
+                callback.onSwiped(itemModel.getItemId(), RecyclerListAdapter.SWIPE_READ, itemModel.getRead());
             }
 
             RecyclerListAdapter.this.notifyItemChanged(position);
-            callback.onSwiped(itemModel.getItemId(), direction);
         }
     }
     public interface SwipeCallback {
-        void onSwiped (Long  itemId, int direction);
+        void onSwiped (Long  itemId, int direction, Boolean value);
     }
 }

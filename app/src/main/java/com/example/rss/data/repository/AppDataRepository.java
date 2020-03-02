@@ -1,13 +1,11 @@
 package com.example.rss.data.repository;
 
-
-import android.util.Log;
-
 import com.example.rss.data.entity.mapper.RepositoryEntityDataMapper;
 import com.example.rss.data.repository.datasource.ChannelDataStoreFactory;
 import com.example.rss.data.repository.datasource.IDataStore;
 import com.example.rss.domain.Category;
 import com.example.rss.domain.Channel;
+import com.example.rss.domain.Favorite;
 import com.example.rss.domain.File;
 import com.example.rss.domain.Item;
 import com.example.rss.domain.repositories.IRepository;
@@ -19,7 +17,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
@@ -97,12 +94,6 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
-	public Completable updateFavoriteById(Long id, Boolean isFavorite) {
-		final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
-		return dataStore.updateFavoriteById(id, isFavorite);
-	}
-
-	@Override
 	public Single<Channel> getChannelByUrl(String url) {
 		final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
 		return dataStore.getChannelByUrl(url).map(repositoryEntityDataMapper::transform);
@@ -155,5 +146,23 @@ public class AppDataRepository implements IRepository {
 	public Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp) {
 		final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
 		return dataStore.updateNextExec(channelId, nextTimestamp);
+	}
+
+	@Override
+	public Completable deleteFavByItemBy(Long id) {
+		final IDataStore dataStore = channelDataStoreFactory.createForFavorite(null);
+		return dataStore.deleteFavByItemBy(id);
+	}
+
+	@Override
+	public Completable insertFavorite(Favorite favorite) {
+		final IDataStore dataStore = channelDataStoreFactory.createForFavorite(null);
+		return dataStore.insertFavorite(RepositoryEntityDataMapper.transform(favorite));
+	}
+
+	@Override
+	public Completable deleteAllFavorites() {
+		final IDataStore dataStore = channelDataStoreFactory.createForFavorite(null);
+		return dataStore.deleteAllFavorites();
 	}
 }

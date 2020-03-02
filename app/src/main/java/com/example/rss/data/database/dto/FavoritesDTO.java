@@ -3,11 +3,9 @@ package com.example.rss.data.database.dto;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
-@Entity(tableName = "favorite")
+@Entity(tableName = "favorite", primaryKeys = {"item_id"})
 public class FavoritesDTO {
-    @PrimaryKey(autoGenerate = true)
     @NonNull
     @ColumnInfo(name = "id")
     private Long favId;

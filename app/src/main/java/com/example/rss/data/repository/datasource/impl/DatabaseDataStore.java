@@ -4,16 +4,15 @@ import com.example.rss.data.database.AppDatabase;
 import com.example.rss.data.database.mapper.ChannelDatabaseMapper;
 import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
+import com.example.rss.data.entity.FavoriteEntity;
 import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.ItemEntity;
 import com.example.rss.data.repository.datasource.IDataStore;
-import com.example.rss.domain.Item;
 
 import java.io.InputStream;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
@@ -66,11 +65,6 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Completable updateFavoriteById(Long id, Boolean isFavorite) {
-		return appDatabase.itemDAO().updateFavoriteById(id, isFavorite);
-	}
-
-	@Override
 	public Single<ChannelEntity> getChannelByUrl(String url) {
 		return appDatabase.channelDAO().getChannelByUrl(url).map(ChannelDatabaseMapper::transform);
 	}
@@ -118,6 +112,21 @@ public class DatabaseDataStore implements IDataStore {
 	@Override
 	public Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp) {
 		return appDatabase.channelDAO().updateNextExec(channelId, nextTimestamp);
+	}
+
+	@Override
+	public Completable deleteFavByItemBy(Long id) {
+		return appDatabase.favoriteDAO().deleteByItemBy(id);
+	}
+
+	@Override
+	public Completable insertFavorite(FavoriteEntity favoriteEntity) {
+		return appDatabase.favoriteDAO().insert(ChannelDatabaseMapper.transform(favoriteEntity));
+	}
+
+	@Override
+	public Completable deleteAllFavorites() {
+		return appDatabase.favoriteDAO().deleteAll();
 	}
 
 	@Override

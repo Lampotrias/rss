@@ -1,19 +1,18 @@
 package com.example.rss.data.entity.mapper;
 
-import android.util.Log;
-
 import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
+import com.example.rss.data.entity.FavoriteEntity;
 import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.ItemEntity;
 import com.example.rss.domain.Category;
 import com.example.rss.domain.Channel;
+import com.example.rss.domain.Favorite;
 import com.example.rss.domain.File;
 import com.example.rss.domain.Item;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -187,10 +186,32 @@ public class RepositoryEntityDataMapper {
     public List<ItemEntity> transformItemsToEntity(List<Item> items){
         List<ItemEntity> itemEntities = new ArrayList<>();
         for (Item item: items) {
-            if (items != null){
+            if (item != null){
                 itemEntities.add(transform(item));
             }
         }
         return itemEntities;
+    }
+
+    public static FavoriteEntity transform (Favorite favorite){
+        FavoriteEntity favoriteEntity = null;
+        if (favorite != null) {
+            favoriteEntity = new FavoriteEntity();
+            favoriteEntity.setItemId(favorite.getItemId());
+            favoriteEntity.setCategoryId(favorite.getCategoryId());
+            favoriteEntity.setFavId(favorite.getFavId());
+        }
+        return favoriteEntity;
+    }
+
+    public static Favorite transform (FavoriteEntity favoriteEntity){
+        Favorite favorite = null;
+        if (favoriteEntity != null) {
+            favorite = new Favorite();
+            favorite.setItemId(favorite.getItemId());
+            favorite.setCategoryId(favorite.getCategoryId());
+            favorite.setFavId(favorite.getFavId());
+        }
+        return favorite;
     }
 }

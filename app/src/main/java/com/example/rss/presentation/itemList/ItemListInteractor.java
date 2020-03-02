@@ -1,32 +1,19 @@
 package com.example.rss.presentation.itemList;
 
-
-import android.util.Log;
-
 import com.example.rss.domain.Channel;
+import com.example.rss.domain.Favorite;
 import com.example.rss.domain.File;
 import com.example.rss.domain.Item;
-import com.example.rss.domain.exception.XmlParseException;
 import com.example.rss.domain.executor.IPostExecutionThread;
 import com.example.rss.domain.executor.IThreadExecutor;
 import com.example.rss.domain.repositories.IRepository;
-import com.example.rss.domain.xml.XmlChannelRawObject;
-import com.example.rss.domain.xml.XmlParser;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Maybe;
-import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
 class ItemListInteractor {
@@ -85,4 +72,27 @@ class ItemListInteractor {
 				.observeOn(postExecutionThread.getScheduler());
 	}
 
+	Completable deleteAllFavorites(){
+		return channelRepository.deleteAllFavorites()
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
+	}
+
+	Completable updateReadById(Long id, Boolean isRead){
+		return channelRepository.updateReadById(id, isRead)
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
+	}
+
+	Completable deleteFavByItemBy(Long itemId){
+		return channelRepository.deleteFavByItemBy(itemId)
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
+	}
+
+	Completable insertFavorite(Favorite favorite){
+		return channelRepository.insertFavorite(favorite)
+				.subscribeOn(Schedulers.from(threadExecutor))
+				.observeOn(postExecutionThread.getScheduler());
+	}
 }

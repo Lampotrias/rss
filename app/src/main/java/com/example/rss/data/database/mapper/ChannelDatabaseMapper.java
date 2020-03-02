@@ -2,10 +2,12 @@ package com.example.rss.data.database.mapper;
 
 import com.example.rss.data.database.dto.CategoryDTO;
 import com.example.rss.data.database.dto.ChannelDTO;
+import com.example.rss.data.database.dto.FavoritesDTO;
 import com.example.rss.data.database.dto.FileDTO;
 import com.example.rss.data.database.dto.ItemDTO;
 import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
+import com.example.rss.data.entity.FavoriteEntity;
 import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.ItemEntity;
 
@@ -184,5 +186,27 @@ public class ChannelDatabaseMapper {
 			}
 		}
 		return itemDTOS;
+	}
+
+	public static FavoriteEntity transform (FavoritesDTO favoritesDTO){
+		FavoriteEntity favoriteEntity = null;
+		if (favoritesDTO != null) {
+			favoriteEntity = new FavoriteEntity();
+			favoriteEntity.setItemId(favoritesDTO.getItemId());
+			favoriteEntity.setCategoryId(favoritesDTO.getCategoryId());
+			favoriteEntity.setFavId(favoritesDTO.getFavId());
+		}
+		return favoriteEntity;
+	}
+
+	public static FavoritesDTO transform (FavoriteEntity favoriteEntity){
+		FavoritesDTO favoritesDTO = null;
+		if (favoriteEntity != null) {
+			favoritesDTO = new FavoritesDTO();
+			favoritesDTO.setItemId(favoriteEntity.getItemId());
+			favoritesDTO.setCategoryId(favoriteEntity.getCategoryId());
+			favoritesDTO.setFavId(favoriteEntity.getFavId());
+		}
+		return favoritesDTO;
 	}
 }

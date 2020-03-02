@@ -1,9 +1,9 @@
 package com.example.rss.presentation.itemList;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.LongSparseArray;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.rss.R;
+import com.example.rss.domain.Favorite;
 import com.example.rss.domain.Item;
 import com.example.rss.domain.exception.DefaultErrorBundle;
 import com.example.rss.domain.exception.IErrorBundle;
@@ -35,7 +36,7 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 
 
-public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
+public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>, RecyclerListAdapter.SwipeCallback
 {
 	private ItemListContract.V mView;
 	private final ItemListInteractor interactor;
@@ -126,7 +127,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 		mView.getRecycler().setLayoutManager(layoutManager);
 		mView.getRecycler().setAdapter(recyclerAdapter);
 		RecyclerListAdapter.SwipeHelper swipeHelper= recyclerAdapter.new SwipeHelper(
-				new ListSwipeCallback(),
+				this,
 				mView.context().getDrawable(R.drawable.ic_star_yellow_30dp),
 				mView.context().getDrawable(R.drawable.ic_read_black_30dp));
 		ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelper);
@@ -182,21 +183,23 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 //				globalActions.updDrawerMenu();
 //			}, throwable -> mView.stopRefresh()));
 //		}, throwable -> mView.stopRefresh()));
+		cDisposable.add(interactor.deleteAllFavorites().subscribe(() -> Log.e("logo", "clear ok")));
 		mView.stopRefresh();
 	}
 
-	private class ListSwipeCallback implements RecyclerListAdapter.SwipeCallback {
-
-		@Override
-		public void onSwiped(Long  itemId, int direction) {
-			String direct = null;
-			if (direction == RecyclerListAdapter.SWIPE_FAVORITE){
-				direct = "Left";
-			}else if(direction == RecyclerListAdapter.SWIPE_READ){
-				direct = "Right";
-			}
-
-			Toast.makeText(mView.context(), itemId + "   -   " + direct, Toast.LENGTH_SHORT).show();
+	@Override
+	public void onSwiped(Long  itemId, int direction, Boolean value) {
+		if (direction == RecyclerListAdapter.SWIPE_FAVORITE){
+			if (value){
+				Favorite favorite = new Favorite();
+				favorite.setItemId(itemId);
+				favorite.setFavId(itemId);
+				favorite.setCategoryId(1L);
+				cDisposable.add(interactor.insertFavorite(favorite).subscribe(()-> Log.e("logo", "ok")));
+			}else
+				interactor.deleteFavByItemBy(itemId).subscribe(()-> Log.e("logo", "ok3"));
+		}else if(direction == RecyclerListAdapter.SWIPE_READ){
+			cDisposable.add(interactor.updateReadById(itemId, value).subscribe(()-> Log.e("logo", "ok2")));
 		}
 	}
 }
