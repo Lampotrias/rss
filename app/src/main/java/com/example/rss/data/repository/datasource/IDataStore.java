@@ -24,12 +24,13 @@ public interface IDataStore {
 	Maybe<List<ChannelEntity>> getAllChannels();
 	Single<Integer> updateChannel(ChannelEntity channelEntity);
 	Completable deleteAllChannels();
+	Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp);
 
 	//Items
 	Maybe<List<ItemEntity>> getItemsByChannelId(Long id);
 	Maybe<List<ItemEntity>> getAllItems();
 	Maybe<List<Long>> InsertManyItems(List<ItemEntity> itemEntities);
-	Single<ItemEntity> getItemByUniqueId(String hash);
+	Maybe<ItemEntity> getItemByUniqueId(String hash);
 	Completable deleteAllItems();
 	Completable updateReadById(Long id, Boolean isRead);
 
@@ -41,8 +42,6 @@ public interface IDataStore {
 	Maybe<List<CategoryEntity>> getCategoriesByType(String mType);
 	Maybe<CategoryEntity> getCategoryById(Long id);
 	Maybe<Long> addCategory(CategoryEntity categoryEntity);
-
-    Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp);
 
     //Favorite
 	Completable deleteFavByItemBy(Long id);

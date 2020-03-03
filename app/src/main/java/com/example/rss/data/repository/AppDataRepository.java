@@ -76,7 +76,7 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
-	public Single<Item> getItemByUniqueId(String hash) {
+	public Maybe<Item> getItemByUniqueId(String hash) {
 		final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
 		return dataStore.getItemByUniqueId(hash).map(repositoryEntityDataMapper::transform);
 	}

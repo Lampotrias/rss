@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +37,9 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
 
 	@BindView(R.id.item_list_recycler)
 	RecyclerView itemListRecycler;
+
+	@BindView(R.id.scrollView)
+	ScrollView scrollView;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {

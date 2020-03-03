@@ -25,7 +25,6 @@ import com.example.rss.presentation.itemList.adapter.RecyclerListAdapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,6 +32,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 
 
@@ -42,7 +42,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 	private final ItemListInteractor interactor;
 	private final CompositeDisposable cDisposable;
 	private Long channelId;
-
+	private RecyclerListAdapter recyclerAdapter;
 	private static LongSparseArray<String> channelToImage = new LongSparseArray<>();
 
 	@Inject
@@ -73,7 +73,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 			cDisposable.dispose();
 	}
 
-	private Maybe<List<Item>> switchChannel(Long channelId){
+	private Maybe<List<Item>> getItemsByChannels(Long channelId){
 		if (channelId > 0)
 			return interactor.getItemsByChannelId(channelId);
 		return interactor.getAllItems();
@@ -104,24 +104,27 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 				});
 	}
 
-	private void SetItemsForRecycler(Long channelId){
-		List<ItemModel> itemModels= new ArrayList<>();
-		cDisposable.add(switchChannel(channelId)
+	private Single<List<ItemModel>> getItemsForRecycler(Long channelId){
+		return getItemsByChannels(channelId)
 				.toObservable()
+				.doOnNext(items -> Log.e("myApp", "*++* " + items.size()))
 				.concatMapIterable(items -> items)
 				.concatMap(item -> prepareItem(item, channelId))
-				.subscribe(itemModels::add, throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable)),
-						() -> {
-							InitializeRecycler(itemModels);
-				})
-		);
-
+				.doOnNext(item -> Log.e("myApp", "*** " + item.getTitle()))
+				.toList();
 	}
 
 	private void InitializeRecycler(List<ItemModel> itemModels){
 		RequestManager requestManager = Glide.with(mView.context());
 
-		RecyclerListAdapter recyclerAdapter = new RecyclerListAdapter(requestManager, mView.getResourceIdRowView(), mView.context());
+		recyclerAdapter = new RecyclerListAdapter(requestManager, mView.getResourceIdRowView(), mView.context());
+		recyclerAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+			@Override
+			public void onItemRangeInserted(int positionStart, int itemCount) {
+				//super.onItemRangeInserted(positionStart, itemCount);
+				mView.getRecycler().smoothScrollToPosition(0);
+			}
+		});
 		recyclerAdapter.submitList(itemModels);
 		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mView.context());
 		mView.getRecycler().setLayoutManager(layoutManager);
@@ -172,21 +175,32 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 	public void setView(ItemListContract.V view) {
 		this.mView = view;
 		this.channelId = mView.getCurChannelId();
-		SetItemsForRecycler(this.channelId);
+
+		cDisposable.add(getItemsForRecycler(this.channelId)
+				.subscribe(this::InitializeRecycler, throwable -> {}));
 	}
 
 	@Override
 	public void refreshList() {
-//		cDisposable.add(interactor.deleteAllChannels().subscribe(() -> {
-//			cDisposable.add(interactor.deleteAllItems().subscribe(() -> {
-//				mView.stopRefresh();
-//				globalActions.updDrawerMenu();
-//			}, throwable -> mView.stopRefresh()));
-//		}, throwable -> mView.stopRefresh()));
-		cDisposable.add(interactor.deleteAllFavorites().subscribe(() -> Log.e("logo", "clear ok")));
-		mView.stopRefresh();
-	}
+		cDisposable.add(interactor.syncGetItems(channelId).subscribe(
+				longs -> {
 
+				},
+				throwable -> {
+				},
+				() -> {
+					cDisposable.add(getItemsForRecycler(this.channelId)
+							.subscribe(itemModels -> {
+										recyclerAdapter.submitList(itemModels);
+										mView.stopRefresh();
+									}
+									, throwable -> {
+										showErrorMessage(new DefaultErrorBundle((Exception) throwable));
+										mView.stopRefresh();
+									}));
+				})
+		);
+	}
 	@Override
 	public void onSwiped(Long  itemId, int direction, Boolean value) {
 		if (direction == RecyclerListAdapter.SWIPE_FAVORITE){
@@ -195,11 +209,11 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 				favorite.setItemId(itemId);
 				favorite.setFavId(itemId);
 				favorite.setCategoryId(1L);
-				cDisposable.add(interactor.insertFavorite(favorite).subscribe(()-> Log.e("logo", "ok")));
+				cDisposable.add(interactor.insertFavorite(favorite).subscribe(()-> {}));
 			}else
-				interactor.deleteFavByItemBy(itemId).subscribe(()-> Log.e("logo", "ok3"));
+				interactor.deleteFavByItemBy(itemId).subscribe(()-> {});
 		}else if(direction == RecyclerListAdapter.SWIPE_READ){
-			cDisposable.add(interactor.updateReadById(itemId, value).subscribe(()-> Log.e("logo", "ok2")));
+			cDisposable.add(interactor.updateReadById(itemId, value).subscribe(()-> {}));
 		}
 	}
 }

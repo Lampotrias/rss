@@ -50,7 +50,7 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Single<ItemEntity> getItemByUniqueId(String hash) {
+	public Maybe<ItemEntity> getItemByUniqueId(String hash) {
 		return appDatabase.itemDAO().getItemByUniqueId(hash).map(ChannelDatabaseMapper::transform);
 	}
 

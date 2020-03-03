@@ -7,7 +7,6 @@ import com.example.rss.data.database.dto.ItemDTO;
 import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
-import io.reactivex.Single;
 
 @Dao
 public interface ItemDAO {
@@ -21,7 +20,7 @@ public interface ItemDAO {
     Maybe<List<Long>> insertAll(List<ItemDTO> itemDTOS);
 
     @Query("SELECT * FROM item where guid = :hash")
-    Single<ItemDTO> getItemByUniqueId(String hash);
+    Maybe<ItemDTO> getItemByUniqueId(String hash);
 
     @Query("DELETE FROM item")
     Completable deleteAllItems();

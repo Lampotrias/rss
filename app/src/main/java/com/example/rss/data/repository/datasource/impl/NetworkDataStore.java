@@ -60,7 +60,7 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Single<ItemEntity> getItemByUniqueId(String hash) {
+    public Maybe<ItemEntity> getItemByUniqueId(String hash) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 

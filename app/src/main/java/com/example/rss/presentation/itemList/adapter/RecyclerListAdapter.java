@@ -62,6 +62,10 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder>{
         mDiffer.submitList(list);
     }
 
+    public ItemModel get(){
+        return mDiffer.getCurrentList().get(0);
+    }
+
     private static final DiffUtil.ItemCallback<ItemModel> DIFF_CALLBACK = new DiffUtil.ItemCallback<ItemModel>() {
         @Override
         public boolean areItemsTheSame(@NonNull ItemModel oldUser, @NonNull ItemModel newUser) {

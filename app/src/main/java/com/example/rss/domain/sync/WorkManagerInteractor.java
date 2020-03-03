@@ -1,7 +1,5 @@
 package com.example.rss.domain.sync;
 
-import android.util.Log;
-
 import com.example.rss.domain.Channel;
 import com.example.rss.domain.File;
 import com.example.rss.domain.Item;
@@ -86,7 +84,7 @@ public class WorkManagerInteractor {
                 .observeOn(postExecutionThread.getScheduler());
     }
 
-    public Single<Item> checkModify(String hash) {
+    public Maybe<Item> checkModify(String hash) {
         return channelRepository.getItemByUniqueId(hash)
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(postExecutionThread.getScheduler());
