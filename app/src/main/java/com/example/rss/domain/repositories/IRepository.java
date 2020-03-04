@@ -40,7 +40,7 @@ public interface IRepository {
 	Maybe<Long> addCategory(Category category);
 
 	//File
-	Single<Long> addFile(File file);
+	Maybe<Long> addFile(File file);
 	Maybe<File> getFileById(Long id);
 
     //Favorite

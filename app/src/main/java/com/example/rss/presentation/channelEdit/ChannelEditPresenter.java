@@ -10,6 +10,9 @@ import androidx.room.EmptyResultSetException;
 import com.example.rss.domain.Category;
 import com.example.rss.domain.exception.DefaultErrorBundle;
 import com.example.rss.domain.exception.IErrorBundle;
+import com.example.rss.domain.interactor.CategoryInteractor;
+import com.example.rss.domain.interactor.ChannelInteractor;
+import com.example.rss.domain.interactor.FileInteractor;
 import com.example.rss.presentation.exception.ChannelExistsException;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
 import com.example.rss.presentation.global.GlobalActions;
@@ -23,7 +26,9 @@ public class ChannelEditPresenter implements ChannelEditContract.P<ChannelEditCo
 {
 	private static final String LOG_TAG = ChannelEditPresenter.class.getSimpleName();
 	private ChannelEditContract.V mView;
-	private final ChannelEditInteractor interactor;
+	private final ChannelInteractor channelInteractor;
+	private final CategoryInteractor categoryInteractor;
+	private final FileInteractor fileInteractor;
 	private final CompositeDisposable compositeDisposable;
 	protected Context context;
 	private String sourceUrl;
@@ -34,48 +39,54 @@ public class ChannelEditPresenter implements ChannelEditContract.P<ChannelEditCo
 	@Inject
 	NavController navController;
 	@Inject
-	ChannelEditPresenter(ChannelEditInteractor interactor) {
-		this.interactor = interactor;
+	ChannelEditPresenter(ChannelInteractor channelInteractor, CategoryInteractor categoryInteractor, FileInteractor fileInteractor) {
+		this.channelInteractor = channelInteractor;
+		this.categoryInteractor = categoryInteractor;
+		this.fileInteractor = fileInteractor;
 		compositeDisposable = new CompositeDisposable();
 	}
 
 	@Override
-	public void onSaveButtonClicked(String url, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi){
+	public void onSaveButtonClicked(String url, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi) {
 		//ToDo addChannelAndFile category logic
 		mView.isEnable(false);
 		compositeDisposable.add(
-				interactor.getCategoryById(1L)
-				.subscribe(category -> {
-					compositeDisposable.add(interactor.checkChannelExistsByUrl(url)
-							.subscribe(channel -> {
-										showErrorMessage(new DefaultErrorBundle(new ChannelExistsException()));
-										mView.isEnable(true);
-									}, throwable -> {
-										if (throwable instanceof EmptyResultSetException){
-											compositeDisposable.add(interactor.addChannelAndFile(url, category.getCategoryId(), bCacheImage, bDownloadFull, bOnlyWifi)
-													.subscribe(
-															aLong -> {
-																mView.displaySuccess("new id: " + aLong);
-																mView.isEnable(true);
-																globalActions.updDrawerMenu();
+				categoryInteractor.getCategoryById(1L)
+						.subscribe(category -> {
+									compositeDisposable.add(channelInteractor.checkChannelExistsByUrl(url)
+											.subscribe(channel -> {
+														showErrorMessage(new DefaultErrorBundle(new ChannelExistsException()));
+														mView.isEnable(true);
+													}, throwable -> {
+														if (throwable instanceof EmptyResultSetException) {
+															compositeDisposable.add(channelInteractor.getRawChannel(url)
+																	.flatMap(rawObject -> fileInteractor.parseFileAndSave(rawObject)
+																			.map(fileId -> channelInteractor.prepareChannelObj(rawObject, url, fileId, category.getCategoryId(), bCacheImage, bDownloadFull, bOnlyWifi)))
+																	.flatMap(channelInteractor::add)
+																	.subscribe(
+																			aLong -> {
+																				mView.displaySuccess("new id: " + aLong);
+																				mView.isEnable(true);
+																				globalActions.updDrawerMenu();
 
-															},
-															throwable1 -> showErrorMessage(new DefaultErrorBundle((Exception) throwable1))));
-										}else{
-											showErrorMessage(new DefaultErrorBundle((Exception) throwable));
-										}
-										mView.isEnable(true);
-									}
-							));
-				}, throwable -> {},
-						() -> {
-							Category category = new Category();
-							category.setType("C");
-							category.setName("Без категории");
-							category.setCategoryId(1L);
-							compositeDisposable.add(interactor.addCategory(category)
-									.subscribe(aLong -> onSaveButtonClicked(url, bCacheImage, bDownloadFull, bOnlyWifi)));
-						}));
+																			},
+																			throwableChannelAdd -> showErrorMessage(new DefaultErrorBundle((Exception) throwableChannelAdd))));
+														} else {
+															showErrorMessage(new DefaultErrorBundle((Exception) throwable));
+														}
+														mView.isEnable(true);
+													}
+											));
+								}, throwable -> {
+								},
+								() -> {
+									Category category = new Category();
+									category.setType("C");
+									category.setName("Без категории");
+									category.setCategoryId(1L);
+									compositeDisposable.add(categoryInteractor.addCategory(category)
+											.subscribe(aLong -> onSaveButtonClicked(url, bCacheImage, bDownloadFull, bOnlyWifi)));
+								}));
 	}
 
 	@Override

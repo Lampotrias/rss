@@ -85,7 +85,7 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Single<Long> addFile(FileEntity fileEntity) {
+	public Maybe<Long> addFile(FileEntity fileEntity) {
 		return appDatabase.fileDAO().insert(ChannelDatabaseMapper.transform(fileEntity));
 	}
 

@@ -95,7 +95,7 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Single<Long> addFile(FileEntity fileEntity) {
+    public Maybe<Long> addFile(FileEntity fileEntity) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 

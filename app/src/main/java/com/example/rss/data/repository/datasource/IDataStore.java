@@ -35,7 +35,7 @@ public interface IDataStore {
 	Completable updateReadById(Long id, Boolean isRead);
 
 	//Files
-	Single<Long> addFile (FileEntity fileEntity);
+	Maybe<Long> addFile (FileEntity fileEntity);
 	Maybe<FileEntity> getFileById(Long id);
 
 	//Category

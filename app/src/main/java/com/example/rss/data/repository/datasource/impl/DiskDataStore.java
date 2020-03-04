@@ -45,7 +45,7 @@ public abstract class DiskDataStore implements IDataStore {
     }
 
     @Override
-    public Single<Long> addFile(FileEntity fileEntity) {
+    public Maybe<Long> addFile(FileEntity fileEntity) {
         return null;
     }
 }

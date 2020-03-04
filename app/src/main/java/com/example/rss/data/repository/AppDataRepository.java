@@ -130,7 +130,7 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
-	public Single<Long> addFile(File file) {
+	public Maybe<Long> addFile(File file) {
 		final IDataStore dataStore = channelDataStoreFactory.createPut();
 		return dataStore.addFile(repositoryEntityDataMapper.transform(file));
 	}

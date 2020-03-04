@@ -14,7 +14,7 @@ import io.reactivex.Single;
 @Dao
 public interface FileDAO {
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	Single<Long> insert(FileDTO fileDTO);
+	Maybe<Long> insert(FileDTO fileDTO);
 
 	@Query("SELECT * FROM file WHERE id = :id")
 	Maybe<FileDTO> getFileById(Long id);
