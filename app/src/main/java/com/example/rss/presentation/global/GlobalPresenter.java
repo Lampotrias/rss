@@ -8,23 +8,28 @@ import com.example.rss.domain.Category;
 import com.example.rss.domain.Channel;
 import com.example.rss.domain.exception.DefaultErrorBundle;
 import com.example.rss.domain.exception.IErrorBundle;
+import com.example.rss.domain.interactor.CategoryInteractor;
+import com.example.rss.domain.interactor.ChannelInteractor;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import androidx.navigation.NavController;
+
 import com.example.rss.R;
+
 import javax.inject.Inject;
+
 import io.reactivex.disposables.CompositeDisposable;
 
 public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
 
     private GlobalContract.V mView;
-    private final GlobalInteractor globalInteractor;
+    private final ChannelInteractor channelInteractor;
+    private final CategoryInteractor categoryInteractor;
     private final CompositeDisposable compositeDisposable;
     private final String CATEGORY_TYPE = "C";
     private final String FAVORITE_TYPE = "F";
@@ -48,38 +53,37 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     NavController navController;
 
     @Inject
-    public GlobalPresenter(GlobalInteractor globalInteractor) {
-        this.globalInteractor = globalInteractor;
+    public GlobalPresenter(ChannelInteractor channelInteractor, CategoryInteractor categoryInteractor) {
+        this.channelInteractor = channelInteractor;
+        this.categoryInteractor = categoryInteractor;
         compositeDisposable = new CompositeDisposable();
-//
     }
 
     @Override
     public void setView(GlobalContract.V view) {
         mView = view;
-        //mView.openDrawer();
         globalActions.updDrawerMenu();
     }
 
     private void prepareDataForMenu() {
-          compositeDisposable.add(
-          globalInteractor.getCategoriesByType(CATEGORY_TYPE)
-                .subscribe(categories -> {
-                    this.setCategories(categories);
-                    compositeDisposable.add(
-                            globalInteractor.getAllChannels()
-                            .subscribe(channels -> {
-                                setChannels(channels);
-                                initChannelListMenu();
-                            }, throwable -> showErrorMessage(new DefaultErrorBundle(new DatabaseConnectionException()))
-                            , this::initChannelListMenu)
-                    );
-                }, throwable -> showErrorMessage(new DefaultErrorBundle(new DatabaseConnectionException()))
-                , this::initChannelListMenu)
+        compositeDisposable.add(
+                categoryInteractor.getCategoriesByType(CATEGORY_TYPE)
+                        .subscribe(categories -> {
+                                    this.setCategories(categories);
+                                    compositeDisposable.add(
+                                            channelInteractor.getAllChannels()
+                                                    .subscribe(channels -> {
+                                                                setChannels(channels);
+                                                                initChannelListMenu();
+                                                            }, throwable -> showErrorMessage(new DefaultErrorBundle(new DatabaseConnectionException()))
+                                                            , this::initChannelListMenu)
+                                    );
+                                }, throwable -> showErrorMessage(new DefaultErrorBundle(new DatabaseConnectionException()))
+                                , this::initChannelListMenu)
         );
     }
 
-    private void initChannelListMenu(){
+    private void initChannelListMenu() {
         final String attrParentTitle = "attrParentTitle";
         final String attrChildTitle = "attrChildTitle";
         final String attrChildId = "attrChildId";
@@ -87,7 +91,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
         channelTreeData = new ArrayList<>();
         List<Map<String, String>> groupData = new ArrayList<>();
 
-        if (!mChannels.isEmpty() && !mCategories.isEmpty()){
+        if (!mChannels.isEmpty() && !mCategories.isEmpty()) {
             Category category1 = new Category();
             category1.setCategoryId(33L);
             category1.setName("test2");
@@ -98,14 +102,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
             channel1.setTitle("test123");
             channel1.setCategoryId(33L);
 
-            Channel channel2 = new Channel();
-            channel2.setChannelId(66L);
-            channel2.setTitle("ewrfewrfewrfre");
-            channel2.setCategoryId(33L);
-
             mChannels.add(channel1);
-            mChannels.add(channel2);
-
             mCategories.add(category1);
 
             Map<String, String> mCategoryTitle;
@@ -113,12 +110,10 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
 
             List<Map<String, String>> tmpChild;
 
-            for (Category category: mCategories) {
+            for (Category category : mCategories) {
                 tmpChild = new ArrayList<>();
-                for (Channel channel: mChannels) {
-
-
-                    if (category.getCategoryId().equals(channel.getCategoryId())){
+                for (Channel channel : mChannels) {
+                    if (category.getCategoryId().equals(channel.getCategoryId())) {
                         mChildAttrArr = new HashMap<>();
                         mChildAttrArr.put(attrChildTitle, channel.getTitle());
                         mChildAttrArr.put(attrChildId, channel.getChannelId().toString());

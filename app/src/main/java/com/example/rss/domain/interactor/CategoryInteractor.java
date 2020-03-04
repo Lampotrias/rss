@@ -5,6 +5,8 @@ import com.example.rss.domain.executor.IPostExecutionThread;
 import com.example.rss.domain.executor.IThreadExecutor;
 import com.example.rss.domain.repositories.IRepository;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.reactivex.Maybe;
@@ -21,7 +23,12 @@ public class CategoryInteractor extends BaseInteractor {
     public Maybe<Category> getCategoryById(Long id){
         return repository.getCategoryById(id).compose(getIOToMainTransformerMaybe());
     }
+
     public Maybe<Long> addCategory(Category category){
         return repository.addCategory(category).compose(getIOToMainTransformerMaybe());
+    }
+
+    public Maybe<List<Category>> getCategoriesByType(String mType){
+        return repository.getCategoriesByType(mType).compose(getIOToMainTransformerMaybe());
     }
 }
