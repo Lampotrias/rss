@@ -28,6 +28,10 @@ public class FileInteractor extends BaseInteractor {
         return repository.addFile(prepareFile(rawObject)).compose(getIOToMainTransformerMaybe());
     }
 
+    public Maybe<File> getFileById (Long id) {
+        return repository.getFileById(id).compose(getIOToMainTransformerMaybe());
+    }
+
     private File prepareFile(XmlChannelRawObject xmlChannelRawObject){
         File file = new File();
         file.setDescription(xmlChannelRawObject.getFile().getDescription());
