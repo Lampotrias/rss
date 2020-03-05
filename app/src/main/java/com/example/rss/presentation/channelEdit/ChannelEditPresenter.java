@@ -68,7 +68,7 @@ public class ChannelEditPresenter implements ChannelEditContract.P<ChannelEditCo
 																				mView.displaySuccess("new id: " + aLong);
 																				mView.isEnable(true);
 																				globalActions.updDrawerMenu();
-
+																				navController.navigateUp();
 																			},
 																			throwableChannelAdd -> showErrorMessage(new DefaultErrorBundle((Exception) throwableChannelAdd))));
 														} else {
@@ -97,10 +97,6 @@ public class ChannelEditPresenter implements ChannelEditContract.P<ChannelEditCo
 	@Override
 	public void setView(ChannelEditContract.V view) {
 		mView = view;
-	}
-
-	public void addNewChannel(String url) {
-
 	}
 
 	private void showErrorMessage(IErrorBundle errorBundle) {

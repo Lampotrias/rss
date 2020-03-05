@@ -93,7 +93,6 @@ public class ChannelEditFragment extends BaseFragment implements ChannelEditCont
 		String url = String.valueOf(urlEditText.getText());
 		if(url.length()> 0 && url.startsWith("http")){
 			urlTextInput.setError(null);
-
 			mPresenter.onSaveButtonClicked(url, ckCacheImage.isChecked(), ckDownloadFullText.isChecked(), ckOnlyWifi.isChecked());
 		}else{
 			urlTextInput.setError("Введите url");

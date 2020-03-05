@@ -16,6 +16,5 @@ public interface ChannelEditContract {
 		void onSaveButtonClicked(String url, Boolean bCacheImage, Boolean bDownloadFull, Boolean bOnlyWifi);
 		void onCancelButtonClicked();
 		void setView(T view);
-		void addNewChannel(String url);
 	}
 }

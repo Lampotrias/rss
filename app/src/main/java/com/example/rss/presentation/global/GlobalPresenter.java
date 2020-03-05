@@ -1,6 +1,7 @@
 package com.example.rss.presentation.global;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.example.rss.data.exception.DatabaseConnectionException;
@@ -41,7 +42,6 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     private void setCategories(List<Category> mCategories) {
         this.mCategories = mCategories;
     }
-
     private void setChannels(List<Channel> mChannels) {
         this.mChannels = mChannels;
     }
@@ -158,6 +158,16 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     @Override
     public void updLeftMenu() {
         prepareDataForMenu();
+    }
+
+    @Override
+    public void contextChannelEdit(Long id) {
+        Log.e("MyApp", "edit " + id);
+    }
+
+    @Override
+    public void contextChannelDelete(Long id) {
+        Log.e("MyApp", "delete " + id);
     }
 
     @Override

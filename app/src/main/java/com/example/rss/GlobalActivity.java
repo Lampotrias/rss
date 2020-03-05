@@ -2,6 +2,8 @@ package com.example.rss;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +42,11 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 	private DrawerLayout drawer;
 	private ExpandableListView expandableListView;
 	private AndroidApplication app;
+	private List<List<Map<String, String>>> channelTreeData = null;
+
+	private final int MENU_DELETE = 43234;
+	private final int MENU_EDIT = 43233;
+
 
     @Inject
     public GlobalPresenter mPresenter;
@@ -53,7 +60,7 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 	@Override
 	protected void onPostCreate(@Nullable Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		mPresenter.setView(this);
+
 	}
 
 	@Override
@@ -92,6 +99,8 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 
 		Button btnService = findViewById(R.id.btnTestService);
 		btnService.setOnClickListener(v -> mPresenter.OnClickChannelTest(v));
+		registerForContextMenu(expandableListView);
+		mPresenter.setView(this);
 	}
 
 	@Override
@@ -115,12 +124,72 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 
 		expandableListView.setAdapter(adapter);
 		expandableListView.setOnChildClickListener(this);
+
+		this.channelTreeData = childData;
+		refreshContextMenu();
+	}
+
+	private void refreshContextMenu(){
+		invalidateOptionsMenu();
 	}
 
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 		mPresenter.selectTreeItemChannel(groupPosition, childPosition);
 		return true;
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+
+		if (this.channelTreeData != null){
+			ExpandableListView.ExpandableListContextMenuInfo info =
+					(ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
+
+			int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+			int group = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+			int child = ExpandableListView.getPackedPositionChild(info.packedPosition);
+
+			if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD)
+			{
+				menu.add(0, MENU_EDIT, 0, "Редактировать");
+				menu.add(0, MENU_DELETE, 1, "Удалить");
+			}
+		}
+	}
+
+	@Override
+	public boolean onContextItemSelected(@NonNull MenuItem item) {
+		ExpandableListView.ExpandableListContextMenuInfo info =
+				(ExpandableListView.ExpandableListContextMenuInfo) item.getMenuInfo();
+
+		int groupPos = 0, childPos = 0;
+		int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+		if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD)
+		{
+			groupPos = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+			childPos = ExpandableListView.getPackedPositionChild(info.packedPosition);
+		}else
+			return super.onContextItemSelected(item);
+
+		Log.e("myApp", "groupPos = " + groupPos + " childPos = " + childPos);
+
+		Long channelId = Long.valueOf(channelTreeData.get(groupPos).get(childPos).get("attrChildId"));
+
+		switch (item.getItemId())
+		{
+			case MENU_DELETE:
+				mPresenter.contextChannelDelete(channelId);
+				return true;
+
+			case MENU_EDIT:
+				mPresenter.contextChannelEdit(channelId);
+				return true;
+
+			default:
+				return super.onContextItemSelected(item);
+		}
 	}
 
 	@Override

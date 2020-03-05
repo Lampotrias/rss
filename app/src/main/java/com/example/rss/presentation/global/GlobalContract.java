@@ -26,5 +26,7 @@ public interface GlobalContract {
         void openSettingsFragment();
         void selectTreeItemChannel(int groupPos, int childPos);
         void updLeftMenu();
+        void contextChannelEdit(Long id);
+        void contextChannelDelete(Long id);
     }
 }
