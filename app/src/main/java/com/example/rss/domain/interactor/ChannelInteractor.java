@@ -1,5 +1,7 @@
 package com.example.rss.domain.interactor;
 
+import android.util.Log;
+
 import com.example.rss.domain.Channel;
 import com.example.rss.domain.exception.XmlParseException;
 import com.example.rss.domain.executor.IPostExecutionThread;
@@ -19,6 +21,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public class ChannelInteractor extends BaseInteractor {
@@ -31,26 +34,46 @@ public class ChannelInteractor extends BaseInteractor {
         this.repository = repository;
     }
 
-    public Maybe<List<Channel>> getAllChannels(){
+    public Maybe<List<Channel>> getAllChannels() {
         return repository.getAllChannels().compose(getIOToMainTransformerMaybe());
     }
 
-    public Maybe<Channel> getChannelById(Long id){
+    public Maybe<Channel> getChannelById(Long id) {
         return repository.getChannelById(id).compose(getIOToMainTransformerMaybe());
     }
 
-    public Single<Channel> checkChannelExistsByUrl(String url){
+    public Single<Channel> checkChannelExistsByUrl(String url) {
         return repository.getChannelByUrl(url).compose(getIOToMainTransformerSingle());
     }
 
-    public Maybe<XmlChannelRawObject> getRawChannel(String url){
-            return repository.getRssFeedContent(url)
-                    .map(this::parseChannel)
-                    .compose(getIOToMainTransformerMaybe());
+    public Maybe<XmlChannelRawObject> getRawChannel(String url) {
+        return repository.getRssFeedContent(url)
+                .map(this::parseChannel)
+                .compose(getIOToMainTransformerMaybe());
     }
 
-    public Maybe<Long> add(Channel channel){
+    public Maybe<Long> add(Channel channel) {
         return repository.addChannel(channel).compose(getIOToMainTransformerMaybe());
+    }
+
+    public Maybe<InputStream> getRssFeedContent(String path){
+        return repository.getRssFeedContent(path).compose(getIOToMainTransformerMaybe());
+    }
+
+    public Observable<List<Channel>> switchChannelSource(Long channelId) {
+        if (channelId > 0) {
+            return repository.getChannelById(channelId)
+                    .doOnSuccess(channel -> Log.e("logo", "getChannelById" + channel.getDescription()))
+                    .compose(getIOToMainTransformerMaybe())
+                    .toObservable()
+                    .toList()
+                    .toObservable();
+        } else {
+            return repository.getAllChannels()
+                    .compose(getIOToMainTransformerMaybe())
+                    .doOnSuccess(channel -> Log.e("logo", "getAllChannels" + channel.size()))
+                    .toObservable();
+        }
     }
 
     private XmlChannelRawObject parseChannel(InputStream stream) throws XmlParseException {
@@ -84,7 +107,6 @@ public class ChannelInteractor extends BaseInteractor {
                 if (dateLastSync != null) {
                     channel.setLastBuild(dateLastSync.getTime() / 1000);
                 }
-
             } catch (ParseException e) {
                 e.printStackTrace();
             }

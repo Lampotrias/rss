@@ -79,7 +79,7 @@ public class WorkManagerInteractor {
                 .map(fileId -> prepareItem(xmlItemRawObject, fileId, channelId))
                 .toList()
                 .toMaybe()
-                .flatMap(items -> channelRepository.InsertManyItems(items))
+                .flatMap(items -> channelRepository.insertManyItems(items))
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(postExecutionThread.getScheduler());
     }

@@ -4,7 +4,7 @@ import com.example.rss.domain.File;
 import com.example.rss.domain.executor.IPostExecutionThread;
 import com.example.rss.domain.executor.IThreadExecutor;
 import com.example.rss.domain.repositories.IRepository;
-import com.example.rss.domain.xml.XmlChannelRawObject;
+import com.example.rss.domain.xml.XmlEntityHasFile;
 
 import javax.inject.Inject;
 
@@ -24,18 +24,21 @@ public class FileInteractor extends BaseInteractor {
         return repository.addFile(file).compose(getIOToMainTransformerMaybe());
     }
 
-    public Maybe<Long> parseFileAndSave(XmlChannelRawObject rawObject){
-        return repository.addFile(prepareFile(rawObject)).compose(getIOToMainTransformerMaybe());
+    public Maybe<Long> parseFileAndSave(XmlEntityHasFile rawObject){
+        if (rawObject.getEnclosure() != null){
+            return repository.addFile(prepareFile(rawObject)).compose(getIOToMainTransformerMaybe());
+        }else
+            return Maybe.just(0L);
     }
 
     public Maybe<File> getFileById (Long id) {
         return repository.getFileById(id).compose(getIOToMainTransformerMaybe());
     }
 
-    private File prepareFile(XmlChannelRawObject xmlChannelRawObject){
+    private File prepareFile(XmlEntityHasFile xmlEntityHasFile){
         File file = new File();
-        file.setDescription(xmlChannelRawObject.getFile().getDescription());
-        file.setPath(xmlChannelRawObject.getFile().getPath());
+        file.setDescription(xmlEntityHasFile.getEnclosure().getDescription());
+        file.setPath(xmlEntityHasFile.getEnclosure().getPath());
         file.setExternal(false);
         file.setType("image");
         return file;

@@ -166,7 +166,7 @@ public class XmlParser {
                                 }
                             }
                         }
-                        channelEntity.setFile(fileEntity);
+                        channelEntity.setEnclosure(fileEntity);
                         break;
                 }
             }

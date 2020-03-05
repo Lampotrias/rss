@@ -29,7 +29,7 @@ public interface IRepository {
 	//Items
 	Maybe<List<Item>> getItemsByChannelId(Long id);
 	Maybe<List<Item>> getAllItems();
-	Maybe<List<Long>> InsertManyItems(List<Item> items);
+	Maybe<List<Long>> insertManyItems(List<Item> items);
 	Maybe<Item> getItemByUniqueId(String hash);
 	Completable deleteAllItems();
 	Completable updateReadById(Long id, Boolean isRead);

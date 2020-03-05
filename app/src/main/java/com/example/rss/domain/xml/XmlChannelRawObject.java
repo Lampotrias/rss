@@ -1,6 +1,6 @@
 package com.example.rss.domain.xml;
 
-public class XmlChannelRawObject {
+public class XmlChannelRawObject implements XmlEntityHasFile{
 	private String title;
 	private String description;
 	private String link;
@@ -39,11 +39,11 @@ public class XmlChannelRawObject {
 		this.lastBuild = lastBuild;
 	}
 
-	public XmlFileRawObject getFile() {
+	public XmlFileRawObject getEnclosure() {
 		return file;
 	}
 
-	public void setFile(XmlFileRawObject file) {
+	public void setEnclosure(XmlFileRawObject file) {
 		this.file = file;
 	}
 }

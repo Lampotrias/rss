@@ -1,6 +1,6 @@
 package com.example.rss.domain.xml;
 
-public class XmlItemRawObject {
+public class XmlItemRawObject implements XmlEntityHasFile{
     private String title;
     private String link;
     private String description;
@@ -48,6 +48,7 @@ public class XmlItemRawObject {
         this.uniqueId = guid;
     }
 
+    @Override
     public XmlFileRawObject getEnclosure() {
         return enclosure;
     }

@@ -70,7 +70,7 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
-	public Maybe<List<Long>> InsertManyItems(List<Item> items) {
+	public Maybe<List<Long>> insertManyItems(List<Item> items) {
 		final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
 		return dataStore.InsertManyItems(repositoryEntityDataMapper.transformItemsToEntity(items));
 	}
