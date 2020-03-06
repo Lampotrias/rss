@@ -24,6 +24,7 @@ public interface IRepository {
 	Single<Channel> getChannelByUrl(String url);
 	Single<Integer> updateChannel(Channel channel);
 	Completable deleteAllChannels();
+	Completable deleteChannelById(Long id);
 	Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp);
 
 	//Items

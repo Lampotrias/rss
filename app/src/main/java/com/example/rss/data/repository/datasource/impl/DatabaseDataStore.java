@@ -85,6 +85,11 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
+	public Completable deleteChannelById(Long id) {
+		return appDatabase.channelDAO().deleteById(id);
+	}
+
+	@Override
 	public Maybe<Long> addFile(FileEntity fileEntity) {
 		return appDatabase.fileDAO().insert(ChannelDatabaseMapper.transform(fileEntity));
 	}

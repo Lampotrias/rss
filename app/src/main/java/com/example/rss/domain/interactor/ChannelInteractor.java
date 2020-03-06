@@ -20,6 +20,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -62,6 +63,10 @@ public class ChannelInteractor extends BaseInteractor {
 
     public Maybe<InputStream> getRssFeedContent(String path){
         return repository.getRssFeedContent(path).compose(getIOToMainTransformerMaybe());
+    }
+
+    public Completable deleteChannelById(Long id){
+        return repository.deleteChannelById(id).compose(getIOToMainTransformerCompletable());
     }
 
     public Observable<List<Channel>> switchChannelSource(Long channelId) {

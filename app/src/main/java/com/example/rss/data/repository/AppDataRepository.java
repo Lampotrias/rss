@@ -112,6 +112,12 @@ public class AppDataRepository implements IRepository {
 	}
 
 	@Override
+	public Completable deleteChannelById(Long id) {
+		final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
+		return dataStore.deleteChannelById(id);
+	}
+
+	@Override
 	public Maybe<List<Category>> getCategoriesByType(String mType) {
 		final IDataStore dataStore = channelDataStoreFactory.createForCategory(null);
 		return dataStore.getCategoriesByType(mType).map(repositoryEntityDataMapper::transformCategories);

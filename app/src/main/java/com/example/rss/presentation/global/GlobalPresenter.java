@@ -1,7 +1,6 @@
 package com.example.rss.presentation.global;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.example.rss.data.exception.DatabaseConnectionException;
@@ -67,7 +66,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
         globalActions.updDrawerMenu();
     }
 
-    private void prepareDataForMenu() {
+    private void reCalcMenu() {
         compositeDisposable.add(
                 categoryInteractor.getCategoriesByType(CATEGORY_TYPE)
                         .subscribe(categories -> {
@@ -159,7 +158,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
 
     @Override
     public void updLeftMenu() {
-        prepareDataForMenu();
+        reCalcMenu();
     }
 
     @Override
@@ -172,6 +171,13 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
 
     @Override
     public void contextChannelDelete(Long id) {
+        compositeDisposable.add(channelInteractor.deleteChannelById(id).subscribe(
+                () -> {
+                    reCalcMenu();
+                    navController.navigate(R.id.nav_item_list_fragment);
+                    mView.closeDrawer();
+                },
+                throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable))));
     }
 
     @Override

@@ -11,7 +11,6 @@ import com.example.rss.data.database.dto.ChannelDTO;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
@@ -38,4 +37,7 @@ public interface ChannelDAO {
 
 	@Query("DELETE FROM channel")
 	Completable deleteAllChannels();
+
+	@Query("DELETE FROM channel WHERE id = :id")
+	Completable deleteById(Long id);
 }

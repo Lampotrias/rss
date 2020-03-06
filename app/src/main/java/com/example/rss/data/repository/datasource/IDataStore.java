@@ -24,6 +24,7 @@ public interface IDataStore {
 	Maybe<List<ChannelEntity>> getAllChannels();
 	Single<Integer> updateChannel(ChannelEntity channelEntity);
 	Completable deleteAllChannels();
+	Completable deleteChannelById(Long id);
 	Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp);
 
 	//Items
