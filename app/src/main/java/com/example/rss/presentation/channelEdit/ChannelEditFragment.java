@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.example.rss.AndroidApplication;
 import com.example.rss.R;
+import com.example.rss.domain.Channel;
 import com.example.rss.presentation.BaseFragment;
 import com.example.rss.presentation.di.scope.ChannelScope;
 import com.example.rss.presentation.global.GlobalActions;
@@ -28,8 +29,9 @@ import butterknife.ButterKnife;
 @ChannelScope
 public class ChannelEditFragment extends BaseFragment implements ChannelEditContract.V {
 
-	private static ChannelEditFragment instance;
 	private AndroidApplication app;
+    private Long curChannelId = 0L;
+    public static final String CHANNEL_ID_PARAM = "CHANNEL_ID_PARAM";
 
 	@Inject
 	public ChannelEditPresenter mPresenter;
@@ -38,7 +40,7 @@ public class ChannelEditFragment extends BaseFragment implements ChannelEditCont
 	public GlobalActions globalActions;
 
 	@BindView(R.id.btnAddChannel)
-	MaterialButton btnAdd;
+	MaterialButton btnSave;
 
 	@BindView(R.id.btnCancel)
 	MaterialButton btnCancel;
@@ -58,24 +60,28 @@ public class ChannelEditFragment extends BaseFragment implements ChannelEditCont
 	@BindView(R.id.ck_only_wifi)
 	MaterialCheckBox ckOnlyWifi;
 
+	private Long categoryId;
+
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        if (getArguments() != null){
+            curChannelId = getArguments().getLong(CHANNEL_ID_PARAM, 0);
+        }
+
 		app = (AndroidApplication) Objects.requireNonNull(getActivity()).getApplication();
 		app.getFragmentModule(this).inject(this);
 	}
-
-
 
 	@Nullable
 	@Override
 	public android.view.View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		android.view.View rootView = inflater.inflate(R.layout.channel_edit_fragment, container, false);
 		ButterKnife.bind(this, rootView);
+		mPresenter.setView(this);
 
-		urlEditText.setText("https://www.feedforall.com/sample.xml");
-
-		btnAdd.setOnClickListener((view)-> onSaveButtonClicked());
+		btnSave.setOnClickListener((view)-> onSaveButtonClicked());
 		urlEditText.setOnKeyListener((v, keyCode, event) -> {
 			String url = String.valueOf(urlEditText.getText());
 			if (url.startsWith("http")){
@@ -99,13 +105,6 @@ public class ChannelEditFragment extends BaseFragment implements ChannelEditCont
 		}
 	}
 
-	public static ChannelEditFragment getInstance(){
-		if (instance == null) {
-			instance = new ChannelEditFragment();
-		}
-		return instance;
-	}
-
 	@Override
 	public void displayError(String errorMessage) {
 		showToastMessage(errorMessage);
@@ -122,14 +121,38 @@ public class ChannelEditFragment extends BaseFragment implements ChannelEditCont
 	}
 
 	@Override
-	public void isEnable(Boolean bDisable) {
-		btnAdd.setEnabled(bDisable);
+	public void setSaveButtonEnable(Boolean bDisable) {
+		btnSave.setEnabled(bDisable);
+	}
+
+    @Override
+    public Long getCurChannelId() {
+        return curChannelId;
+    }
+
+	@Override
+	public void drawNewChannelWindow() {
+		urlEditText.setText("https://www.feedforall.com/sample.xml");
+		btnSave.setText("Добавить");
+
+		ckCacheImage.setChecked(false);
+		ckDownloadFullText.setChecked(false);
+		ckOnlyWifi.setChecked(false);
+	}
+
+	@Override
+	public void drawEditChannelWindow(Channel channel) {
+		urlEditText.setText(channel.getSourceLink());
+		btnSave.setText("Сохранить");
+
+		ckCacheImage.setChecked(channel.getCacheImage());
+		ckDownloadFullText.setChecked(channel.getDownloadFullText());
+		ckOnlyWifi.setChecked(channel.getOnlyWifi());
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		mPresenter.setView(this);
 	}
 
 	@Override
@@ -140,7 +163,6 @@ public class ChannelEditFragment extends BaseFragment implements ChannelEditCont
 
 	@Override
 	public void onDestroy() {
-		instance = null;
 		mPresenter.destroy();
 		app.releaseFragmentModule();
 		super.onDestroy();

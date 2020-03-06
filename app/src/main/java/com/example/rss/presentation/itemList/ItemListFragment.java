@@ -29,6 +29,8 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
 	private AndroidApplication app;
 	private Long curChannelId = 0L;
 
+	public static final String CHANNEL_ID = "CHANNEL_ID";
+
 	@Inject	public ItemListPresenter mPresenter;
 	@Inject	public GlobalActions globalActions;
 
@@ -45,7 +47,7 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null){
-			curChannelId = getArguments().getLong("channelId", 0);
+			curChannelId = getArguments().getLong(CHANNEL_ID, 0);
 		}
 		app = (AndroidApplication) Objects.requireNonNull(getActivity()).getApplication();
 		app.getFragmentModule(this).inject(this);

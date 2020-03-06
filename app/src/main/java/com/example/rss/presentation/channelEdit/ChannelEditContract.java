@@ -2,6 +2,7 @@ package com.example.rss.presentation.channelEdit;
 
 import android.content.Context;
 
+import com.example.rss.domain.Channel;
 import com.example.rss.presentation.Presenter;
 
 public interface ChannelEditContract {
@@ -9,7 +10,10 @@ public interface ChannelEditContract {
 		void displayError (String throwable);
 		void displaySuccess(String message);
 		Context context();
-		void isEnable(Boolean bDisable);
+		void setSaveButtonEnable(Boolean bDisable);
+        Long getCurChannelId();
+        void drawNewChannelWindow();
+        void drawEditChannelWindow(Channel channel);
 	}
 
 	interface P<T> extends Presenter {

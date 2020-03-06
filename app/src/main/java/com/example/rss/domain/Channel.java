@@ -109,4 +109,22 @@ public class Channel {
 	public void setNextSyncDate(Long nextSyncDate) {
 		this.nextSyncDate = nextSyncDate;
 	}
+
+	@Override
+	public String toString() {
+		return "Channel{" +
+				"channelId=" + channelId +
+				", title='" + title + '\'' +
+				", description='" + description + '\'' +
+				", categoryId=" + categoryId +
+				", fileId=" + fileId +
+				", link='" + link + '\'' +
+				", sourceLink='" + sourceLink + '\'' +
+				", lastBuild=" + lastBuild +
+				", cacheImage=" + cacheImage +
+				", downloadFullText=" + downloadFullText +
+				", onlyWifi=" + onlyWifi +
+				", nextSyncDate=" + nextSyncDate +
+				'}';
+	}
 }

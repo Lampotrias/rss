@@ -11,6 +11,7 @@ import com.example.rss.domain.exception.DefaultErrorBundle;
 import com.example.rss.domain.exception.IErrorBundle;
 import com.example.rss.domain.interactor.CategoryInteractor;
 import com.example.rss.domain.interactor.ChannelInteractor;
+import com.example.rss.presentation.channelEdit.ChannelEditFragment;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.Map;
 import androidx.navigation.NavController;
 
 import com.example.rss.R;
+import com.example.rss.presentation.itemList.ItemListFragment;
 
 import javax.inject.Inject;
 
@@ -150,7 +152,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     public void selectTreeItemChannel(int groupPos, int childPos) {
         String index = channelTreeData.get(groupPos).get(childPos).get("attrChildId");
         Bundle bundle = new Bundle();
-        bundle.putLong("channelId", Long.parseLong(index));
+        bundle.putLong(ItemListFragment.CHANNEL_ID, Long.parseLong(index));
         navController.navigate(R.id.nav_item_list_fragment, bundle);
         mView.closeDrawer();
     }
@@ -162,12 +164,14 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
 
     @Override
     public void contextChannelEdit(Long id) {
-        Log.e("MyApp", "edit " + id);
+        Bundle bundle = new Bundle();
+        bundle.putLong(ChannelEditFragment.CHANNEL_ID_PARAM, id);
+        navController.navigate(R.id.nav_channel_edit_fragment, bundle);
+        mView.closeDrawer();
     }
 
     @Override
     public void contextChannelDelete(Long id) {
-        Log.e("MyApp", "delete " + id);
     }
 
     @Override
