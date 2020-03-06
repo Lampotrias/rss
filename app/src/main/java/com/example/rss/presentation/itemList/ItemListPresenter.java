@@ -28,6 +28,7 @@ import com.example.rss.presentation.itemList.adapter.RecyclerListAdapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -191,6 +192,16 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
     public void refreshList() {
         cDisposable.add(
                 channelInteractor.switchChannelSource(channelId)
+                        .doOnNext(channels ->{
+                            if (channels.size() == 0){
+                                cDisposable.add(itemInteractor.deleteAllItems()
+                                        .flatMap(i -> itemInteractor.deleteAllFavorites())
+                                        .subscribe(integer -> {},
+                                                throwable -> {showErrorMessage(new DefaultErrorBundle((Exception) throwable));}));
+                                recyclerAdapter.submitList(null);
+                            }
+                        })
+                        .filter(channels -> channels.size() > 0)
                         .concatMapIterable(channels -> channels)
                         .flatMapMaybe(channel -> channelInteractor.getRssFeedContent(channel.getSourceLink())
                                 .doOnSuccess(inputStream -> Log.e("logo", "11" + channel.getDescription())))
@@ -224,16 +235,21 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
                         .toMaybe()
                         .flatMap(itemInteractor::insertManyItems)
                         .subscribe(
-                                longs -> {
-                                    cDisposable.add(getItemModelsForRecycler(this.channelId)
-                                            .subscribe(itemModels -> {
-                                                        recyclerAdapter.submitList(itemModels);
-                                                        mView.stopRefresh();
-                                                    }
-                                                    , throwable -> {
-                                                        showErrorMessage(new DefaultErrorBundle((Exception) throwable));
-                                                        mView.stopRefresh();
-                                                    }));
+                                insertItems -> {
+                                    if (insertItems.size() > 0) {
+                                        cDisposable.add(getItemModelsForRecycler(this.channelId)
+                                                .subscribe(itemModels -> {
+                                                            recyclerAdapter.submitList(itemModels);
+                                                            mView.stopRefresh();
+                                                        }
+                                                        , throwable -> {
+                                                            showErrorMessage(new DefaultErrorBundle((Exception) throwable));
+                                                            mView.stopRefresh();
+                                                        }));
+                                    }else{
+                                        mView.stopRefresh();
+                                    }
+
                                 },
                                 throwable -> {
                                     Log.e("myApp", "0 + " + throwable.getMessage());
@@ -250,13 +266,13 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
                 favorite.setItemId(itemId);
                 favorite.setFavId(itemId);
                 favorite.setCategoryId(1L);
-                cDisposable.add(itemInteractor.insertFavorite(favorite).subscribe(() -> {
+                cDisposable.add(itemInteractor.insertFavorite(favorite).subscribe(aLong -> {
                 }));
             } else
-                itemInteractor.deleteFavByItemBy(itemId).subscribe(() -> {
+                itemInteractor.deleteFavByItemBy(itemId).subscribe(integer -> {
                 });
         } else if (direction == RecyclerListAdapter.SWIPE_READ) {
-            cDisposable.add(itemInteractor.updateItemReadById(itemId, value).subscribe(() -> {
+            cDisposable.add(itemInteractor.updateItemReadById(itemId, value).subscribe(integer -> {
             }));
         }
     }

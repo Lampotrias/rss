@@ -10,6 +10,7 @@ import com.example.rss.domain.exception.DefaultErrorBundle;
 import com.example.rss.domain.exception.IErrorBundle;
 import com.example.rss.domain.interactor.CategoryInteractor;
 import com.example.rss.domain.interactor.ChannelInteractor;
+import com.example.rss.domain.interactor.ItemInteractor;
 import com.example.rss.presentation.channelEdit.ChannelEditFragment;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
 
@@ -32,6 +33,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     private GlobalContract.V mView;
     private final ChannelInteractor channelInteractor;
     private final CategoryInteractor categoryInteractor;
+    private final ItemInteractor itemInteractor;
     private final CompositeDisposable compositeDisposable;
     private final String CATEGORY_TYPE = "C";
     private final String FAVORITE_TYPE = "F";
@@ -54,9 +56,10 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     NavController navController;
 
     @Inject
-    public GlobalPresenter(ChannelInteractor channelInteractor, CategoryInteractor categoryInteractor) {
+    public GlobalPresenter(ChannelInteractor channelInteractor, CategoryInteractor categoryInteractor, ItemInteractor itemInteractor) {
         this.channelInteractor = channelInteractor;
         this.categoryInteractor = categoryInteractor;
+        this.itemInteractor = itemInteractor;
         compositeDisposable = new CompositeDisposable();
     }
 
@@ -171,8 +174,11 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
 
     @Override
     public void contextChannelDelete(Long id) {
-        compositeDisposable.add(channelInteractor.deleteChannelById(id).subscribe(
-                () -> {
+        compositeDisposable.add(channelInteractor.deleteChannelById(id)
+                .flatMap(integer -> itemInteractor.deleteItemsByChannelId(id))
+                //TODO удаление favorites
+                .subscribe(
+                integer -> {
                     reCalcMenu();
                     navController.navigate(R.id.nav_item_list_fragment);
                     mView.closeDrawer();

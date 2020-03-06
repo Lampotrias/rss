@@ -65,8 +65,8 @@ public class ChannelInteractor extends BaseInteractor {
         return repository.getRssFeedContent(path).compose(getIOToMainTransformerMaybe());
     }
 
-    public Completable deleteChannelById(Long id){
-        return repository.deleteChannelById(id).compose(getIOToMainTransformerCompletable());
+    public Maybe<Integer> deleteChannelById(Long id){
+        return repository.deleteChannelById(id).compose(getIOToMainTransformerMaybe());
     }
 
     public Observable<List<Channel>> switchChannelSource(Long channelId) {
@@ -79,6 +79,7 @@ public class ChannelInteractor extends BaseInteractor {
                     .toObservable();
         } else {
             return repository.getAllChannels()
+                    .doOnComplete(() -> Log.e("logo", "complete"))
                     .compose(getIOToMainTransformerMaybe())
                     .doOnSuccess(channel -> Log.e("logo", "getAllChannels" + channel.size()))
                     .toObservable();

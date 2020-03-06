@@ -8,15 +8,16 @@ import androidx.room.Query;
 import com.example.rss.data.database.dto.FavoritesDTO;
 
 import io.reactivex.Completable;
+import io.reactivex.Maybe;
 
 @Dao
 public interface FavoriteDAO {
     @Query("DELETE FROM favorite WHERE item_id =:id")
-    Completable deleteByItemBy(Long id);
+    Maybe<Integer> deleteByItemBy(Long id);
 
     @Query("DELETE FROM favorite")
-    Completable deleteAll();
+    Maybe<Integer> deleteAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Completable insert(FavoritesDTO favoritesDTO);
+    Maybe<Long> insert(FavoritesDTO favoritesDTO);
 }

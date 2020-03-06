@@ -35,20 +35,20 @@ public class ItemInteractor extends BaseInteractor {
         return repository.getItemsByChannelId(id).compose(getIOToMainTransformerMaybe());
     }
 
-    public Completable deleteFavByItemBy(Long itemId){
-        return repository.deleteFavByItemBy(itemId).compose(getIOToMainTransformerCompletable());
+    public Maybe<Integer> deleteFavByItemBy(Long itemId){
+        return repository.deleteFavByItemBy(itemId).compose(getIOToMainTransformerMaybe());
 
     }
-    public Completable insertFavorite(Favorite favorite){
-        return repository.insertFavorite(favorite).compose(getIOToMainTransformerCompletable());
+    public Maybe<Long> insertFavorite(Favorite favorite){
+        return repository.insertFavorite(favorite).compose(getIOToMainTransformerMaybe());
     }
 
     public Maybe<List<Item>> getAllItems () {
         return repository.getAllItems().compose(getIOToMainTransformerMaybe());
     }
 
-    public Completable updateItemReadById(Long id, Boolean isRead){
-        return repository.updateReadById(id, isRead).compose(getIOToMainTransformerCompletable());
+    public Maybe<Integer> updateItemReadById(Long id, Boolean isRead){
+        return repository.updateReadById(id, isRead).compose(getIOToMainTransformerMaybe());
     }
 
     public Maybe<Item> getItemByUniqueId (String uid){
@@ -57,6 +57,18 @@ public class ItemInteractor extends BaseInteractor {
 
     public Maybe<List<Long>> insertManyItems(List<Item> items){
         return repository.insertManyItems(items).compose(getIOToMainTransformerMaybe());
+    }
+
+    public Maybe<Integer> deleteAllItems(){
+        return repository.deleteAllItems().compose(getIOToMainTransformerMaybe());
+    }
+
+    public Maybe<Integer> deleteItemsByChannelId(Long id){
+        return repository.deleteItemsByChannelId(id).compose(getIOToMainTransformerMaybe());
+    }
+
+    public Maybe<Integer> deleteAllFavorites(){
+        return repository.deleteAllFavorites().compose(getIOToMainTransformerMaybe());
     }
 
     public Observable<List<XmlItemRawObject>> parseItemsByStream(InputStream stream){

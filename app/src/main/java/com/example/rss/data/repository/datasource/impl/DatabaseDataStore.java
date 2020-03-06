@@ -55,12 +55,17 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Completable deleteAllItems() {
+	public Maybe<Integer> deleteAllItems() {
 		return appDatabase.itemDAO().deleteAllItems();
 	}
 
 	@Override
-	public Completable updateReadById(Long id, Boolean isRead) {
+	public Maybe<Integer> deleteItemsByChannelId(Long id) {
+		return appDatabase.itemDAO().deleteItemsByChannelId(id);
+	}
+
+	@Override
+	public Maybe<Integer> updateReadById(Long id, Boolean isRead) {
 		return appDatabase.itemDAO().updateReadById(id, isRead);
 	}
 
@@ -80,12 +85,12 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Completable deleteAllChannels() {
+	public Maybe<Integer> deleteAllChannels() {
 		return appDatabase.channelDAO().deleteAllChannels();
 	}
 
 	@Override
-	public Completable deleteChannelById(Long id) {
+	public Maybe<Integer> deleteChannelById(Long id) {
 		return appDatabase.channelDAO().deleteById(id);
 	}
 
@@ -120,17 +125,17 @@ public class DatabaseDataStore implements IDataStore {
 	}
 
 	@Override
-	public Completable deleteFavByItemBy(Long id) {
+	public Maybe<Integer> deleteFavByItemBy(Long id) {
 		return appDatabase.favoriteDAO().deleteByItemBy(id);
 	}
 
 	@Override
-	public Completable insertFavorite(FavoriteEntity favoriteEntity) {
+	public Maybe<Long> insertFavorite(FavoriteEntity favoriteEntity) {
 		return appDatabase.favoriteDAO().insert(ChannelDatabaseMapper.transform(favoriteEntity));
 	}
 
 	@Override
-	public Completable deleteAllFavorites() {
+	public Maybe<Integer> deleteAllFavorites() {
 		return appDatabase.favoriteDAO().deleteAll();
 	}
 

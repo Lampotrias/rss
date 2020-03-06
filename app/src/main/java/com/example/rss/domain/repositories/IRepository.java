@@ -23,8 +23,8 @@ public interface IRepository {
 	Maybe<List<Channel>> getAllChannels();
 	Single<Channel> getChannelByUrl(String url);
 	Single<Integer> updateChannel(Channel channel);
-	Completable deleteAllChannels();
-	Completable deleteChannelById(Long id);
+	Maybe<Integer> deleteAllChannels();
+	Maybe<Integer> deleteChannelById(Long id);
 	Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp);
 
 	//Items
@@ -32,8 +32,9 @@ public interface IRepository {
 	Maybe<List<Item>> getAllItems();
 	Maybe<List<Long>> insertManyItems(List<Item> items);
 	Maybe<Item> getItemByUniqueId(String hash);
-	Completable deleteAllItems();
-	Completable updateReadById(Long id, Boolean isRead);
+	Maybe<Integer> deleteAllItems();
+	Maybe<Integer> deleteItemsByChannelId(Long id);
+	Maybe<Integer> updateReadById(Long id, Boolean isRead);
 
 	//Category
 	Maybe<List<Category>> getCategoriesByType(String mType);
@@ -45,7 +46,7 @@ public interface IRepository {
 	Maybe<File> getFileById(Long id);
 
     //Favorite
-	Completable deleteFavByItemBy(Long id);
-	Completable insertFavorite(Favorite favorite);
-	Completable deleteAllFavorites();
+	Maybe<Integer> deleteFavByItemBy(Long id);
+	Maybe<Long> insertFavorite(Favorite favorite);
+	Maybe<Integer> deleteAllFavorites();
 }

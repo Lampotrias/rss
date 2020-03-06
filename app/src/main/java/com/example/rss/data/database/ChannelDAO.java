@@ -5,12 +5,8 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
-
 import com.example.rss.data.database.dto.ChannelDTO;
-
 import java.util.List;
-
-import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
@@ -36,8 +32,8 @@ public interface ChannelDAO {
 	Single<Integer> updateChannel(ChannelDTO channelDTO);
 
 	@Query("DELETE FROM channel")
-	Completable deleteAllChannels();
+	Maybe<Integer> deleteAllChannels();
 
 	@Query("DELETE FROM channel WHERE id = :id")
-	Completable deleteById(Long id);
+	Maybe<Integer> deleteById(Long id);
 }

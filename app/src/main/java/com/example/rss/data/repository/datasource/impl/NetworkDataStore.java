@@ -65,12 +65,17 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Completable deleteAllItems() {
+    public Maybe<Integer> deleteAllItems() {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
     @Override
-    public Completable updateReadById(Long id, Boolean isRead) {
+    public Maybe<Integer> deleteItemsByChannelId(Long id) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Maybe<Integer> updateReadById(Long id, Boolean isRead) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
@@ -90,12 +95,12 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Completable deleteAllChannels() {
+    public Maybe<Integer> deleteAllChannels() {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
     @Override
-    public Completable deleteChannelById(Long id) {
+    public Maybe<Integer> deleteChannelById(Long id) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
@@ -130,17 +135,17 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Completable deleteFavByItemBy(Long id) {
+    public Maybe<Integer> deleteFavByItemBy(Long id) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
     @Override
-    public Completable insertFavorite(FavoriteEntity favoriteEntity) {
+    public Maybe<Long> insertFavorite(FavoriteEntity favoriteEntity) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
     @Override
-    public Completable deleteAllFavorites() {
+    public Maybe<Integer> deleteAllFavorites() {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 }

@@ -18,8 +18,8 @@ public interface CategoryDAO {
     @Query("SELECT * FROM category WHERE type = :type OR type = ''")
     Maybe<List<CategoryDTO>> getCategoriesByType(String type);
 
-    @Insert @Transaction
-    Completable insert(CategoryDTO categoryDTO);
+    @Insert
+    Maybe<Long> insert(CategoryDTO categoryDTO);
 
     @Query("SELECT * FROM category WHERE id = :id")
     Maybe<CategoryDTO> getCategoryById(Long id);

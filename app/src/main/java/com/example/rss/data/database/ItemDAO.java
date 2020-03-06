@@ -23,8 +23,11 @@ public interface ItemDAO {
     Maybe<ItemDTO> getItemByUniqueId(String hash);
 
     @Query("DELETE FROM item")
-    Completable deleteAllItems();
+    Maybe<Integer> deleteAllItems();
+
+    @Query("DELETE FROM item WHERE channel_id = :id")
+    Maybe<Integer> deleteItemsByChannelId(Long id);
 
     @Query("UPDATE item set is_read = :isRead WHERE id = :id")
-    Completable updateReadById(Long id, Boolean isRead);
+    Maybe<Integer> updateReadById(Long id, Boolean isRead);
 }
