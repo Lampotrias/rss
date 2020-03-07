@@ -46,6 +46,20 @@ public class ChannelDataStoreFactory {
         return new NetworkDataStore();
     }
 
+    public IDataStore createForFavorite(Long id) {
+        IDataStore dataStore;
+
+        if (id != null){
+            //check cache
+            dataStore = createDatabaseDataStore();
+        }else
+        {
+            dataStore = createDatabaseDataStore();
+        }
+
+        return dataStore;
+    }
+
     public IDataStore createForChannel(Long id) {
         Cache cacheObj;
         try {

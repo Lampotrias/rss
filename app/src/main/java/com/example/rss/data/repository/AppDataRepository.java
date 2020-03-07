@@ -17,7 +17,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
@@ -144,7 +143,7 @@ public class AppDataRepository implements IRepository {
 
 	@Override
 	public Maybe<Long> addFile(File file) {
-		final IDataStore dataStore = channelDataStoreFactory.createPut();
+		final IDataStore dataStore = channelDataStoreFactory.createForFile(null);
 		return dataStore.addFile(repositoryEntityDataMapper.transform(file));
 	}
 
