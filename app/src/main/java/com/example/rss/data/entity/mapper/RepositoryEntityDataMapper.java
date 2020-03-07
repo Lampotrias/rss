@@ -50,7 +50,7 @@ public class RepositoryEntityDataMapper {
 
         if (channelEntity != null){
             channel = new Channel();
-            channel.setChannelId(channelEntity.getChannelId());
+            channel.setChannelId(channelEntity.getId());
             channel.setTitle(channelEntity.getTitle());
             channel.setFileId(channelEntity.getFileId());
             channel.setLink(channelEntity.getLink());
@@ -119,7 +119,7 @@ public class RepositoryEntityDataMapper {
         Category category = null;
         if (categoryEntity != null) {
             category = new Category();
-            category.setCategoryId(categoryEntity.getCategoryId());
+            category.setCategoryId(categoryEntity.getId());
             category.setName(categoryEntity.getName());
             category.setType(categoryEntity.getType());
         }

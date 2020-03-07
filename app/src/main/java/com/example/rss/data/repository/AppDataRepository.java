@@ -1,5 +1,6 @@
 package com.example.rss.data.repository;
 
+
 import com.example.rss.data.entity.mapper.RepositoryEntityDataMapper;
 import com.example.rss.data.repository.datasource.ChannelDataStoreFactory;
 import com.example.rss.data.repository.datasource.IDataStore;
@@ -41,7 +42,7 @@ public class AppDataRepository implements IRepository {
 
 	@Override
 	public Maybe<Long> addChannel(Channel channel) {
-		final IDataStore dataStore = channelDataStoreFactory.createPut();
+		final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
 		return dataStore.addChannel(repositoryEntityDataMapper.transform(channel));
 	}
 

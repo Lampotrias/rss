@@ -36,6 +36,12 @@ public class WorkManagerInteractor {
         this.channelRepository = channelRepository;
     }
 
+    public Maybe<Channel> getChannel(Long id){
+        return channelRepository.getChannelById(id)
+                .subscribeOn(Schedulers.from(threadExecutor))
+                .observeOn(postExecutionThread.getScheduler());
+    }
+
     public Observable<Channel> getChannelForSync(int intervalSec) {
         Long currentTs = new Date().getTime() / 1000;
 

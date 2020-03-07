@@ -1,36 +1,31 @@
 package com.example.rss.data.entity;
 
-public class CategoryEntity {
-	//@SerializedName("id")
-	private Long categoryId;
+public class CategoryEntity implements Entity {
+    private Long categoryId;
+    private String name;
+    private String type;
 
-	//@SerializedName("name")
-	private String name;
+    public Long getId() {
+        return categoryId;
+    }
 
-	//@SerializedName("type")
-	private String type;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
 
-	public Long getCategoryId() {
-		return categoryId;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setCategoryId(Long categoryId) {
-		this.categoryId = categoryId;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 }
