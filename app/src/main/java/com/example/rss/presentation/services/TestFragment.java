@@ -54,7 +54,7 @@ public class TestFragment extends BaseFragment {
                                                             Log.e("myApp", "item exists = " + item.getTitle());
                                                         },
                                                         throwable -> {
-                                                            if (throwable instanceof EmptyResultSetException){
+                                                            if (throwable instanceof EmptyResultSetException) {
                                                                 Log.e("myApp", "item not exists = " + xmlItemRawObject.getTitle());
                                                                 //item not exists
                                                                 disposable.add(interactor.processItemXml(xmlItemRawObject, channel.getChannelId()).subscribe(
@@ -66,7 +66,8 @@ public class TestFragment extends BaseFragment {
                                                         })
                                                 );
                                             },
-                                            throwable -> {},
+                                            throwable -> {
+                                            },
                                             () -> {
                                                 //TODO make full update channel
                                                 Long currentTs = new Date().getTime() / 1000;
@@ -84,14 +85,5 @@ public class TestFragment extends BaseFragment {
                         })
         );
         return rootView;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        disposable.add(interactor.getChannel(1L).subscribe(channel -> {
-            Log.e("logo", channel.getTitle());
-        }));
     }
 }

@@ -117,7 +117,7 @@ public class RepositoryEntityDataMapper {
         Category category = null;
         if (categoryEntity != null) {
             category = new Category();
-            category.setCategoryId(categoryEntity.getCategoryId());
+            category.setCategoryId(categoryEntity.getId());
             category.setName(categoryEntity.getName());
             category.setType(categoryEntity.getType());
         }

@@ -16,7 +16,8 @@ import javax.inject.Singleton;
 public class FileManager {
 
     @Inject
-    FileManager() {}
+    FileManager() {
+    }
 
     void writeToFile(File file, String fileContent) {
         if (!file.exists()) {
@@ -69,12 +70,16 @@ public class FileManager {
         return sharedPreferences.getLong(key, 0);
     }
 
-    boolean clearDirectory(File directory) {
+    boolean clear(File directory) {
         boolean result = false;
-        if (directory.exists()) {
-            for (File file : directory.listFiles()) {
-                result = file.delete();
+        if (directory.isDirectory()) {
+            if (directory.exists()) {
+                for (File file : directory.listFiles()) {
+                    result = file.delete();
+                }
             }
+        } else if (directory.isFile()) {
+            result = directory.delete();
         }
         return result;
     }

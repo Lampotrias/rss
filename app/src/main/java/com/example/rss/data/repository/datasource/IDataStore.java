@@ -4,17 +4,12 @@ import com.example.rss.data.entity.CategoryEntity;
 import com.example.rss.data.entity.ChannelEntity;
 import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.ItemEntity;
-import com.example.rss.domain.Category;
-import com.example.rss.domain.File;
-import com.example.rss.domain.Item;
 
 import java.io.InputStream;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Maybe;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public interface IDataStore {

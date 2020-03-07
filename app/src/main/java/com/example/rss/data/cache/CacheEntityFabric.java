@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.example.rss.domain.executor.IThreadExecutor;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -23,8 +25,12 @@ public class CacheEntityFabric {
         this.threadExecutor = threadExecutor;
     }
 
-    public Cache getChannelCache(){
-        return new CacheAppChannel(context, serializer, fileManager, threadExecutor);
+    public Cache getChannelCache() throws IOException {
+        return new ChannelCache(context, serializer, fileManager, threadExecutor);
+    }
+
+    public Cache getCategoryCache() throws IOException {
+        return new CategoryCache(context, serializer, fileManager, threadExecutor);
     }
 
 }

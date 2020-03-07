@@ -70,7 +70,7 @@ public class ChannelDatabaseMapper {
 		CategoryDTO categoryDTO = null;
 		if (categoryEntity != null) {
 			categoryDTO = new CategoryDTO();
-			categoryDTO.setCategoryId(categoryEntity.getCategoryId());
+			categoryDTO.setCategoryId(categoryEntity.getId());
 			categoryDTO.setName(categoryEntity.getName());
 			categoryDTO.setType(categoryEntity.getType());
 		}

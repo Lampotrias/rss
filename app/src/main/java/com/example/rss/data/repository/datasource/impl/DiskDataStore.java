@@ -23,8 +23,7 @@ public class DiskDataStore implements IDataStore {
 
     @Override
     public Maybe<Long> addChannel(ChannelEntity channel) {
-        //return this.cache.putChannel(channel);
-        return null;
+        throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
     @Override
@@ -34,7 +33,7 @@ public class DiskDataStore implements IDataStore {
 
     @Override
     public Maybe<ChannelEntity> getChannelById(Long id) {
-        return cache.get(id);
+        return cache.get(id.toString());
     }
 
     @Override
@@ -99,7 +98,7 @@ public class DiskDataStore implements IDataStore {
 
     @Override
     public Maybe<CategoryEntity> getCategoryById(Long id) {
-        throw new UnsupportedOperationException("Operation is not available!!!");
+        return cache.get(id.toString());
     }
 
     @Override

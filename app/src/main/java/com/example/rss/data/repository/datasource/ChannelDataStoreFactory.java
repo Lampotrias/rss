@@ -13,85 +13,92 @@ import com.example.rss.data.repository.datasource.impl.NetworkDataStore;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
 public class ChannelDataStoreFactory {
-	private final Context context;
-	private final CacheEntityFabric cacheEntityFabric;
+    private final Context context;
+    private final CacheEntityFabric cacheEntityFabric;
 
 
-	@Inject
-	public ChannelDataStoreFactory(@NonNull Context context, @NonNull CacheEntityFabric cacheEntityFabric) {
-		this.context = context;
-		this.cacheEntityFabric = cacheEntityFabric;
-	}
+    @Inject
+    public ChannelDataStoreFactory(@NonNull Context context, @NonNull CacheEntityFabric cacheEntityFabric) {
+        this.context = context;
+        this.cacheEntityFabric = cacheEntityFabric;
+    }
 
-	@NotNull
-	private IDataStore createDatabaseDataStore() {
-		AppDatabase appDatabase = AppDatabase.getInstance(context);
-		return createDatabaseDataStore(null);
-	}
+    @NotNull
+    private IDataStore createDatabaseDataStore() {
+        AppDatabase appDatabase = AppDatabase.getInstance(context);
+        return createDatabaseDataStore(null);
+    }
 
-	@NotNull
-	private IDataStore createDatabaseDataStore(Cache cache) {
-		AppDatabase appDatabase = AppDatabase.getInstance(context);
-		return new DatabaseDataStore(appDatabase, cache);
-	}
+    @NotNull
+    private IDataStore createDatabaseDataStore(Cache cache) {
+        AppDatabase appDatabase = AppDatabase.getInstance(context);
+        return new DatabaseDataStore(appDatabase, cache);
+    }
 
-	public IDataStore createNetwork(){
-		return new NetworkDataStore();
-	}
+    public IDataStore createNetwork() {
+        return new NetworkDataStore();
+    }
 
-	public IDataStore createForChannel(Long id) {
-		Cache cacheObj = cacheEntityFabric.getChannelCache();
-		if (id != null) {
-			if (!cacheObj.isExpired() && cacheObj.isCached(id))
-				return new DiskDataStore(cacheObj);
-		}
-		return createDatabaseDataStore(cacheObj);
-	}
+    public IDataStore createForChannel(Long id) {
+        Cache cacheObj;
+        try {
+            cacheObj = cacheEntityFabric.getChannelCache();
+        } catch (IOException e) {
+            return createDatabaseDataStore();
+        }
 
-	public IDataStore createForCategory(Long id) {
-		IDataStore dataStore;
+        if (id != null) {
+            if (!cacheObj.isExpired() && cacheObj.isCached(id.toString()))
+                return new DiskDataStore(cacheObj);
+        }
+        return createDatabaseDataStore(cacheObj);
+    }
 
-		if (id != null){
-			//check cache
-			dataStore = createDatabaseDataStore();
-		}else
-		{
-			dataStore = createDatabaseDataStore();
-		}
+    public IDataStore createForCategory(Long id) {
+        Cache cacheObj;
+        try {
+            cacheObj = cacheEntityFabric.getCategoryCache();
+        } catch (IOException e) {
+            return createDatabaseDataStore();
+        }
 
-		return dataStore;
-	}
+        if (id != null) {
+            if (!cacheObj.isExpired() && cacheObj.isCached(id.toString()))
+                return new DiskDataStore(cacheObj);
+        }
+        return createDatabaseDataStore(cacheObj);
+    }
 
-	public IDataStore createForItems(Long id) {
-		IDataStore dataStore;
+    public IDataStore createForItems(Long id) {
+        IDataStore dataStore;
 
-		if (id != null){
-			//check cache
-			dataStore = createDatabaseDataStore();
-		}else
-		{
-			dataStore = createDatabaseDataStore();
-		}
+        if (id != null) {
+            //check cache
+            dataStore = createDatabaseDataStore();
+        } else {
+            dataStore = createDatabaseDataStore();
+        }
 
-		return dataStore;
-	}
+        return dataStore;
+    }
 
-	public IDataStore createForFile(Long id) {
-		IDataStore dataStore;
+    public IDataStore createForFile(Long id) {
+        IDataStore dataStore;
 
-		if (id != null){
-			//check cache
-			dataStore = createDatabaseDataStore();
-		}else
-		{
-			dataStore = createDatabaseDataStore();
-		}
+        if (id != null) {
+            //check cache
+            dataStore = createDatabaseDataStore();
+        } else {
+            dataStore = createDatabaseDataStore();
+        }
 
-		return dataStore;
-	}
+        return dataStore;
+    }
 }

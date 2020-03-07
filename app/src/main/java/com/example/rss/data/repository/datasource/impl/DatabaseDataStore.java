@@ -10,12 +10,10 @@ import com.example.rss.data.entity.FileEntity;
 import com.example.rss.data.entity.ItemEntity;
 import com.example.rss.data.repository.datasource.IDataStore;
 
-
 import java.io.InputStream;
 import java.util.List;
 
 import io.reactivex.Completable;
-
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
@@ -76,7 +74,7 @@ public class DatabaseDataStore implements IDataStore {
 
 	@Override
 	public Single<Integer> updateChannel(ChannelEntity channelEntity) {
-		return appDatabase.channelDAO().updateChannel(ChannelDatabaseMapper.transform(channelEntity));
+		return appDatabase.channelDAO().updateChannel(ChannelDatabaseMapper.transform(channelEntity)).doOnSuccess(integer -> cache.evictByEntityId(channelEntity.getId().toString()));
 	}
 
 	@Override
@@ -101,7 +99,7 @@ public class DatabaseDataStore implements IDataStore {
 
 	@Override
 	public Maybe<CategoryEntity> getCategoryById(Long id) {
-		return appDatabase.categoryDAO().getCategoryById(id).map(ChannelDatabaseMapper::transform);
+		return appDatabase.categoryDAO().getCategoryById(id).map(ChannelDatabaseMapper::transform).doOnSuccess(cache::put);
 	}
 
 	@Override
@@ -111,7 +109,7 @@ public class DatabaseDataStore implements IDataStore {
 
 	@Override
 	public Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp) {
-		return appDatabase.channelDAO().updateNextExec(channelId, nextTimestamp);
+		return appDatabase.channelDAO().updateNextExec(channelId, nextTimestamp).doOnSuccess(integer -> cache.evictByEntityId(channelId.toString()));
 	}
 
 	@Override
