@@ -20,6 +20,7 @@ import com.example.rss.domain.exception.IErrorBundle;
 import com.example.rss.domain.interactor.ChannelInteractor;
 import com.example.rss.domain.interactor.FileInteractor;
 import com.example.rss.domain.interactor.ItemInteractor;
+import com.example.rss.domain.xml.XmlItemRawObject;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
 import com.example.rss.presentation.global.GlobalActions;
 import com.example.rss.presentation.itemList.adapter.ItemModel;
@@ -35,9 +36,11 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import io.reactivex.Maybe;
+import io.reactivex.MaybeSource;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Function;
 
 
 public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>, RecyclerListAdapter.SwipeCallback {
@@ -66,6 +69,8 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 
     @Override
     public void resume() {
+
+        Log.e("myApp", String.valueOf(mView.getRecycler().getVisibility()));
         globalActions.setTitle(mView.context().getString(R.string.all_items));
     }
 
@@ -122,6 +127,10 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
     }
 
     private void InitializeRecycler(List<ItemModel> itemModels) {
+        Log.e("myApp", "--- " + itemModels.size() + "==== " + View.GONE + " ==== " + View.VISIBLE);
+        if(itemModels.size() == 0)
+            mView.setEmptyView(true);
+
         RequestManager requestManager = Glide.with(mView.context());
 
         recyclerAdapter = new RecyclerListAdapter(requestManager, mView.getResourceIdRowView(), mView.context());
@@ -129,7 +138,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
-                mView.getRecycler().smoothScrollToPosition(0);
+                mView.getRecycler().scrollToPosition(0);
             }
         });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mView.context());
@@ -199,38 +208,26 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
                                         .subscribe(integer -> {},
                                                 throwable -> {showErrorMessage(new DefaultErrorBundle((Exception) throwable));}));
                                 recyclerAdapter.submitList(null);
+                                mView.setEmptyView(true);
                             }
                         })
                         .filter(channels -> channels.size() > 0)
                         .concatMapIterable(channels -> channels)
-                        .flatMapMaybe(channel -> channelInteractor.getRssFeedContent(channel.getSourceLink())
-                                .doOnSuccess(inputStream -> Log.e("logo", "11" + channel.getDescription())))
-                        .doOnNext(inputStream -> Log.e("logo", "22" + inputStream.hashCode()))
-                        .flatMap(itemInteractor::parseItemsByStream)
-                        .doOnNext(xmlItemRawObjects -> Log.e("logo", "33" + xmlItemRawObjects.get(0).getTitle()))
-                        .concatMapIterable(xmlItemRawObjects -> xmlItemRawObjects)
-                        .doOnNext(xmlItemRawObject -> {
-                            if (xmlItemRawObject.getDescription() == null)
-                                Log.e("myApp", "!!!!!!! " + xmlItemRawObject.getTitle() + "   " + channelId);
-                        })
-                        .filter(xmlItemRawObject -> xmlItemRawObject.getDescription() != null)
-                        .doOnNext(xmlItemRawObject -> {
-                            Log.e("myApp", "+ " + xmlItemRawObject.getTitle());
-                        })
-                        .concatMap(xmlItemRawObject -> itemInteractor.getItemByUniqueId(xmlItemRawObject.getGuid())
-                                .map(item -> {
-                                    xmlItemRawObject.setGuid("");
-                                    Log.e("myApp", "exists " + xmlItemRawObject.getTitle());
-                                    return xmlItemRawObject;
-                                })
-                                .toObservable().defaultIfEmpty(xmlItemRawObject))
-                        .doOnNext(xmlItemRawObject -> Log.e("myApp", "- " + xmlItemRawObject.getTitle()))
-                        .filter(xmlItemRawObject -> !xmlItemRawObject.getGuid().isEmpty())
-
-                        .flatMap(xmlItemRawObject -> fileInteractor.parseFileAndSave(xmlItemRawObject)
-                                .map(fileId -> itemInteractor.prepareItem(xmlItemRawObject, fileId, channelId))
-                                .toObservable())
-                        .doOnNext(xmlItemRawObject -> Log.e("myApp", "//// " + xmlItemRawObject.getTitle()))
+                        .flatMap(channel -> channelInteractor.getRssFeedContent(channel.getSourceLink())
+                                .flatMap(itemInteractor::parseItemsByStream)
+                                .toObservable()
+                                .concatMapIterable(xmlItemRawObjects -> xmlItemRawObjects)
+                                .filter(xmlItemRawObject -> xmlItemRawObject.getDescription() != null)
+                                .concatMap(xmlItemRawObject -> itemInteractor.getItemByUniqueId(xmlItemRawObject.getGuid())
+                                        .map(item -> {
+                                            xmlItemRawObject.setGuid("");
+                                            return xmlItemRawObject;
+                                        })
+                                        .toObservable().defaultIfEmpty(xmlItemRawObject))
+                                .filter(xmlItemRawObject -> !xmlItemRawObject.getGuid().isEmpty())
+                                .flatMapMaybe(xmlItemRawObject ->  fileInteractor.parseFileAndSave(xmlItemRawObject)
+                                        .map(file -> itemInteractor.prepareItem(xmlItemRawObject, file, channel.getChannelId())))
+                        )
                         .toList()
                         .toMaybe()
                         .flatMap(itemInteractor::insertManyItems)
@@ -239,6 +236,11 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
                                     if (insertItems.size() > 0) {
                                         cDisposable.add(getItemModelsForRecycler(this.channelId)
                                                 .subscribe(itemModels -> {
+                                                            if(itemModels.size() == 0){
+                                                                mView.setEmptyView(true);
+                                                            }else{
+                                                                mView.setEmptyView(false);
+                                                            }
                                                             recyclerAdapter.submitList(itemModels);
                                                             mView.stopRefresh();
                                                         }
@@ -249,11 +251,12 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
                                     }else{
                                         mView.stopRefresh();
                                     }
-
                                 },
                                 throwable -> {
                                     Log.e("myApp", "0 + " + throwable.getMessage());
                                     mView.stopRefresh();
+                                }, () -> {
+                                    mView.setEmptyView(false);
                                 })
         );
     }

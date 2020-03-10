@@ -1,7 +1,5 @@
 package com.example.rss.presentation.itemList.adapter;
 
-import com.example.rss.domain.Item;
-
 import java.util.Objects;
 
 public class ItemModel {

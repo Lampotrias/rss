@@ -71,17 +71,17 @@ public class ItemInteractor extends BaseInteractor {
         return repository.deleteAllFavorites().compose(getIOToMainTransformerMaybe());
     }
 
-    public Observable<List<XmlItemRawObject>> parseItemsByStream(InputStream stream){
-        Observable<List<XmlItemRawObject>> obj = Observable.create(emitter -> {
+    public Maybe<List<XmlItemRawObject>> parseItemsByStream(InputStream stream){
+        Maybe<List<XmlItemRawObject>> obj = Maybe.create(emitter -> {
             try {
                 XmlParser xmlParser = new XmlParser(stream);
-                emitter.onNext(xmlParser.parseItems());
-                emitter.onComplete();
+                emitter.onSuccess(xmlParser.parseItems());
+                //emitter.onComplete();
             }catch (IOException e) {
                 emitter.onError(e);
             }
         });
-        return obj.compose(getIOToMainTransformerObservable());
+        return obj.compose(getIOToMainTransformerMaybe());
     }
 
     public Item prepareItem(XmlItemRawObject xmlItemRawObject, Long fileId, Long channelId) {

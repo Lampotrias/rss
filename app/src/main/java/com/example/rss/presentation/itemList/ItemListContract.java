@@ -12,6 +12,7 @@ public interface ItemListContract {
 		RecyclerView getRecycler();
 		int getResourceIdRowView();
 		Long getCurChannelId();
+		void setEmptyView(Boolean isShow);
 	}
 
 	interface P<T> extends Presenter {

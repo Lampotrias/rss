@@ -1,6 +1,7 @@
 package com.example.rss.presentation.global;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.example.rss.data.exception.DatabaseConnectionException;
@@ -26,6 +27,7 @@ import com.example.rss.presentation.itemList.ItemListFragment;
 
 import javax.inject.Inject;
 
+import io.reactivex.Maybe;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
@@ -174,9 +176,11 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
 
     @Override
     public void contextChannelDelete(Long id) {
-        compositeDisposable.add(channelInteractor.deleteChannelById(id)
-                .flatMap(integer -> itemInteractor.deleteItemsByChannelId(id))
+        compositeDisposable.add(
+                Maybe.merge(channelInteractor.deleteChannelById(id), itemInteractor.deleteItemsByChannelId(id), itemInteractor.getAllItems(), itemInteractor.deleteAllItems())
+
                 //TODO удаление favorites
+                //TODO удаление files
                 .subscribe(
                 integer -> {
                     reCalcMenu();

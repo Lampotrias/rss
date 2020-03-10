@@ -2,9 +2,12 @@ package com.example.rss.presentation.itemList;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +42,9 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
 
 	@BindView(R.id.item_list_recycler)
 	RecyclerView itemListRecycler;
+
+	@BindView(R.id.empty_view)
+	TextView empty_view;
 
 	@BindView(R.id.scrollView)
 	ScrollView scrollView;
@@ -117,5 +123,17 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
 	@Override
 	public Long getCurChannelId() {
 		return curChannelId;
+	}
+
+	@Override
+	public void setEmptyView(Boolean isShow) {
+		Log.e("myApp", "+++ " + isShow + "==== " + itemListRecycler.getWidth() + " **** " + itemListRecycler.getBottom());
+		if (isShow){
+			empty_view.setVisibility(View.VISIBLE);
+			itemListRecycler.setVisibility(View.GONE);
+		}else{
+			empty_view.setVisibility(View.GONE);
+			itemListRecycler.setVisibility(View.VISIBLE);
+		}
 	}
 }
