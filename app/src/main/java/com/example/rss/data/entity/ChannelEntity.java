@@ -1,141 +1,117 @@
 package com.example.rss.data.entity;
 
-public class ChannelEntity {
+public class ChannelEntity implements Entity {
 
-	//@SerializedName("id")
-	private Long channelId;
+    private Long channelId;
+    private String title;
+    private String description;
+    private Long categoryId;
+    private Long fileId;
+    private String link;
+    private String sourceLink;
+    private Long lastBuildDate;
+    private Long nextSyncDate;
+    private Boolean cacheImage;
+    private Boolean downloadFullText;
+    private Boolean onlyWifi;
 
-	//@SerializedName("title")
-	private String title;
+    public Boolean getCacheImage() {
+        return cacheImage;
+    }
 
-	//@SerializedName("description")
-	private String description;
+    public void setCacheImage(Boolean cacheImage) {
+        this.cacheImage = cacheImage;
+    }
 
+    public Long getNextSyncDate() {
+        return nextSyncDate;
+    }
 
-	//@SerializedName("description")
-	private Long categoryId;
+    public void setNextSyncDate(Long nextSyncDate) {
+        this.nextSyncDate = nextSyncDate;
+    }
 
-	//@SerializedName("file")
-	private Long fileId;
+    public Boolean getDownloadFullText() {
+        return downloadFullText;
+    }
 
-	//@SerializedName("link")
-	private String link;
+    public void setDownloadFullText(Boolean downloadFullText) {
+        this.downloadFullText = downloadFullText;
+    }
 
+    public String getSourceLink() {
+        return sourceLink;
+    }
 
-	private String sourceLink;
+    public void setSourceLink(String sourceLink) {
+        this.sourceLink = sourceLink;
+    }
 
-	//@SerializedName("last_build")
-	private Long lastBuildDate;
+    public Boolean getOnlyWifi() {
+        return onlyWifi;
+    }
 
-	//@SerializedName("nextSyncDate")
-	private Long nextSyncDate;
+    public void setOnlyWifi(Boolean onlyWifi) {
+        this.onlyWifi = onlyWifi;
+    }
 
-	//@SerializedName("cache_image")
-	private Boolean cacheImage;
+    public ChannelEntity() {
+        //empty
+    }
 
-	//@SerializedName("download_full_text")
-	private Boolean downloadFullText;
+    public Long getCategoryId() {
+        return categoryId;
+    }
 
-	//@SerializedName("onlyWifi")
-	private Boolean onlyWifi;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
 
-	public Boolean getCacheImage() {
-		return cacheImage;
-	}
+    public Long getId() {
+        return channelId;
+    }
 
-	public void setCacheImage(Boolean cacheImage) {
-		this.cacheImage = cacheImage;
-	}
+    public void setChannelId(Long channelId) {
+        this.channelId = channelId;
+    }
 
-	public Long getNextSyncDate() {
-		return nextSyncDate;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setNextSyncDate(Long nextSyncDate) {
-		this.nextSyncDate = nextSyncDate;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public Boolean getDownloadFullText() {
-		return downloadFullText;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDownloadFullText(Boolean downloadFullText) {
-		this.downloadFullText = downloadFullText;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public String getSourceLink() {
-		return sourceLink;
-	}
+    public Long getFileId() {
+        return fileId;
+    }
 
-	public void setSourceLink(String sourceLink) {
-		this.sourceLink = sourceLink;
-	}
+    public void setFileId(Long fileId) {
+        this.fileId = fileId;
+    }
 
-	public Boolean getOnlyWifi() {
-		return onlyWifi;
-	}
+    public String getLink() {
+        return link;
+    }
 
-	public void setOnlyWifi(Boolean onlyWifi) {
-		this.onlyWifi = onlyWifi;
-	}
+    public void setLink(String link) {
+        this.link = link;
+    }
 
-	public ChannelEntity() {
-		//empty
-	}
+    public Long getLastBuildDate() {
+        return lastBuildDate;
+    }
 
-	public Long getCategoryId() {
-		return categoryId;
-	}
-
-	public void setCategoryId(Long categoryId) {
-		this.categoryId = categoryId;
-	}
-
-	public Long getChannelId() {
-		return channelId;
-	}
-
-	public void setChannelId(Long channelId) {
-		this.channelId = channelId;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Long getFileId() {
-		return fileId;
-	}
-
-	public void setFileId(Long fileId) {
-		this.fileId = fileId;
-	}
-
-	public String getLink() {
-		return link;
-	}
-
-	public void setLink(String link) {
-		this.link = link;
-	}
-
-	public Long getLastBuildDate() {
-		return lastBuildDate;
-	}
-
-	public void setLastBuildDate(Long lastBuildDate) {
-		this.lastBuildDate = lastBuildDate;
-	}
+    public void setLastBuildDate(Long lastBuildDate) {
+        this.lastBuildDate = lastBuildDate;
+    }
 }

@@ -21,7 +21,7 @@ public class ChannelDatabaseMapper {
 
 		if (channelEntity != null){
 			channelDTO = new ChannelDTO();
-			channelDTO.setChannelId(channelEntity.getChannelId());
+			channelDTO.setChannelId(channelEntity.getId());
 			channelDTO.setTitle(channelEntity.getTitle());
 			channelDTO.setDescription(channelEntity.getDescription());
 			channelDTO.setCategoryId(channelEntity.getCategoryId());
@@ -72,7 +72,7 @@ public class ChannelDatabaseMapper {
 		CategoryDTO categoryDTO = null;
 		if (categoryEntity != null) {
 			categoryDTO = new CategoryDTO();
-			categoryDTO.setCategoryId(categoryEntity.getCategoryId());
+			categoryDTO.setCategoryId(categoryEntity.getId());
 			categoryDTO.setName(categoryEntity.getName());
 			categoryDTO.setType(categoryEntity.getType());
 		}

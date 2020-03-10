@@ -7,8 +7,6 @@ import androidx.navigation.Navigation;
 
 import com.example.rss.AndroidApplication;
 import com.example.rss.data.repository.AppDataRepository;
-import com.example.rss.data.repository.datasource.impl.CacheApp;
-import com.example.rss.data.repository.datasource.impl.ICacheApp;
 import com.example.rss.domain.executor.IPostExecutionThread;
 import com.example.rss.domain.executor.IThreadExecutor;
 import com.example.rss.domain.executor.JobExecutor;
@@ -50,10 +48,10 @@ public class AppModule {
         return userDataRepository;
     }
 
-    @Provides @Singleton
-    ICacheApp provideCacheDataStore (CacheApp cacheApp){
-        return cacheApp;
-    }
+   /* @Provides @Singleton
+    CacheEntityFabric provideCacheDataStore (CacheEntityFabric cacheEntityFabric){
+        return cacheEntityFabric;
+    }*/
 
     @Provides @Singleton
     GlobalActions provideGlobalActions(){

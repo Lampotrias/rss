@@ -1,5 +1,6 @@
 package com.example.rss.data.repository;
 
+
 import com.example.rss.data.entity.mapper.RepositoryEntityDataMapper;
 import com.example.rss.data.repository.datasource.ChannelDataStoreFactory;
 import com.example.rss.data.repository.datasource.IDataStore;
@@ -16,7 +17,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
@@ -41,7 +41,7 @@ public class AppDataRepository implements IRepository {
 
 	@Override
 	public Maybe<Long> addChannel(Channel channel) {
-		final IDataStore dataStore = channelDataStoreFactory.createPut();
+		final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
 		return dataStore.addChannel(repositoryEntityDataMapper.transform(channel));
 	}
 
@@ -143,7 +143,7 @@ public class AppDataRepository implements IRepository {
 
 	@Override
 	public Maybe<Long> addFile(File file) {
-		final IDataStore dataStore = channelDataStoreFactory.createPut();
+		final IDataStore dataStore = channelDataStoreFactory.createForFile(null);
 		return dataStore.addFile(repositoryEntityDataMapper.transform(file));
 	}
 
