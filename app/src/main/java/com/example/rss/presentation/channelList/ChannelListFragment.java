@@ -9,24 +9,29 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.rss.R;
+import com.example.rss.databinding.ChannelListFragmentBinding;
 import com.example.rss.presentation.BaseFragment;
 
-import butterknife.ButterKnife;
-
 public class ChannelListFragment extends BaseFragment implements ChannelListContract.V {
+
+    private ChannelListFragmentBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.channel_list_fragment, container, false);
-        ButterKnife.bind(this, view);
+        binding = ChannelListFragmentBinding.inflate(inflater, container, false);
 
-        return view;
+        return binding.getRoot();
     }
 
     @Override
     public Context context() {
         return null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        binding = null;
+        super.onDestroyView();
     }
 }

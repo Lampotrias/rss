@@ -14,7 +14,6 @@ import com.example.rss.presentation.exception.ErrorDetailItemException;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
 import com.example.rss.presentation.global.GlobalActions;
 import com.example.rss.presentation.itemDetail.adapter.ViewDetailAdapter;
-import com.example.rss.presentation.itemDetail.adapter.ViewDetailPresenter;
 import com.example.rss.presentation.itemList.adapter.ItemModel;
 
 import java.text.DateFormat;
@@ -63,8 +62,7 @@ public class ItemDetailPresenter extends ViewPager2.OnPageChangeCallback impleme
                         }, throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable)),
                         () -> {
                             RequestManager requestManager = Glide.with(mView.context());
-                            ViewDetailPresenter viewDetailPresenter = new ViewDetailPresenter(requestManager, itemModels, mView.getResourceIdRowView());
-                            ViewDetailAdapter viewDetailAdapter = new ViewDetailAdapter(viewDetailPresenter);
+                            ViewDetailAdapter viewDetailAdapter = new ViewDetailAdapter(itemModels, requestManager);
                             mView.getViewPager().registerOnPageChangeCallback(this);
                             mView.getViewPager().setAdapter(viewDetailAdapter);
                             mView.getViewPager().setCurrentItem(needShowItemId, false);

@@ -1,71 +1,54 @@
 package com.example.rss.presentation.itemDetail.adapter;
 
-import android.graphics.Color;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
 import com.example.rss.R;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.example.rss.databinding.CardDetailItemRowBinding;
 
 public class DetailViewHolder extends RecyclerView.ViewHolder implements DetailRowView {
 
-    @BindView(R.id.txTitle)
-    TextView txTitle;
+    CardDetailItemRowBinding binding;
 
-    @BindView(R.id.txDescription)
-    TextView txDescription;
+    public DetailViewHolder(CardDetailItemRowBinding binding) {
+        super(binding.getRoot());
+        this.binding = binding;
 
-    @BindView(R.id.txDate)
-    TextView txDate;
-
-    @BindView(R.id.img_star)
-    ImageView imgStar;
-
-    @BindView(R.id.img_channel_logo)
-    ImageView imgChannelLogo;
-
-    public DetailViewHolder(@NonNull View itemView) {
-        super(itemView);
-        ButterKnife.bind(this, itemView);
     }
 
     @Override
     public void setTitle(String title) {
-        txTitle.setText(title);
+        binding.txTitle.setText(title);
     }
 
     @Override
     public void setDescription(String description) {
-        txDescription.setText(description);
+        binding.txDescription.setText(description);
     }
 
     @Override
     public void setDate(String date) {
-        txDate.setText(date);
+        binding.txDate.setText(date);
     }
 
     @Override
     public void setLogo(RequestManager glide, String logoPath) {
-        if (logoPath == null || logoPath.equals("")){
-            imgChannelLogo.setVisibility(View.GONE);
-        }else{
-            glide.load(logoPath).into(imgChannelLogo);
+        if (logoPath == null || logoPath.equals("")) {
+            binding.imgChannelLogo.setVisibility(View.GONE);
+        } else {
+            glide.load(logoPath).into(binding.imgChannelLogo);
         }
     }
 
     @Override
     public void setStar(@NonNull Boolean isStar) {
-        if(!isStar){
-            imgStar.setImageResource(R.drawable.ic_star_border_24dp);
-        }else if (isStar){
-            imgStar.setImageResource(R.drawable.ic_star_yellow_24dp);
+        if (!isStar) {
+            binding.imgStar.setImageResource(R.drawable.ic_star_border_24dp);
+        } else if (isStar) {
+            binding.imgStar.setImageResource(R.drawable.ic_star_yellow_24dp);
         }
     }
 }

@@ -16,30 +16,31 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
 import com.example.rss.R;
+import com.example.rss.databinding.CardListItemRowBinding;
 
 import java.util.List;
 import java.util.Objects;
 
-public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder>{
+public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder> {
     public static final int SWIPE_FAVORITE = 0;
     public static final int SWIPE_READ = 1;
     private final AsyncListDiffer<ItemModel> mDiffer;
     private final RequestManager glide;
     private final Context context;
-    private final int resId;
+    private CardListItemRowBinding itemPersonBinding;
 
-    public RecyclerListAdapter(RequestManager glide, int resId, Context context) {
+    public RecyclerListAdapter(RequestManager glide, Context context) {
         this.mDiffer = new AsyncListDiffer<>(this, DIFF_CALLBACK);
         this.context = context;
         this.glide = glide;
-        this.resId = resId;
     }
 
     @NonNull
     @Override
     public ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ListViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(resId, parent, false));
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        itemPersonBinding = CardListItemRowBinding.inflate(layoutInflater, parent, false);
+        return new ListViewHolder(itemPersonBinding);
     }
 
     @Override
@@ -49,8 +50,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder>{
         holder.setDescription(item.getDescription());
         holder.setDate(item.getPubDate());
         holder.setLogo(glide, item.getEnclosure());
-        holder.setStar((item.getStar() == null)?false:item.getStar());
-        holder.setRead((item.getRead() == null)?false:item.getRead());
+        holder.setStar((item.getStar() == null) ? false : item.getStar());
+        holder.setRead((item.getRead() == null) ? false : item.getRead());
     }
 
     @Override
@@ -62,7 +63,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder>{
         mDiffer.submitList(list);
     }
 
-    public ItemModel get(){
+    public ItemModel get() {
         return mDiffer.getCurrentList().get(0);
     }
 
@@ -71,6 +72,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder>{
         public boolean areItemsTheSame(@NonNull ItemModel oldUser, @NonNull ItemModel newUser) {
             return Objects.equals(oldUser.getItemId(), newUser.getItemId());
         }
+
         @Override
         public boolean areContentsTheSame(@NonNull ItemModel oldUser, @NonNull ItemModel newUser) {
             return oldUser.equals(newUser);
@@ -100,11 +102,11 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder>{
                     /*if (dX < c.getWidth())
                         c.drawColor(context.getResources().getColor(R.color.swipe_favorites));
                     else*/
-                        c.drawColor(context.getResources().getColor(R.color.swipe_read));
+                    c.drawColor(context.getResources().getColor(R.color.swipe_read));
 
                     icoRead.setBounds(new Rect(paddingStart, horizontalPos, paddingStart + icoRead.getIntrinsicWidth(), horizontalPos + icoRead.getIntrinsicHeight()));
                     icoRead.draw(c);
-                }else{
+                } else {
                     c.clipRect(
                             viewHolder.itemView.getWidth() + dX,
                             viewHolder.itemView.getTop(),
@@ -132,13 +134,12 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder>{
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
 
-            ItemModel itemModel =  mDiffer.getCurrentList().get(position);
+            ItemModel itemModel = mDiffer.getCurrentList().get(position);
             if (direction == ItemTouchHelper.LEFT) {
                 itemModel.setStar(!itemModel.getStar());
                 callback.onSwiped(itemModel.getItemId(), RecyclerListAdapter.SWIPE_FAVORITE, itemModel.getStar());
 
-            }
-            else if (direction == ItemTouchHelper.RIGHT){
+            } else if (direction == ItemTouchHelper.RIGHT) {
                 itemModel.setRead(!itemModel.getRead());
                 callback.onSwiped(itemModel.getItemId(), RecyclerListAdapter.SWIPE_READ, itemModel.getRead());
             }
@@ -146,7 +147,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder>{
             RecyclerListAdapter.this.notifyItemChanged(position);
         }
     }
+
     public interface SwipeCallback {
-        void onSwiped (Long  itemId, int direction, Boolean value);
+        void onSwiped(Long itemId, int direction, Boolean value);
     }
 }

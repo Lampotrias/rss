@@ -20,7 +20,6 @@ import com.example.rss.domain.exception.IErrorBundle;
 import com.example.rss.domain.interactor.ChannelInteractor;
 import com.example.rss.domain.interactor.FileInteractor;
 import com.example.rss.domain.interactor.ItemInteractor;
-import com.example.rss.domain.xml.XmlItemRawObject;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
 import com.example.rss.presentation.global.GlobalActions;
 import com.example.rss.presentation.itemList.adapter.ItemModel;
@@ -29,18 +28,15 @@ import com.example.rss.presentation.itemList.adapter.RecyclerListAdapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
 
 import io.reactivex.Maybe;
-import io.reactivex.MaybeSource;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Function;
 
 
 public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>, RecyclerListAdapter.SwipeCallback {
@@ -128,12 +124,12 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 
     private void InitializeRecycler(List<ItemModel> itemModels) {
         Log.e("myApp", "--- " + itemModels.size() + "==== " + View.GONE + " ==== " + View.VISIBLE);
-        if(itemModels.size() == 0)
+        if (itemModels.size() == 0)
             mView.setEmptyView(true);
 
         RequestManager requestManager = Glide.with(mView.context());
 
-        recyclerAdapter = new RecyclerListAdapter(requestManager, mView.getResourceIdRowView(), mView.context());
+        recyclerAdapter = new RecyclerListAdapter(requestManager, mView.context());
         recyclerAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -201,12 +197,15 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
     public void refreshList() {
         cDisposable.add(
                 channelInteractor.switchChannelSource(channelId)
-                        .doOnNext(channels ->{
-                            if (channels.size() == 0){
+                        .doOnNext(channels -> {
+                            if (channels.size() == 0) {
                                 cDisposable.add(itemInteractor.deleteAllItems()
                                         .flatMap(i -> itemInteractor.deleteAllFavorites())
-                                        .subscribe(integer -> {},
-                                                throwable -> {showErrorMessage(new DefaultErrorBundle((Exception) throwable));}));
+                                        .subscribe(integer -> {
+                                                },
+                                                throwable -> {
+                                                    showErrorMessage(new DefaultErrorBundle((Exception) throwable));
+                                                }));
                                 recyclerAdapter.submitList(null);
                                 mView.setEmptyView(true);
                             }
@@ -225,7 +224,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
                                         })
                                         .toObservable().defaultIfEmpty(xmlItemRawObject))
                                 .filter(xmlItemRawObject -> !xmlItemRawObject.getGuid().isEmpty())
-                                .flatMapMaybe(xmlItemRawObject ->  fileInteractor.parseFileAndSave(xmlItemRawObject)
+                                .flatMapMaybe(xmlItemRawObject -> fileInteractor.parseFileAndSave(xmlItemRawObject)
                                         .map(file -> itemInteractor.prepareItem(xmlItemRawObject, file, channel.getChannelId())))
                         )
                         .toList()
@@ -236,9 +235,9 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
                                     if (insertItems.size() > 0) {
                                         cDisposable.add(getItemModelsForRecycler(this.channelId)
                                                 .subscribe(itemModels -> {
-                                                            if(itemModels.size() == 0){
+                                                            if (itemModels.size() == 0) {
                                                                 mView.setEmptyView(true);
-                                                            }else{
+                                                            } else {
                                                                 mView.setEmptyView(false);
                                                             }
                                                             recyclerAdapter.submitList(itemModels);
@@ -248,7 +247,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
                                                             showErrorMessage(new DefaultErrorBundle((Exception) throwable));
                                                             mView.stopRefresh();
                                                         }));
-                                    }else{
+                                    } else {
                                         mView.stopRefresh();
                                     }
                                 },
