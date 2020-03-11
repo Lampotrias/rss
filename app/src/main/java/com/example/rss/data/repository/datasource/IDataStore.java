@@ -9,7 +9,6 @@ import com.example.rss.data.entity.ItemEntity;
 import java.io.InputStream;
 import java.util.List;
 
-import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
@@ -35,6 +34,10 @@ public interface IDataStore {
 	Maybe<Integer> deleteAllItems();
 	Maybe<Integer> deleteItemsByChannelId(Long id);
 	Maybe<Integer> updateReadById(Long id, Boolean isRead);
+	Maybe<Integer> getCountItemsByChannel(Long id);
+	Maybe<Integer> getPosItemInChannelQueue(Long channelId, Long itemId);
+	Maybe<Integer> getCountItemsForChannel(Long channelId);
+	Maybe<List<ItemEntity>> getItemsWithOffsetByChannel(Long channelId, Integer offset, Integer limit);
 
 	//Files
 	Maybe<Long> addFile (FileEntity fileEntity);

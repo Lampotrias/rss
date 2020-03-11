@@ -28,7 +28,7 @@ public class NetworkDataStore implements IDataStore {
             try {
                 stream = new URL(path).openStream();
                 emitter.onSuccess(stream);
-            }catch (Exception e){
+            } catch (Exception e) {
                 emitter.onError(new NetworkConnectionException(e.getCause()));
             }
         });
@@ -77,6 +77,26 @@ public class NetworkDataStore implements IDataStore {
     @Override
     public Maybe<Integer> updateReadById(Long id, Boolean isRead) {
         throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Maybe<Integer> getCountItemsByChannel(Long id) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Maybe<Integer> getPosItemInChannelQueue(Long channelId, Long itemId) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Maybe<Integer> getCountItemsForChannel(Long channelId) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Maybe<List<ItemEntity>> getItemsWithOffsetByChannel(Long channelId, Integer offset, Integer limit) {
+        return null;
     }
 
     @Override

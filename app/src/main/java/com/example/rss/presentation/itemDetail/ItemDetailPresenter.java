@@ -1,11 +1,12 @@
 package com.example.rss.presentation.itemDetail;
 
+import android.util.Log;
+
 import androidx.navigation.NavController;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.example.rss.domain.Item;
 import com.example.rss.domain.exception.DefaultErrorBundle;
 import com.example.rss.domain.exception.IErrorBundle;
 import com.example.rss.domain.interactor.FileInteractor;
@@ -16,11 +17,8 @@ import com.example.rss.presentation.global.GlobalActions;
 import com.example.rss.presentation.itemDetail.adapter.ViewDetailAdapter;
 import com.example.rss.presentation.itemList.adapter.ItemModel;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -32,8 +30,13 @@ public class ItemDetailPresenter extends ViewPager2.OnPageChangeCallback impleme
     private final ItemInteractor itemInteractor;
     private final FileInteractor fileInteractor;
     private final CompositeDisposable compositeDisposable;
-    private List<ItemModel> itemModels;
-    private int needShowItemId;
+    private List<ItemModel> itemModels = new ArrayList<>();
+    private Long channelId;
+    private Long itemId;
+    private final Integer pageSize = 2;
+    private Integer currentAbsPosition;
+    private Integer totalItemsCount;
+    private int adapterTmpPosition;
     @Inject
     GlobalActions globalActions;
 
@@ -47,41 +50,44 @@ public class ItemDetailPresenter extends ViewPager2.OnPageChangeCallback impleme
         compositeDisposable = new CompositeDisposable();
     }
 
-    void initRecycler() {
-        itemModels = new ArrayList<>();
-        compositeDisposable.add(itemInteractor.getItemsByChannelId(mView.getChannelId())
-                .toObservable()
-                .concatMapIterable(items -> items)
-                .subscribe(item -> {
-                            ItemModel itemModel = transform(item);
-                            compositeDisposable.add(
-                                    fileInteractor.getFileById(item.getEnclosure())
-                                            .subscribe(file -> itemModel.setEnclosure(file.getPath()), throwable -> {
-                                            }));
-                            itemModels.add(itemModel);
-                        }, throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable)),
-                        () -> {
-                            RequestManager requestManager = Glide.with(mView.context());
-                            ViewDetailAdapter viewDetailAdapter = new ViewDetailAdapter(itemModels, requestManager);
-                            mView.getViewPager().registerOnPageChangeCallback(this);
-                            mView.getViewPager().setAdapter(viewDetailAdapter);
-                            mView.getViewPager().setCurrentItem(needShowItemId, false);
-                        })
+    private void initRecycler() {
+        //get range for title
+        compositeDisposable.add(
+                itemInteractor.getPosItemInChannelQueue(this.channelId, this.itemId)
+                        .flatMap(absolutePosition -> itemInteractor.getItemsWithOffsetByChannel(this.channelId, absolutePosition - this.pageSize, (this.pageSize * 2) + 1)
+                                .doOnSuccess(items -> this.currentAbsPosition = absolutePosition)
+                                .flatMap(items -> itemInteractor.getCountItemsByChannel(this.channelId).doOnSuccess(count -> totalItemsCount = count).map(integer -> items)))
+                        .toObservable()
+                        .concatMapIterable(items -> items)
+                        .flatMapMaybe(item -> fileInteractor.getLinkByFileId(item.getEnclosure()).map(imgPath -> {
+                            ItemModel itemModel = ItemModel.transform(item);
+                            itemModel.setEnclosure(imgPath);
+                            return itemModel;
+                        }))
+                        .subscribe(item -> {
+                                    this.itemModels.add(item);
+                                }, throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable)),
+                                () -> {
+                                    RequestManager requestManager = Glide.with(mView.context());
+                                    ViewDetailAdapter viewDetailAdapter = new ViewDetailAdapter(this.itemModels, requestManager);
+                                    mView.getViewPager().registerOnPageChangeCallback(this);
+                                    mView.getViewPager().setAdapter(viewDetailAdapter);
+
+                                    int currentAdapterPosition = 0;
+                                    for (ItemModel itemModel : this.itemModels) {
+                                        if (itemModel.getItemId().equals(itemId))
+                                            currentAdapterPosition = this.itemModels.indexOf(itemModel);
+                                    }
+                                    this.setTitleForPosition(currentAdapterPosition);
+                                    adapterTmpPosition = currentAdapterPosition;
+                                    mView.getViewPager().setCurrentItem(currentAdapterPosition, false);
+                                }
+                        )
         );
     }
 
-    private ItemModel transform(Item item) {
-        DateFormat format = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.getDefault());
-        ItemModel model = new ItemModel();
-        model.setItemId(item.getItemId());
-        model.setGuid(item.getGuid());
-        model.setTitle(item.getTitle());
-        model.setDescription(item.getDescription());
-        model.setLink(item.getLink());
-        model.setPubDate(format.format(item.getPubDate() * 1000));
-        model.setRead(item.getRead());
-        model.setStar(item.getFavorite());
-        return model;
+    private void setTitleForPosition(int position) {
+        globalActions.setTitle(this.currentAbsPosition + "/" + this.totalItemsCount + "  " + this.itemModels.get(position).getTitle());
     }
 
     @Override
@@ -106,19 +112,37 @@ public class ItemDetailPresenter extends ViewPager2.OnPageChangeCallback impleme
     @Override
     public void setView(ItemDetailContract.V view) {
         this.mView = view;
-        needShowItemId = mView.getItemId();
+        itemId = mView.getItemId();
+        channelId = mView.getChannelId();
 
-        if (needShowItemId == -1) {
+        if (itemId > 0 && channelId > 0) {
+            initRecycler();
+        } else {
             showErrorMessage(new DefaultErrorBundle(new ErrorDetailItemException()));
             navController.navigateUp();
-        } else {
-            initRecycler();
         }
     }
 
     @Override
     public void onPageSelected(int position) {
         super.onPageSelected(position);
-        globalActions.setTitle(position + 1 + "/" + itemModels.size() + "  " + itemModels.get(position).getTitle());
+
+        if (position != adapterTmpPosition) {
+            if (position > this.adapterTmpPosition)
+                this.currentAbsPosition++;
+            else
+                this.currentAbsPosition--;
+            this.adapterTmpPosition = position;
+        }
+        this.setTitleForPosition(position);
+        this.updateReadStatus(position);
+    }
+
+    private void updateReadStatus(int position) {
+        compositeDisposable.add(itemInteractor.updateItemReadById(this.itemModels.get(position).getItemId(), true).subscribe(
+                integer -> {
+                },
+                throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable))
+        ));
     }
 }

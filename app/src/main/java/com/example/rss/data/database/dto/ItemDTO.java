@@ -123,6 +123,7 @@ public class ItemDTO {
     public void setChannelId(Long channelId) {
         this.channelId = channelId;
     }
+
     @NonNull
     public Long getEnclosure() {
         return enclosure;

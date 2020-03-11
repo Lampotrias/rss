@@ -20,22 +20,30 @@ public class FileInteractor extends BaseInteractor {
         this.repository = repository;
     }
 
-    private Maybe<Long> saveFile(File file){
+    private Maybe<Long> saveFile(File file) {
         return repository.addFile(file).compose(getIOToMainTransformerMaybe());
     }
 
-    public Maybe<Long> parseFileAndSave(XmlEntityHasFile rawObject){
-        if (rawObject.getEnclosure() != null){
+    public Maybe<String> getLinkByFileId(Long fileId) {
+        String emptyPath = "";
+        if (fileId > 0) {
+            return this.getFileById(fileId).map(File::getPath).defaultIfEmpty(emptyPath);
+        } else
+            return Maybe.just(emptyPath);
+    }
+
+    public Maybe<Long> parseFileAndSave(XmlEntityHasFile rawObject) {
+        if (rawObject.getEnclosure() != null) {
             return repository.addFile(prepareFile(rawObject)).compose(getIOToMainTransformerMaybe());
-        }else
+        } else
             return Maybe.just(0L);
     }
 
-    public Maybe<File> getFileById (Long id) {
+    public Maybe<File> getFileById(Long id) {
         return repository.getFileById(id).compose(getIOToMainTransformerMaybe());
     }
 
-    private File prepareFile(XmlEntityHasFile xmlEntityHasFile){
+    private File prepareFile(XmlEntityHasFile xmlEntityHasFile) {
         File file = new File();
         file.setDescription(xmlEntityHasFile.getEnclosure().getDescription());
         file.setPath(xmlEntityHasFile.getEnclosure().getPath());

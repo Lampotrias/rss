@@ -19,45 +19,45 @@ public abstract class BaseInteractor {
         this.postExecutionThread = postExecutionThread;
     }
 
-    public <T> MaybeTransformer<T, T> getIOTransformerMaybe()  {
+    public <T> MaybeTransformer<T, T> getIOTransformerMaybe() {
         return objectObservable -> objectObservable
                 .subscribeOn(Schedulers.from(threadExecutor));
     }
 
-    public <T> MaybeTransformer<T, T> getIOToMainTransformerMaybe()  {
+    public <T> MaybeTransformer<T, T> getIOToMainTransformerMaybe() {
         return objectObservable -> objectObservable
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(postExecutionThread.getScheduler());
     }
 
-    public <T> ObservableTransformer<T, T> getIOTransformerObservable()  {
+    public <T> ObservableTransformer<T, T> getIOTransformerObservable() {
         return objectObservable -> objectObservable
                 .subscribeOn(Schedulers.from(threadExecutor));
     }
 
-    public <T> ObservableTransformer<T, T> getIOToMainTransformerObservable()  {
+    public <T> ObservableTransformer<T, T> getIOToMainTransformerObservable() {
         return objectObservable -> objectObservable
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(postExecutionThread.getScheduler());
     }
 
-    public <T> SingleTransformer<T, T> getIOTransformerSingle()  {
+    public <T> SingleTransformer<T, T> getIOTransformerSingle() {
         return objectObservable -> objectObservable
                 .subscribeOn(Schedulers.from(threadExecutor));
     }
 
-    public <T> SingleTransformer<T, T> getIOToMainTransformerSingle()  {
+    public <T> SingleTransformer<T, T> getIOToMainTransformerSingle() {
         return objectObservable -> objectObservable
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(postExecutionThread.getScheduler());
     }
 
-    public CompletableTransformer getIOTransformerCompletable()  {
+    public CompletableTransformer getIOTransformerCompletable() {
         return objectObservable -> objectObservable
                 .subscribeOn(Schedulers.from(threadExecutor));
     }
 
-    public CompletableTransformer getIOToMainTransformerCompletable()  {
+    public CompletableTransformer getIOToMainTransformerCompletable() {
         return objectObservable -> objectObservable
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(postExecutionThread.getScheduler());

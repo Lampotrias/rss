@@ -31,53 +31,70 @@ public class ItemInteractor extends BaseInteractor {
         this.repository = repository;
     }
 
-    public Maybe<List<Item>> getItemsByChannelId (Long id) {
+    public Maybe<List<Item>> getItemsByChannelId(Long id) {
         return repository.getItemsByChannelId(id).compose(getIOToMainTransformerMaybe());
     }
 
-    public Maybe<Integer> deleteFavByItemBy(Long itemId){
+    public Maybe<Integer> deleteFavByItemBy(Long itemId) {
         return repository.deleteFavByItemBy(itemId).compose(getIOToMainTransformerMaybe());
 
     }
-    public Maybe<Long> insertFavorite(Favorite favorite){
+
+    public Maybe<Long> insertFavorite(Favorite favorite) {
         return repository.insertFavorite(favorite).compose(getIOToMainTransformerMaybe());
     }
 
-    public Maybe<List<Item>> getAllItems () {
+    public Maybe<List<Item>> getItemsWithOffsetByChannel(Long channelId, Integer offset, Integer limit) {
+        return repository.getItemsWithOffsetByChannel(channelId, offset, limit).compose(getIOToMainTransformerMaybe());
+    }
+
+    public Maybe<Integer> getCountItemsForChannel(Long channelId) {
+        return repository.getCountItemsForChannel(channelId).compose(getIOToMainTransformerMaybe());
+    }
+
+    public Maybe<List<Item>> getAllItems() {
         return repository.getAllItems().compose(getIOToMainTransformerMaybe());
     }
 
-    public Maybe<Integer> updateItemReadById(Long id, Boolean isRead){
+    public Maybe<Integer> updateItemReadById(Long id, Boolean isRead) {
         return repository.updateReadById(id, isRead).compose(getIOToMainTransformerMaybe());
     }
 
-    public Maybe<Item> getItemByUniqueId (String uid){
+    public Maybe<Item> getItemByUniqueId(String uid) {
         return repository.getItemByUniqueId(uid).compose(getIOToMainTransformerMaybe());
     }
 
-    public Maybe<List<Long>> insertManyItems(List<Item> items){
+    public Maybe<Integer> getCountItemsByChannel(Long id) {
+        return repository.getCountItemsByChannel(id).compose(getIOToMainTransformerMaybe());
+    }
+
+    public Maybe<Integer> getPosItemInChannelQueue(Long channelId, Long itemId) {
+        return repository.getPosItemInChannelQueue(channelId, itemId).compose(getIOToMainTransformerMaybe());
+    }
+
+    public Maybe<List<Long>> insertManyItems(List<Item> items) {
         return repository.insertManyItems(items).compose(getIOToMainTransformerMaybe());
     }
 
-    public Maybe<Integer> deleteAllItems(){
+    public Maybe<Integer> deleteAllItems() {
         return repository.deleteAllItems().compose(getIOToMainTransformerMaybe());
     }
 
-    public Maybe<Integer> deleteItemsByChannelId(Long id){
+    public Maybe<Integer> deleteItemsByChannelId(Long id) {
         return repository.deleteItemsByChannelId(id).compose(getIOToMainTransformerMaybe());
     }
 
-    public Maybe<Integer> deleteAllFavorites(){
+    public Maybe<Integer> deleteAllFavorites() {
         return repository.deleteAllFavorites().compose(getIOToMainTransformerMaybe());
     }
 
-    public Maybe<List<XmlItemRawObject>> parseItemsByStream(InputStream stream){
+    public Maybe<List<XmlItemRawObject>> parseItemsByStream(InputStream stream) {
         Maybe<List<XmlItemRawObject>> obj = Maybe.create(emitter -> {
             try {
                 XmlParser xmlParser = new XmlParser(stream);
                 emitter.onSuccess(xmlParser.parseItems());
                 //emitter.onComplete();
-            }catch (IOException e) {
+            } catch (IOException e) {
                 emitter.onError(e);
             }
         });

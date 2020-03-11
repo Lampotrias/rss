@@ -24,8 +24,12 @@ import javax.inject.Inject;
 @ChannelScope
 public class ItemDetailFragment extends BaseFragment implements ItemDetailContract.V {
     private AndroidApplication app;
-    private int itemId = -1;
-    private Long channelId;
+    private Long itemId = 0L;
+    private Long channelId = 0L;
+
+    public static final String DETAIL_ITEM_ID = "DETAIL_POSITION";
+    public static final String DETAIL_CHANNEL_ID = "DETAIL_CHANNEL_ID";
+
     @Inject
     public ItemDetailPresenter mPresenter;
     @Inject
@@ -37,8 +41,8 @@ public class ItemDetailFragment extends BaseFragment implements ItemDetailContra
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            itemId = getArguments().getInt("DETAIL_POSITION", -1);
-            channelId = getArguments().getLong("DETAIL_CHANNEL_ID", -1);
+            itemId = getArguments().getLong(DETAIL_ITEM_ID, 0);
+            channelId = getArguments().getLong(DETAIL_CHANNEL_ID, 0);
         }
         app = (AndroidApplication) Objects.requireNonNull(getActivity()).getApplication();
         app.getFragmentModule(this).inject(this);
@@ -81,17 +85,12 @@ public class ItemDetailFragment extends BaseFragment implements ItemDetailContra
     }
 
     @Override
-    public int getResourceIdRowView() {
-        return R.layout.card_detail_item_row;
-    }
-
-    @Override
     public ViewPager2 getViewPager() {
         return binding.vPager;
     }
 
     @Override
-    public int getItemId() {
+    public Long getItemId() {
         return itemId;
     }
 

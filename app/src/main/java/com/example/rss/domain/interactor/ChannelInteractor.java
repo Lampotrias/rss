@@ -20,7 +20,6 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -57,15 +56,15 @@ public class ChannelInteractor extends BaseInteractor {
         return repository.addChannel(channel).compose(getIOToMainTransformerMaybe());
     }
 
-    public Single<Integer> update(Channel channel){
+    public Single<Integer> update(Channel channel) {
         return repository.updateChannel(channel).compose(getIOToMainTransformerSingle());
     }
 
-    public Maybe<InputStream> getRssFeedContent(String path){
+    public Maybe<InputStream> getRssFeedContent(String path) {
         return repository.getRssFeedContent(path).compose(getIOToMainTransformerMaybe());
     }
 
-    public Maybe<Integer> deleteChannelById(Long id){
+    public Maybe<Integer> deleteChannelById(Long id) {
         return repository.deleteChannelById(id).compose(getIOToMainTransformerMaybe());
     }
 

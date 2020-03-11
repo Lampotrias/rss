@@ -22,6 +22,7 @@ import com.example.rss.domain.interactor.FileInteractor;
 import com.example.rss.domain.interactor.ItemInteractor;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
 import com.example.rss.presentation.global.GlobalActions;
+import com.example.rss.presentation.itemDetail.ItemDetailFragment;
 import com.example.rss.presentation.itemList.adapter.ItemModel;
 import com.example.rss.presentation.itemList.adapter.RecyclerItemClickListener;
 import com.example.rss.presentation.itemList.adapter.RecyclerListAdapter;
@@ -89,7 +90,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 
     private Observable<ItemModel> convertToModel(Item item, Long channelId) {
         Long realChannelId = item.getChannelId();
-        return Observable.fromCallable(() -> transform(item))
+        return Observable.fromCallable(() -> ItemModel.transform(item))
                 .flatMap(itemModel -> {
                     if (channelId == 0) {
                         String imgPath = channelToImage.get(realChannelId);
@@ -115,10 +116,8 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
     private Single<List<ItemModel>> getItemModelsForRecycler(Long channelId) {
         return getItemsByChannels(channelId)
                 .toObservable()
-                //.doOnNext(items -> Log.e("myApp", "*++* " + items.size()))
                 .concatMapIterable(items -> items)
                 .concatMap(item -> convertToModel(item, channelId))
-                //.doOnNext(item -> Log.e("myApp", "*** " + item.getTitle()))
                 .toList();
     }
 
@@ -151,8 +150,9 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
             @Override
             public void onItemClick(View view, int position) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("DETAIL_POSITION", position);
-                bundle.putLong("DETAIL_CHANNEL_ID", channelId);
+                ItemModel item = recyclerAdapter.get(position);
+                bundle.putLong(ItemDetailFragment.DETAIL_ITEM_ID, item.getItemId());
+                bundle.putLong(ItemDetailFragment.DETAIL_CHANNEL_ID, item.getChannelId());
                 navController.navigate(R.id.nav_itemDetailFragment, bundle);
             }
 
@@ -166,21 +166,6 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
     private void showErrorMessage(IErrorBundle errorBundle) {
         String errorMessage = ErrorMessageFactory.create(this.mView.context(), errorBundle.getException());
         mView.displayError(errorMessage);
-    }
-
-    private ItemModel transform(Item item) {
-        DateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
-
-        ItemModel model = new ItemModel();
-        model.setItemId(item.getItemId());
-        model.setGuid(item.getGuid());
-        model.setTitle(item.getTitle());
-        model.setDescription(item.getDescription());
-        model.setLink(item.getLink());
-        model.setPubDate(format.format(item.getPubDate()));
-        model.setStar((item.getFavorite() == null) ? false : item.getFavorite());
-        model.setRead((item.getRead() == null) ? false : item.getRead());
-        return model;
     }
 
     @Override

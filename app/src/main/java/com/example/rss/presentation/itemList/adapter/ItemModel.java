@@ -1,9 +1,15 @@
 package com.example.rss.presentation.itemList.adapter;
 
+import com.example.rss.domain.Item;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.Objects;
 
 public class ItemModel {
     private Long itemId;
+    private Long channelId;
     private String guid;
     private String title;
     private String description;
@@ -19,6 +25,14 @@ public class ItemModel {
 
     public void setItemId(Long itemId) {
         this.itemId = itemId;
+    }
+
+    public Long getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(Long channelId) {
+        this.channelId = channelId;
     }
 
     public String getGuid() {
@@ -83,6 +97,22 @@ public class ItemModel {
 
     public void setStar(Boolean star) {
         isStar = star;
+    }
+
+    public static ItemModel transform(Item item) {
+        DateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
+
+        ItemModel model = new ItemModel();
+        model.setItemId(item.getItemId());
+        model.setChannelId(item.getChannelId());
+        model.setGuid(item.getGuid());
+        model.setTitle(item.getTitle());
+        model.setDescription(item.getDescription());
+        model.setLink(item.getLink());
+        model.setPubDate(format.format(item.getPubDate()));
+        model.setStar((item.getFavorite() == null) ? false : item.getFavorite());
+        model.setRead((item.getRead() == null) ? false : item.getRead());
+        return model;
     }
 
     @Override

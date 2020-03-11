@@ -32,7 +32,6 @@ public class ChannelDataStoreFactory {
 
     @NotNull
     private IDataStore createDatabaseDataStore() {
-        AppDatabase appDatabase = AppDatabase.getInstance(context);
         return createDatabaseDataStore(null);
     }
 
@@ -49,11 +48,10 @@ public class ChannelDataStoreFactory {
     public IDataStore createForFavorite(Long id) {
         IDataStore dataStore;
 
-        if (id != null){
+        if (id != null) {
             //check cache
             dataStore = createDatabaseDataStore();
-        }else
-        {
+        } else {
             dataStore = createDatabaseDataStore();
         }
 

@@ -30,13 +30,13 @@ public class WorkManagerInteractor {
     private final IRepository channelRepository;
 
     @Inject
-    public WorkManagerInteractor(IRepository channelRepository, IThreadExecutor threadExecutor, IPostExecutionThread postExecutionThread){
+    public WorkManagerInteractor(IRepository channelRepository, IThreadExecutor threadExecutor, IPostExecutionThread postExecutionThread) {
         this.threadExecutor = threadExecutor;
         this.postExecutionThread = postExecutionThread;
         this.channelRepository = channelRepository;
     }
 
-    public Maybe<Channel> getChannel(Long id){
+    public Maybe<Channel> getChannel(Long id) {
         return channelRepository.getChannelById(id)
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(postExecutionThread.getScheduler());
@@ -60,18 +60,18 @@ public class WorkManagerInteractor {
                         if (last != null && last != 0) {
                             if (last < next) {
                                 return false;
-                            }else
+                            } else
                                 return next < last && last < currentTs;
-                        }else
+                        } else
                             return true; //нет LastBuild
-                    }else
+                    } else
                         return false;
                 })
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(postExecutionThread.getScheduler());
     }
 
-    public Observable<XmlItemRawObject> syncItemsByChannel(Channel channel){
+    public Observable<XmlItemRawObject> syncItemsByChannel(Channel channel) {
         return channelRepository.getRssFeedContent(channel.getSourceLink())
                 .map(this::parseItem)
                 .toObservable()
@@ -80,7 +80,7 @@ public class WorkManagerInteractor {
                 .observeOn(postExecutionThread.getScheduler());
     }
 
-    public Maybe<List<Long>> processItemXml(XmlItemRawObject xmlItemRawObject, Long channelId){
+    public Maybe<List<Long>> processItemXml(XmlItemRawObject xmlItemRawObject, Long channelId) {
         return saveFile(xmlItemRawObject)
                 .map(fileId -> prepareItem(xmlItemRawObject, fileId, channelId))
                 .toList()
@@ -96,19 +96,19 @@ public class WorkManagerInteractor {
                 .observeOn(postExecutionThread.getScheduler());
     }
 
-    private List<XmlItemRawObject> parseItem (InputStream stream) throws IOException {
+    private List<XmlItemRawObject> parseItem(InputStream stream) throws IOException {
         XmlParser xmlParser = new XmlParser(stream);
         return xmlParser.parseItems();
     }
 
-    private Observable<Long> saveFile(XmlItemRawObject xmlItemRawObject){
-        if (xmlItemRawObject.getEnclosure() != null){
+    private Observable<Long> saveFile(XmlItemRawObject xmlItemRawObject) {
+        if (xmlItemRawObject.getEnclosure() != null) {
             return channelRepository.addFile(prepareFile(xmlItemRawObject)).toObservable().switchIfEmpty(Observable.just(0L));
-        }else
+        } else
             return Observable.just(0L);
     }
 
-    private File prepareFile(XmlItemRawObject xmlItemRawObject){
+    private File prepareFile(XmlItemRawObject xmlItemRawObject) {
         File file = new File();
         file.setDescription(xmlItemRawObject.getEnclosure().getDescription());
         file.setPath(xmlItemRawObject.getEnclosure().getPath());
@@ -137,13 +137,13 @@ public class WorkManagerInteractor {
         return item;
     }
 
-    public Single<Integer> updateChannel(Channel channel){
+    public Single<Integer> updateChannel(Channel channel) {
         return channelRepository.updateChannel(channel)
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(postExecutionThread.getScheduler());
     }
 
-    public Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp){
+    public Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp) {
         return channelRepository.updateNextExec(channelId, nextTimestamp)
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(postExecutionThread.getScheduler());

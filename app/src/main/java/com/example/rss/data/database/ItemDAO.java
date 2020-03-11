@@ -3,8 +3,11 @@ package com.example.rss.data.database;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+
 import com.example.rss.data.database.dto.ItemDTO;
+
 import java.util.List;
+
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 
@@ -15,6 +18,15 @@ public interface ItemDAO {
 
     @Query("SELECT item.id, item.channel_id, item.guid, item.title, item.description, item.link,  item.pub_date, item.enclosure, item.is_read, CASE WHEN favorite.item_id > 0 THEN 1 END is_favorite FROM item LEFT JOIN favorite on item.id = favorite.item_id ORDER BY item.pub_date DESC")
     Maybe<List<ItemDTO>> getAllItems();
+
+    @Query("SELECT count(*) FROM item WHERE channel_id = :channelId")
+    Maybe<Integer> getCountItemsForChannel(Long channelId);
+
+    @Query("SELECT count(*) FROM item i1 WHERE i1.channel_id = :channelId AND i1.pub_date >= (SELECT i2.pub_date FROM item i2 WHERE i2.id = :itemId) ORDER BY i1.pub_date DESC")
+    Maybe<Integer> getPosItemInChannelQueue(Long channelId, Long itemId);
+
+    @Query("select * from item where channel_id = :channelId ORDER BY pub_date DESC LIMIT :offset, :limit")
+    Maybe<List<ItemDTO>> getItemsWithOffsetByChannel(Long channelId, Integer offset, Integer limit);
 
     @Insert
     Maybe<List<Long>> insertAll(List<ItemDTO> itemDTOS);
@@ -30,4 +42,7 @@ public interface ItemDAO {
 
     @Query("UPDATE item set is_read = :isRead WHERE id = :id")
     Maybe<Integer> updateReadById(Long id, Boolean isRead);
+
+    @Query("SELECT COUNT(*) FROM item where channel_id = :id")
+    Maybe<Integer> getCountItemsByChannel(Long id);
 }

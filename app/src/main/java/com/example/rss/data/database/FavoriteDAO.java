@@ -7,7 +7,6 @@ import androidx.room.Query;
 
 import com.example.rss.data.database.dto.FavoritesDTO;
 
-import io.reactivex.Completable;
 import io.reactivex.Maybe;
 
 @Dao

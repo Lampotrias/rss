@@ -35,6 +35,10 @@ public interface IRepository {
 	Maybe<Integer> deleteAllItems();
 	Maybe<Integer> deleteItemsByChannelId(Long id);
 	Maybe<Integer> updateReadById(Long id, Boolean isRead);
+	Maybe<Integer> getCountItemsByChannel(Long id);
+	Maybe<Integer> getPosItemInChannelQueue(Long channelId, Long itemId);
+	Maybe<Integer> getCountItemsForChannel(Long channelId);
+	Maybe<List<Item>> getItemsWithOffsetByChannel(Long channelId, Integer offset, Integer limit);
 
 	//Category
 	Maybe<List<Category>> getCategoriesByType(String mType);
