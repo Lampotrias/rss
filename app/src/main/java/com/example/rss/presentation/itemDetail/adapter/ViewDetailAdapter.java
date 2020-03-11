@@ -1,6 +1,6 @@
 package com.example.rss.presentation.itemDetail.adapter;
 
-import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -18,10 +18,12 @@ public class ViewDetailAdapter extends RecyclerView.Adapter<DetailViewHolder> {
     private CardDetailItemRowBinding binding;
     private final RequestManager glide;
     private List<ItemModel> items;
+    private final DetailViewHolder.onClick onClick;
 
-    public ViewDetailAdapter(List<ItemModel> items, RequestManager glide) {
+    public ViewDetailAdapter(List<ItemModel> items, RequestManager glide, DetailViewHolder.onClick onClick) {
         this.glide = glide;
         this.items = items;
+        this.onClick = onClick;
     }
 
     @NonNull
@@ -39,7 +41,7 @@ public class ViewDetailAdapter extends RecyclerView.Adapter<DetailViewHolder> {
         holder.setDescription(item.getDescription());
         holder.setDate(item.getPubDate());
         holder.setLogo(glide, item.getEnclosure());
-        holder.setStar((item.getStar() == null) ? false : item.getStar());
+        holder.setStar((item.getStar() == null) ? false : item.getStar(), onClick);
     }
 
     @Override

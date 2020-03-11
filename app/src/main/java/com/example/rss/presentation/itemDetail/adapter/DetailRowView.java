@@ -7,5 +7,5 @@ public interface DetailRowView {
     void setDescription(String description);
     void setDate(String date);
     void setLogo(RequestManager glide, String logoPath);
-    void setStar(Boolean isStar);
+    void setStar(Boolean isStar, DetailViewHolder.onClick onClick);
 }

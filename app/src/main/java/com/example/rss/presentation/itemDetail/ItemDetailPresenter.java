@@ -1,12 +1,11 @@
 package com.example.rss.presentation.itemDetail;
 
-import android.util.Log;
-
 import androidx.navigation.NavController;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.example.rss.domain.Favorite;
 import com.example.rss.domain.exception.DefaultErrorBundle;
 import com.example.rss.domain.exception.IErrorBundle;
 import com.example.rss.domain.interactor.FileInteractor;
@@ -14,6 +13,7 @@ import com.example.rss.domain.interactor.ItemInteractor;
 import com.example.rss.presentation.exception.ErrorDetailItemException;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
 import com.example.rss.presentation.global.GlobalActions;
+import com.example.rss.presentation.itemDetail.adapter.DetailViewHolder;
 import com.example.rss.presentation.itemDetail.adapter.ViewDetailAdapter;
 import com.example.rss.presentation.itemList.adapter.ItemModel;
 
@@ -25,11 +25,12 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 
 
-public class ItemDetailPresenter extends ViewPager2.OnPageChangeCallback implements ItemDetailContract.P<ItemDetailContract.V> {
+public class ItemDetailPresenter extends ViewPager2.OnPageChangeCallback implements ItemDetailContract.P<ItemDetailContract.V>, DetailViewHolder.onClick {
     private ItemDetailContract.V mView;
     private final ItemInteractor itemInteractor;
     private final FileInteractor fileInteractor;
     private final CompositeDisposable compositeDisposable;
+    private ViewDetailAdapter viewDetailAdapter;
     private List<ItemModel> itemModels = new ArrayList<>();
     private Long channelId;
     private Long itemId;
@@ -69,7 +70,7 @@ public class ItemDetailPresenter extends ViewPager2.OnPageChangeCallback impleme
                                 }, throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable)),
                                 () -> {
                                     RequestManager requestManager = Glide.with(mView.context());
-                                    ViewDetailAdapter viewDetailAdapter = new ViewDetailAdapter(this.itemModels, requestManager);
+                                    viewDetailAdapter = new ViewDetailAdapter(this.itemModels, requestManager, this);
                                     mView.getViewPager().registerOnPageChangeCallback(this);
                                     mView.getViewPager().setAdapter(viewDetailAdapter);
 
@@ -136,6 +137,7 @@ public class ItemDetailPresenter extends ViewPager2.OnPageChangeCallback impleme
         }
         this.setTitleForPosition(position);
         this.updateReadStatus(position);
+        this.itemId = this.itemModels.get(position).getItemId();
     }
 
     private void updateReadStatus(int position) {
@@ -144,5 +146,24 @@ public class ItemDetailPresenter extends ViewPager2.OnPageChangeCallback impleme
                 },
                 throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable))
         ));
+    }
+
+    @Override
+    public void clickStar() {
+        int pos = this.adapterTmpPosition;
+
+        Boolean isStar = this.itemModels.get(pos).getStar();
+        if (isStar) {
+            compositeDisposable.add(itemInteractor.deleteFavByItemBy(this.itemId).subscribe(integer -> {
+            }, throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable))));
+        } else {
+            Favorite favorite = new Favorite();
+            favorite.setItemId(itemId);
+            favorite.setFavId(itemId);
+            favorite.setCategoryId(1L);
+            compositeDisposable.add(itemInteractor.insertFavorite(favorite).subscribe(integer -> {
+            }, throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable))));
+        }
+        this.itemModels.get(pos).setStar(!isStar);
     }
 }

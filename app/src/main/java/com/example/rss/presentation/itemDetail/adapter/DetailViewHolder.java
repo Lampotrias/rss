@@ -11,12 +11,11 @@ import com.example.rss.databinding.CardDetailItemRowBinding;
 
 public class DetailViewHolder extends RecyclerView.ViewHolder implements DetailRowView {
 
-    CardDetailItemRowBinding binding;
+    private final CardDetailItemRowBinding binding;
 
-    public DetailViewHolder(CardDetailItemRowBinding binding) {
+    DetailViewHolder(CardDetailItemRowBinding binding) {
         super(binding.getRoot());
         this.binding = binding;
-
     }
 
     @Override
@@ -44,11 +43,19 @@ public class DetailViewHolder extends RecyclerView.ViewHolder implements DetailR
     }
 
     @Override
-    public void setStar(@NonNull Boolean isStar) {
+    public void setStar(@NonNull Boolean isStar, onClick onClick) {
         if (!isStar) {
             binding.imgStar.setImageResource(R.drawable.ic_star_border_24dp);
-        } else if (isStar) {
+        } else {
             binding.imgStar.setImageResource(R.drawable.ic_star_yellow_24dp);
         }
+        binding.imgStar.setOnClickListener(v -> {
+            onClick.clickStar();
+            this.setStar(!isStar, onClick);
+        });
+    }
+
+    public interface onClick{
+        void clickStar();
     }
 }

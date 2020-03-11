@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rss.AndroidApplication;
-import com.example.rss.R;
+
 import com.example.rss.databinding.ItemsListFragmentBinding;
 import com.example.rss.presentation.BaseFragment;
 import com.example.rss.presentation.di.scope.ChannelScope;
@@ -106,11 +106,6 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
     @Override
     public RecyclerView getRecycler() {
         return binding.itemListRecycler;
-    }
-
-    @Override
-    public int getResourceIdRowView() {
-        return R.layout.card_list_item_row;
     }
 
     @Override
