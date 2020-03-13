@@ -5,7 +5,9 @@ import android.util.Log;
 import android.util.LongSparseArray;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +28,8 @@ import com.example.rss.presentation.itemDetail.ItemDetailFragment;
 import com.example.rss.presentation.itemList.adapter.ItemModel;
 import com.example.rss.presentation.itemList.adapter.RecyclerItemClickListener;
 import com.example.rss.presentation.itemList.adapter.RecyclerListAdapter;
+import com.example.rss.presentation.itemList.state.Paginator;
+import com.example.rss.presentation.itemList.state.RecyclerViewPaginator;
 
 import java.util.List;
 
@@ -37,7 +41,11 @@ import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 
 
-public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>, RecyclerListAdapter.SwipeCallback {
+public class ItemListPresenter implements
+                                            ItemListContract.P<ItemListContract.V>,
+                                            RecyclerListAdapter.SwipeCallback,
+                                            Paginator.ViewController<ItemModel> {
+
     private ItemListContract.V mView;
     private final ChannelInteractor channelInteractor;
     private final ItemInteractor itemInteractor;
@@ -46,6 +54,11 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
     private Long channelId;
     private RecyclerListAdapter recyclerAdapter;
     private static LongSparseArray<String> channelToImage = new LongSparseArray<>();
+    private final static Integer PAGE_SIZE = 10;
+    int curPage = 0;
+    LinearLayoutManager layoutManager;
+
+    RecyclerViewPaginator paginator;
 
     @Inject
     GlobalActions globalActions;
@@ -59,11 +72,12 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
         this.itemInteractor = itemInteractor;
         this.fileInteractor = fileInteractor;
         cDisposable = new CompositeDisposable();
+
+        paginator = new RecyclerViewPaginator(new PaginatorPage(), this);
     }
 
     @Override
     public void resume() {
-
         Log.e("myApp", String.valueOf(mView.getRecycler().getVisibility()));
         globalActions.setTitle(mView.context().getString(R.string.all_items));
     }
@@ -77,6 +91,7 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
     public void destroy() {
         if (!cDisposable.isDisposed())
             cDisposable.dispose();
+        paginator.release();
     }
 
     private Maybe<List<Item>> getItemsByChannels(Long channelId) {
@@ -118,31 +133,31 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
                 .toList();
     }
 
-    private void InitializeRecycler(List<ItemModel> itemModels) {
-        Log.e("myApp", "--- " + itemModels.size() + "==== " + View.GONE + " ==== " + View.VISIBLE);
-        if (itemModels.size() == 0)
-            mView.setEmptyView(true);
+    private void InitializeRecycler() {
 
+        mView.getRecycler().setItemAnimator(new DefaultItemAnimator());
         RequestManager requestManager = Glide.with(mView.context());
 
         recyclerAdapter = new RecyclerListAdapter(requestManager, mView.context());
-        recyclerAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                mView.getRecycler().scrollToPosition(0);
-            }
-        });
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mView.context());
+
+//        recyclerAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+//            @Override
+//            public void onItemRangeInserted(int positionStart, int itemCount) {
+//                super.onItemRangeInserted(positionStart, itemCount);
+//                //mView.getRecycler().scrollToPosition(0);
+//            }
+//        });
+        layoutManager = new LinearLayoutManager(mView.context());
         mView.getRecycler().setLayoutManager(layoutManager);
         mView.getRecycler().setAdapter(recyclerAdapter);
-        recyclerAdapter.submitList(itemModels);
+
         RecyclerListAdapter.SwipeHelper swipeHelper = recyclerAdapter.new SwipeHelper(
                 this,
                 mView.context().getDrawable(R.drawable.ic_star_yellow_30dp),
                 mView.context().getDrawable(R.drawable.ic_read_black_30dp));
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelper);
         itemTouchHelper.attachToRecyclerView(mView.getRecycler());
+
         mView.getRecycler().addOnItemTouchListener(new RecyclerItemClickListener(null, mView.getRecycler(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -158,6 +173,29 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
 
             }
         }));
+
+        mView.getRecycler().addOnScrollListener(new ScrollingHandler());
+    }
+
+    private class ScrollingHandler extends RecyclerView.OnScrollListener {
+
+        @Override
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+
+            int visibleItemCount = layoutManager.getChildCount();
+            int totalItemCount = layoutManager.getItemCount();
+            int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+            Log.e("logo", "visibleItemCount: " + visibleItemCount + " (" + (visibleItemCount + firstVisibleItemPosition) + ") ");
+            Log.e("logo", "totalItemCount: " + totalItemCount);
+            Log.e("logo", "firstVisibleItemPosition: " + firstVisibleItemPosition);
+            if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                    && firstVisibleItemPosition >= 0
+                    && totalItemCount >= PAGE_SIZE) {
+                Log.e("logo", "loadNewPage");
+                paginator.loadNewPage();
+            }
+        }
     }
 
     private void showErrorMessage(IErrorBundle errorBundle) {
@@ -170,15 +208,14 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
         this.mView = view;
         this.channelId = mView.getCurChannelId();
 
-        cDisposable.add(getItemModelsForRecycler(this.channelId)
-                .subscribe(this::InitializeRecycler, throwable -> {
-                }));
+        InitializeRecycler();
+        paginator.refresh();
     }
 
     @Override
     public void refreshList() {
-        cDisposable.add(
-                channelInteractor.switchChannelSource(channelId)
+        /*cDisposable.add(
+                channelInteractor.switchChannelSource(this.channelId)
                         .doOnNext(channels -> {
                             if (channels.size() == 0) {
                                 cDisposable.add(itemInteractor.deleteAllItems()
@@ -239,7 +276,8 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
                                 }, () -> {
                                     mView.setEmptyView(false);
                                 })
-        );
+        );*/
+        mView.stopRefresh();
     }
 
     @Override
@@ -258,6 +296,59 @@ public class ItemListPresenter implements ItemListContract.P<ItemListContract.V>
         } else if (direction == RecyclerListAdapter.SWIPE_READ) {
             cDisposable.add(itemInteractor.updateItemReadById(itemId, value).subscribe(integer -> {
             }));
+        }
+    }
+
+    @Override
+    public void showData(Boolean show, List<ItemModel> data) {
+        Log.e("logo", "showData: " + data.size());
+
+        recyclerAdapter.submitList(data);
+    }
+
+    @Override
+    public void showErrorMessage(Throwable error) {
+        Log.e("logo", "showErrorMessage");
+    }
+
+    @Override
+    public void showEmptyError(Boolean show, Throwable error) {
+        Log.e("logo", "showEmptyError");
+    }
+
+    @Override
+    public void showRefreshProgress(Boolean show) {
+        Log.e("logo", "showRefreshProgress");
+    }
+
+    @Override
+    public void showEmptyProgress(Boolean show) {
+        //Log.e("logo", "showEmptyProgress");
+    }
+
+    @Override
+    public void showPageProgress(Boolean show) {
+        Log.e("logo", "showPageProgress");
+    }
+
+    @Override
+    public void showEmptyView(Boolean show) {
+        Log.e("logo", "showEmptyView");
+    }
+
+    class PaginatorPage implements Paginator.Page<ItemModel> {
+
+        @Override
+        public Maybe<List<ItemModel>> invoke(int page) {
+            curPage = page;
+            int offset = (page == 1) ? 1 : (page - 1) * PAGE_SIZE;
+
+            return itemInteractor.getItemsWithOffsetByChannel(ItemListPresenter.this.channelId, offset, PAGE_SIZE)
+                    .toObservable()
+                    .concatMapIterable(items -> items)
+                    .concatMap(item -> convertToModel(item, channelId))
+                    .toList()
+                    .toMaybe();
         }
     }
 }

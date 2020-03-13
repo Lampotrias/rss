@@ -28,6 +28,9 @@ public interface ItemDAO {
     @Query("SELECT item.id, item.channel_id, item.guid, item.title, item.description, item.link,  item.pub_date, item.enclosure, item.is_read, CASE WHEN favorite.item_id > 0 THEN 1 END is_favorite FROM item LEFT JOIN favorite on item.id = favorite.item_id WHERE channel_id = :channelId ORDER BY pub_date DESC LIMIT :offset, :limit")
     Maybe<List<ItemDTO>> getItemsWithOffsetByChannel(Long channelId, Integer offset, Integer limit);
 
+    @Query("SELECT item.id, item.channel_id, item.guid, item.title, item.description, item.link,  item.pub_date, item.enclosure, item.is_read, CASE WHEN favorite.item_id > 0 THEN 1 END is_favorite FROM item LEFT JOIN favorite on item.id = favorite.item_id ORDER BY pub_date DESC LIMIT :offset, :limit")
+    Maybe<List<ItemDTO>> getItemsWithOffset(Integer offset, Integer limit);
+
     @Insert
     Maybe<List<Long>> insertAll(List<ItemDTO> itemDTOS);
 

@@ -90,7 +90,10 @@ public class DatabaseDataStore implements IDataStore {
 
     @Override
     public Maybe<List<ItemEntity>> getItemsWithOffsetByChannel(Long channelId, Integer offset, Integer limit) {
-        return appDatabase.itemDAO().getItemsWithOffsetByChannel(channelId, offset, limit).map(ChannelDatabaseMapper::transformItemsDtoToEntity);
+        if(channelId > 0)
+            return appDatabase.itemDAO().getItemsWithOffsetByChannel(channelId, offset, limit).map(ChannelDatabaseMapper::transformItemsDtoToEntity);
+        else
+            return appDatabase.itemDAO().getItemsWithOffset(offset, limit).map(ChannelDatabaseMapper::transformItemsDtoToEntity);
     }
 
     @Override

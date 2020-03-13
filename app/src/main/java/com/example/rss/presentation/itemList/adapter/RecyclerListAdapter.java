@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,19 +17,22 @@ import com.bumptech.glide.RequestManager;
 import com.example.rss.R;
 import com.example.rss.databinding.CardListItemRowBinding;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder> {
+public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder> implements IRecyclerListAdapter<ItemModel>{
     public static final int SWIPE_FAVORITE = 0;
     public static final int SWIPE_READ = 1;
-    private final AsyncListDiffer<ItemModel> mDiffer;
     private final RequestManager glide;
     private final Context context;
     private CardListItemRowBinding itemPersonBinding;
 
+    private List<ItemModel> data = new ArrayList<>();
+
+    public interface SwipeCallback {
+        void onSwiped(Long itemId, int direction, Boolean value);
+    }
     public RecyclerListAdapter(RequestManager glide, Context context) {
-        this.mDiffer = new AsyncListDiffer<>(this, DIFF_CALLBACK);
         this.context = context;
         this.glide = glide;
     }
@@ -45,7 +47,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ListViewHolder holder, int position) {
-        ItemModel item = mDiffer.getCurrentList().get(position);
+        ItemModel item = this.data.get(position);
         holder.setTitle(item.getTitle());
         holder.setDescription(item.getDescription());
         holder.setDate(item.getPubDate());
@@ -56,28 +58,20 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mDiffer.getCurrentList().size();
+        return this.data.size();
     }
 
-    public void submitList(@Nullable List<ItemModel> list) {
-        mDiffer.submitList(list);
+    @Override
+    public void submitList(@Nullable List<ItemModel> newList) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffCallback(this.data, newList));
+        this.data.clear();
+        this.data.addAll(newList);
+        diffResult.dispatchUpdatesTo(this);
     }
 
     public ItemModel get(int position) {
-        return mDiffer.getCurrentList().get(position);
+        return this.data.get(position);
     }
-
-    private static final DiffUtil.ItemCallback<ItemModel> DIFF_CALLBACK = new DiffUtil.ItemCallback<ItemModel>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull ItemModel oldUser, @NonNull ItemModel newUser) {
-            return Objects.equals(oldUser.getItemId(), newUser.getItemId());
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull ItemModel oldUser, @NonNull ItemModel newUser) {
-            return oldUser.equals(newUser);
-        }
-    };
 
     public class SwipeHelper extends ItemTouchHelper.SimpleCallback {
 
@@ -134,7 +128,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder> {
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
 
-            ItemModel itemModel = mDiffer.getCurrentList().get(position);
+            ItemModel itemModel = RecyclerListAdapter.this.data.get(position);
             if (direction == ItemTouchHelper.LEFT) {
                 itemModel.setStar(!itemModel.getStar());
                 callback.onSwiped(itemModel.getItemId(), RecyclerListAdapter.SWIPE_FAVORITE, itemModel.getStar());
@@ -148,7 +142,42 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder> {
         }
     }
 
-    public interface SwipeCallback {
-        void onSwiped(Long itemId, int direction, Boolean value);
+    public class DiffCallback extends DiffUtil.Callback{
+
+        List<ItemModel> oldList;
+        List<ItemModel> newList;
+
+        DiffCallback(List<ItemModel> newList, List<ItemModel> oldList) {
+            this.newList = newList;
+            this.oldList = oldList;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldList.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newList.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldList.get(oldItemPosition).getItemId().equals(newList.get(newItemPosition).getItemId())
+                    && oldList.get(oldItemPosition).getTitle().equals(newList.get(newItemPosition).getTitle());
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
+        }
+
+        @Nullable
+        @Override
+        public Object getChangePayload(int oldItemPosition, int newItemPosition) {
+            //you can return particular field for changed item.
+            return super.getChangePayload(oldItemPosition, newItemPosition);
+        }
     }
 }
