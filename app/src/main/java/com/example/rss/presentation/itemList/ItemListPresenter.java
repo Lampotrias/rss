@@ -31,6 +31,7 @@ import com.example.rss.presentation.itemList.adapter.RecyclerListAdapter;
 import com.example.rss.presentation.itemList.state.Paginator;
 import com.example.rss.presentation.itemList.state.RecyclerViewPaginator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -54,7 +55,7 @@ public class ItemListPresenter implements
     private Long channelId;
     private RecyclerListAdapter recyclerAdapter;
     private static LongSparseArray<String> channelToImage = new LongSparseArray<>();
-    private final static Integer PAGE_SIZE = 10;
+    private final static Integer PAGE_SIZE = 5;
     int curPage = 0;
     LinearLayoutManager layoutManager;
 
@@ -134,19 +135,18 @@ public class ItemListPresenter implements
     }
 
     private void InitializeRecycler() {
-
         mView.getRecycler().setItemAnimator(new DefaultItemAnimator());
         RequestManager requestManager = Glide.with(mView.context());
 
         recyclerAdapter = new RecyclerListAdapter(requestManager, mView.context());
 
-//        recyclerAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-//            @Override
-//            public void onItemRangeInserted(int positionStart, int itemCount) {
-//                super.onItemRangeInserted(positionStart, itemCount);
-//                //mView.getRecycler().scrollToPosition(0);
-//            }
-//        });
+        /*recyclerAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                mView.getRecycler().scrollToPosition(0);
+            }
+        });*/
         layoutManager = new LinearLayoutManager(mView.context());
         mView.getRecycler().setLayoutManager(layoutManager);
         mView.getRecycler().setAdapter(recyclerAdapter);
@@ -186,15 +186,17 @@ public class ItemListPresenter implements
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
             int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-            Log.e("logo", "visibleItemCount: " + visibleItemCount + " (" + (visibleItemCount + firstVisibleItemPosition) + ") ");
-            Log.e("logo", "totalItemCount: " + totalItemCount);
-            Log.e("logo", "firstVisibleItemPosition: " + firstVisibleItemPosition);
-            if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+
+            if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 1
                     && firstVisibleItemPosition >= 0
                     && totalItemCount >= PAGE_SIZE) {
+                Log.e("logo", "visibleItemCount: " + visibleItemCount + " (" + (visibleItemCount + firstVisibleItemPosition) + ") ");
+                Log.e("logo", "totalItemCount: " + totalItemCount);
+                Log.e("logo", "firstVisibleItemPosition: " + firstVisibleItemPosition);
                 Log.e("logo", "loadNewPage");
                 paginator.loadNewPage();
             }
+
         }
     }
 
@@ -214,7 +216,7 @@ public class ItemListPresenter implements
 
     @Override
     public void refreshList() {
-        /*cDisposable.add(
+        cDisposable.add(
                 channelInteractor.switchChannelSource(this.channelId)
                         .doOnNext(channels -> {
                             if (channels.size() == 0) {
@@ -225,7 +227,7 @@ public class ItemListPresenter implements
                                                 throwable -> {
                                                     showErrorMessage(new DefaultErrorBundle((Exception) throwable));
                                                 }));
-                                recyclerAdapter.submitList(null);
+                                recyclerAdapter.submitList(new ArrayList<>());
                                 mView.setEmptyView(true);
                             }
                         })
@@ -276,7 +278,7 @@ public class ItemListPresenter implements
                                 }, () -> {
                                     mView.setEmptyView(false);
                                 })
-        );*/
+        );
         mView.stopRefresh();
     }
 
@@ -302,7 +304,6 @@ public class ItemListPresenter implements
     @Override
     public void showData(Boolean show, List<ItemModel> data) {
         Log.e("logo", "showData: " + data.size());
-
         recyclerAdapter.submitList(data);
     }
 

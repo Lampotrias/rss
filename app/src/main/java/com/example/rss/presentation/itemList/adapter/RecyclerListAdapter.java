@@ -62,10 +62,11 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder> im
     }
 
     @Override
-    public void submitList(@Nullable List<ItemModel> newList) {
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffCallback(this.data, newList));
+    public void submitList(@NonNull List<ItemModel> newList) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffCallback(newList, this.data));
         this.data.clear();
         this.data.addAll(newList);
+
         diffResult.dispatchUpdatesTo(this);
     }
 
