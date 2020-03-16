@@ -1,7 +1,6 @@
 package com.example.rss.presentation.itemList;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.util.LongSparseArray;
 import android.view.View;
 
@@ -31,14 +30,12 @@ import com.example.rss.presentation.itemList.adapter.RecyclerListAdapter;
 import com.example.rss.presentation.itemList.state.Paginator;
 import com.example.rss.presentation.itemList.state.RecyclerViewPaginator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 
 
@@ -56,10 +53,10 @@ public class ItemListPresenter implements
     private RecyclerListAdapter recyclerAdapter;
     private static LongSparseArray<String> channelToImage = new LongSparseArray<>();
     private final static Integer PAGE_SIZE = 5;
-    int curPage = 0;
-    LinearLayoutManager layoutManager;
 
-    RecyclerViewPaginator paginator;
+    private LinearLayoutManager layoutManager;
+
+    private RecyclerViewPaginator paginator;
 
     @Inject
     GlobalActions globalActions;
@@ -79,7 +76,6 @@ public class ItemListPresenter implements
 
     @Override
     public void resume() {
-        Log.e("myApp", String.valueOf(mView.getRecycler().getVisibility()));
         globalActions.setTitle(mView.context().getString(R.string.all_items));
     }
 
@@ -93,12 +89,6 @@ public class ItemListPresenter implements
         if (!cDisposable.isDisposed())
             cDisposable.dispose();
         paginator.release();
-    }
-
-    private Maybe<List<Item>> getItemsByChannels(Long channelId) {
-        if (channelId > 0)
-            return itemInteractor.getItemsByChannelId(channelId);
-        return itemInteractor.getAllItems();
     }
 
     private Observable<ItemModel> convertToModel(Item item, Long channelId) {
@@ -126,27 +116,12 @@ public class ItemListPresenter implements
                 });
     }
 
-    private Single<List<ItemModel>> getItemModelsForRecycler(Long channelId) {
-        return getItemsByChannels(channelId)
-                .toObservable()
-                .concatMapIterable(items -> items)
-                .concatMap(item -> convertToModel(item, channelId))
-                .toList();
-    }
-
     private void InitializeRecycler() {
         mView.getRecycler().setItemAnimator(new DefaultItemAnimator());
         RequestManager requestManager = Glide.with(mView.context());
 
         recyclerAdapter = new RecyclerListAdapter(requestManager, mView.context());
 
-        /*recyclerAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                mView.getRecycler().scrollToPosition(0);
-            }
-        });*/
         layoutManager = new LinearLayoutManager(mView.context());
         mView.getRecycler().setLayoutManager(layoutManager);
         mView.getRecycler().setAdapter(recyclerAdapter);
@@ -190,17 +165,12 @@ public class ItemListPresenter implements
             if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 1
                     && firstVisibleItemPosition >= 0
                     && totalItemCount >= PAGE_SIZE) {
-                Log.e("logo", "visibleItemCount: " + visibleItemCount + " (" + (visibleItemCount + firstVisibleItemPosition) + ") ");
-                Log.e("logo", "totalItemCount: " + totalItemCount);
-                Log.e("logo", "firstVisibleItemPosition: " + firstVisibleItemPosition);
-                Log.e("logo", "loadNewPage");
                 paginator.loadNewPage();
             }
-
         }
     }
 
-    private void showErrorMessage(IErrorBundle errorBundle) {
+    private void showErrorMgs(IErrorBundle errorBundle) {
         String errorMessage = ErrorMessageFactory.create(this.mView.context(), errorBundle.getException());
         mView.displayError(errorMessage);
     }
@@ -218,19 +188,6 @@ public class ItemListPresenter implements
     public void refreshList() {
         cDisposable.add(
                 channelInteractor.switchChannelSource(this.channelId)
-                        .doOnNext(channels -> {
-                            if (channels.size() == 0) {
-                                cDisposable.add(itemInteractor.deleteAllItems()
-                                        .flatMap(i -> itemInteractor.deleteAllFavorites())
-                                        .subscribe(integer -> {
-                                                },
-                                                throwable -> {
-                                                    showErrorMessage(new DefaultErrorBundle((Exception) throwable));
-                                                }));
-                                recyclerAdapter.submitList(new ArrayList<>());
-                                mView.setEmptyView(true);
-                            }
-                        })
                         .filter(channels -> channels.size() > 0)
                         .concatMapIterable(channels -> channels)
                         .flatMap(channel -> channelInteractor.getRssFeedContent(channel.getSourceLink())
@@ -253,33 +210,16 @@ public class ItemListPresenter implements
                         .flatMap(itemInteractor::insertManyItems)
                         .subscribe(
                                 insertItems -> {
-                                    if (insertItems.size() > 0) {
-                                        cDisposable.add(getItemModelsForRecycler(this.channelId)
-                                                .subscribe(itemModels -> {
-                                                            if (itemModels.size() == 0) {
-                                                                mView.setEmptyView(true);
-                                                            } else {
-                                                                mView.setEmptyView(false);
-                                                            }
-                                                            recyclerAdapter.submitList(itemModels);
-                                                            mView.stopRefresh();
-                                                        }
-                                                        , throwable -> {
-                                                            showErrorMessage(new DefaultErrorBundle((Exception) throwable));
-                                                            mView.stopRefresh();
-                                                        }));
-                                    } else {
-                                        mView.stopRefresh();
-                                    }
+                                    paginator.refresh();
+                                    mView.stopRefresh();
                                 },
                                 throwable -> {
-                                    Log.e("myApp", "0 + " + throwable.getMessage());
                                     mView.stopRefresh();
                                 }, () -> {
                                     mView.setEmptyView(false);
+                                    mView.stopRefresh();
                                 })
         );
-        mView.stopRefresh();
     }
 
     @Override
@@ -293,8 +233,8 @@ public class ItemListPresenter implements
                 cDisposable.add(itemInteractor.insertFavorite(favorite).subscribe(aLong -> {
                 }));
             } else
-                itemInteractor.deleteFavByItemBy(itemId).subscribe(integer -> {
-                });
+                cDisposable.add(itemInteractor.deleteFavByItemBy(itemId).subscribe(integer -> {
+                }));
         } else if (direction == RecyclerListAdapter.SWIPE_READ) {
             cDisposable.add(itemInteractor.updateItemReadById(itemId, value).subscribe(integer -> {
             }));
@@ -303,45 +243,43 @@ public class ItemListPresenter implements
 
     @Override
     public void showData(Boolean show, List<ItemModel> data) {
-        Log.e("logo", "showData: " + data.size());
         recyclerAdapter.submitList(data);
     }
 
     @Override
     public void showErrorMessage(Throwable error) {
-        Log.e("logo", "showErrorMessage");
+        showErrorMgs(new DefaultErrorBundle((Exception) error));
     }
 
     @Override
     public void showEmptyError(Boolean show, Throwable error) {
-        Log.e("logo", "showEmptyError");
+        showErrorMgs(new DefaultErrorBundle((Exception) error));
     }
 
     @Override
     public void showRefreshProgress(Boolean show) {
-        Log.e("logo", "showRefreshProgress");
+
     }
 
     @Override
     public void showEmptyProgress(Boolean show) {
-        //Log.e("logo", "showEmptyProgress");
+
     }
 
     @Override
     public void showPageProgress(Boolean show) {
-        Log.e("logo", "showPageProgress");
+
     }
 
     @Override
     public void showEmptyView(Boolean show) {
-        Log.e("logo", "showEmptyView");
+        mView.setEmptyView(show);
     }
 
     class PaginatorPage implements Paginator.Page<ItemModel> {
 
         @Override
         public Maybe<List<ItemModel>> invoke(int page) {
-            curPage = page;
             int offset = (page == 1) ? 1 : (page - 1) * PAGE_SIZE;
 
             return itemInteractor.getItemsWithOffsetByChannel(ItemListPresenter.this.channelId, offset, PAGE_SIZE)

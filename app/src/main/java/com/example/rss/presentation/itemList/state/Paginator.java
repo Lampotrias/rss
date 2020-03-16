@@ -1,7 +1,5 @@
 package com.example.rss.presentation.itemList.state;
 
-import com.example.rss.presentation.itemList.adapter.ItemModel;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +44,6 @@ public abstract class Paginator<T> {
     public void loadNewPage() {
         currentState.loadNewPage();
     }
-
 
     public void release() {
         currentState.release();
