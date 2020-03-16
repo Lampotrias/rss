@@ -29,4 +29,19 @@
     <string name="all_items">Все</string>
     <string name="exception_detail_item">Не найдена новость</string>
     <string name="not_items_in_list">Нет новостей</string>
+    <string name="title_activity_settings1">Settings1</string>
+
+    <!-- Preference Titles -->
+    <string name="sync_header">Синхронизация</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="sync_time_title">Интервал синхронизации</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>

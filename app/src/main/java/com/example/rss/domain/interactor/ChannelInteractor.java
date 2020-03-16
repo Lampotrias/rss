@@ -1,7 +1,5 @@
 package com.example.rss.domain.interactor;
 
-import android.util.Log;
-
 import com.example.rss.domain.Channel;
 import com.example.rss.domain.exception.XmlParseException;
 import com.example.rss.domain.executor.IPostExecutionThread;
@@ -71,16 +69,13 @@ public class ChannelInteractor extends BaseInteractor {
     public Observable<List<Channel>> switchChannelSource(Long channelId) {
         if (channelId > 0) {
             return repository.getChannelById(channelId)
-                    .doOnSuccess(channel -> Log.e("logo", "getChannelById" + channel.getDescription()))
                     .compose(getIOToMainTransformerMaybe())
                     .toObservable()
                     .toList()
                     .toObservable();
         } else {
             return repository.getAllChannels()
-                    .doOnComplete(() -> Log.e("logo", "complete"))
                     .compose(getIOToMainTransformerMaybe())
-                    .doOnSuccess(channel -> Log.e("logo", "getAllChannels" + channel.size()))
                     .toObservable();
         }
     }
