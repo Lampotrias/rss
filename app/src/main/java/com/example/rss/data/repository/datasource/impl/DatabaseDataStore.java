@@ -14,7 +14,6 @@ import com.example.rss.data.repository.datasource.IDataStore;
 import java.io.InputStream;
 import java.util.List;
 
-import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
@@ -104,7 +103,7 @@ public class DatabaseDataStore implements IDataStore {
     }
 
     @Override
-    public Single<Integer> updateChannel(ChannelEntity channelEntity) {
+    public Maybe<Integer> updateChannel(ChannelEntity channelEntity) {
         return appDatabase.channelDAO().updateChannel(ChannelDatabaseMapper.transform(channelEntity)).doOnSuccess(integer -> cache.evictByEntityId(channelEntity.getId().toString()));
     }
 

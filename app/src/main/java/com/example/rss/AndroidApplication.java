@@ -3,13 +3,14 @@ package com.example.rss;
 import android.app.Application;
 import android.content.Context;
 
-
 import com.example.rss.presentation.BaseFragment;
 import com.example.rss.presentation.di.component.AppComponent;
 import com.example.rss.presentation.di.component.DaggerAppComponent;
 import com.example.rss.presentation.di.component.FragmentComponent;
+import com.example.rss.presentation.di.component.WorkManagerComponent;
 import com.example.rss.presentation.di.module.AppModule;
 import com.example.rss.presentation.di.module.FragmentModule;
+import com.example.rss.presentation.di.module.WorkManagerModule;
 
 
 public class AndroidApplication extends Application {
@@ -17,6 +18,7 @@ public class AndroidApplication extends Application {
 
 	private GlobalActivity globalActivity;
 	private FragmentComponent fragmentComponent;
+	private WorkManagerComponent workManagerComponent;
 
 
 	@Override public void onCreate() {
@@ -54,6 +56,15 @@ public class AndroidApplication extends Application {
 	public FragmentComponent getFragmentModule(BaseFragment baseFragment){
 		fragmentComponent = appComponent.plusFragmentComponent(new FragmentModule(baseFragment));
 		return fragmentComponent;
+	}
+
+	public void releaseWorkManagerModule(){
+		workManagerComponent = null;
+	}
+
+	public WorkManagerComponent getWorkManagerModule(){
+		workManagerComponent = appComponent.plusWorkManagerComponent(new WorkManagerModule());
+		return workManagerComponent;
 	}
 
 	public void releaseFragmentModule(){

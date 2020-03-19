@@ -1,9 +1,11 @@
 package com.example.rss.presentation.global;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
+import androidx.navigation.NavController;
+
+import com.example.rss.R;
 import com.example.rss.data.exception.DatabaseConnectionException;
 import com.example.rss.domain.Category;
 import com.example.rss.domain.Channel;
@@ -14,16 +16,12 @@ import com.example.rss.domain.interactor.ChannelInteractor;
 import com.example.rss.domain.interactor.ItemInteractor;
 import com.example.rss.presentation.channelEdit.ChannelEditFragment;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
+import com.example.rss.presentation.itemList.ItemListFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import androidx.navigation.NavController;
-
-import com.example.rss.R;
-import com.example.rss.presentation.itemList.ItemListFragment;
 
 import javax.inject.Inject;
 
@@ -69,6 +67,9 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     public void setView(GlobalContract.V view) {
         mView = view;
         globalActions.updDrawerMenu();
+
+        InitBackgroundWork work = new InitBackgroundWork(mView.context());
+	    work.createAllTasks();
     }
 
     private void reCalcMenu() {
@@ -153,6 +154,11 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     }
 
     @Override
+    public void openLogFragment() {
+        navController.navigate(R.id.nav_logFragment);
+    }
+
+    @Override
     public void selectTreeItemChannel(int groupPos, int childPos) {
         String index = channelTreeData.get(groupPos).get(childPos).get("attrChildId");
         Bundle bundle = new Bundle();
@@ -204,13 +210,5 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     public void destroy() {
         mView = null;
         globalActions = null;
-    }
-
-    public void OnClickChannelTest(View v) {
-        navController.navigate(R.id.nav_testFragment);
-       /* Bundle bundle = new Bundle();
-        bundle.putInt("itemId", 0);
-        navController.navigate(R.id.nav_itemDetailFragment, bundle);*/
-        mView.closeDrawer();
     }
 }

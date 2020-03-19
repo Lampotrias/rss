@@ -130,7 +130,7 @@ public class AppDataRepository implements IRepository {
     }
 
     @Override
-    public Single<Integer> updateChannel(Channel channel) {
+    public Maybe<Integer> updateChannel(Channel channel) {
         final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
         return dataStore.updateChannel(repositoryEntityDataMapper.transform(channel));
     }

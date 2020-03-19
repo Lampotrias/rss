@@ -32,7 +32,7 @@ public interface ChannelDAO {
     Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp);
 
     @Update
-    Single<Integer> updateChannel(ChannelDTO channelDTO);
+     Maybe<Integer> updateChannel(ChannelDTO channelDTO);
 
     @Query("DELETE FROM channel")
     Maybe<Integer> deleteAllChannels();

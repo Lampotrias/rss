@@ -19,16 +19,16 @@ public class FileManager {
     FileManager() {
     }
 
-    void writeToFile(File file, String fileContent) {
-        if (!file.exists()) {
+    public void writeToFile(File file, String fileContent) {
+        //if (!file.exists()) {
             try {
-                final FileWriter writer = new FileWriter(file);
+                final FileWriter writer = new FileWriter(file, true);
                 writer.write(fileContent);
                 writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+       // }
     }
 
     void writeToPreferences(Context context, String preferenceFileName, String key,

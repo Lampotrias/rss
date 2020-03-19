@@ -24,6 +24,7 @@ public interface GlobalContract {
         void setView(T view);
         void OnClickChannelAdd(View view);
         void openSettingsFragment();
+        void openLogFragment();
         void selectTreeItemChannel(int groupPos, int childPos);
         void updLeftMenu();
         void contextChannelEdit(Long id);

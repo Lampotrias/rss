@@ -21,7 +21,7 @@ public interface IDataStore {
 	Maybe<ChannelEntity> getChannelById(Long id);
 	Single<ChannelEntity> getChannelByUrl(String url);
 	Maybe<List<ChannelEntity>> getAllChannels();
-	Single<Integer> updateChannel(ChannelEntity channelEntity);
+	Maybe<Integer> updateChannel(ChannelEntity channelEntity);
 	Maybe<Integer> deleteAllChannels();
 	Maybe<Integer> deleteChannelById(Long id);
 	Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp);

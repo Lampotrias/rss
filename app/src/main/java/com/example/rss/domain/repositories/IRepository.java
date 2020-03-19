@@ -9,7 +9,6 @@ import com.example.rss.domain.Item;
 import java.io.InputStream;
 import java.util.List;
 
-import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
@@ -22,7 +21,7 @@ public interface IRepository {
 	Maybe<Channel> getChannelById(Long id);
 	Maybe<List<Channel>> getAllChannels();
 	Single<Channel> getChannelByUrl(String url);
-	Single<Integer> updateChannel(Channel channel);
+	Maybe<Integer> updateChannel(Channel channel);
 	Maybe<Integer> deleteAllChannels();
 	Maybe<Integer> deleteChannelById(Long id);
 	Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp);

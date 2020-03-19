@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
-import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
@@ -110,7 +109,7 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
-    public Single<Integer> updateChannel(ChannelEntity channelEntity) {
+    public Maybe<Integer> updateChannel(ChannelEntity channelEntity) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 

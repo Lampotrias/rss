@@ -107,7 +107,7 @@ public class DiskDataStore implements IDataStore {
     }
 
     @Override
-    public Single<Integer> updateChannel(ChannelEntity channelEntity) {
+    public Maybe<Integer> updateChannel(ChannelEntity channelEntity) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
 

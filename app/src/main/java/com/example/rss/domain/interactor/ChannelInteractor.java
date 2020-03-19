@@ -54,8 +54,8 @@ public class ChannelInteractor extends BaseInteractor {
         return repository.addChannel(channel).compose(getIOToMainTransformerMaybe());
     }
 
-    public Single<Integer> update(Channel channel) {
-        return repository.updateChannel(channel).compose(getIOToMainTransformerSingle());
+    public Maybe<Integer> update(Channel channel) {
+        return repository.updateChannel(channel).compose(getIOToMainTransformerMaybe());
     }
 
     public Maybe<InputStream> getRssFeedContent(String path) {

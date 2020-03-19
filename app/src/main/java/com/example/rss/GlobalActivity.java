@@ -23,8 +23,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.rss.presentation.BaseActivity;
 import com.example.rss.presentation.global.GlobalActions;
-import com.example.rss.presentation.global.GlobalPresenter;
 import com.example.rss.presentation.global.GlobalContract;
+import com.example.rss.presentation.global.GlobalPresenter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -98,7 +98,10 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 		btnAdd.setOnClickListener(v -> mPresenter.OnClickChannelAdd(v));
 
 		Button btnService = findViewById(R.id.btnTestService);
-		btnService.setOnClickListener(v -> mPresenter.OnClickChannelTest(v));
+//		btnService.setOnClickListener(v -> {
+//			InitBackgroundWork work = new InitBackgroundWork(this);
+//			work.createAllTasks();
+//		});
 		registerForContextMenu(expandableListView);
 		mPresenter.setView(this);
 	}
@@ -254,6 +257,9 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 				break;
 			case R.id.action_close_app:
 				finish();
+				break;
+			case R.id.show_log:
+				mPresenter.openLogFragment();
 				break;
 		}
 

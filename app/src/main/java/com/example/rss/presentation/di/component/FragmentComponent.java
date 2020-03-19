@@ -5,7 +5,6 @@ import com.example.rss.presentation.di.module.FragmentModule;
 import com.example.rss.presentation.di.scope.ChannelScope;
 import com.example.rss.presentation.itemDetail.ItemDetailFragment;
 import com.example.rss.presentation.itemList.ItemListFragment;
-import com.example.rss.presentation.services.TestFragment;
 
 import dagger.Subcomponent;
 
@@ -15,5 +14,4 @@ public interface FragmentComponent {
     void inject(ChannelEditFragment channelEditFragment);
     void inject(ItemListFragment itemListFragment);
     void inject(ItemDetailFragment itemDetailFragment);
-    void inject(TestFragment testFragment);
 }
