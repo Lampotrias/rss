@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.SimpleExpandableListAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +21,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.rss.presentation.BaseActivity;
+import com.example.rss.presentation.global.AdapterExpandable;
 import com.example.rss.presentation.global.GlobalActions;
 import com.example.rss.presentation.global.GlobalContract;
 import com.example.rss.presentation.global.GlobalPresenter;
@@ -114,10 +114,10 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 		String[] childFrom = new String[]{attrChildTitle};
 		int[] childTo = new int[]{android.R.id.text1};
 
-		SimpleExpandableListAdapter adapter = new SimpleExpandableListAdapter(
+		AdapterExpandable adapter = new AdapterExpandable(
 				this,
 				groupData,
-				android.R.layout.simple_expandable_list_item_1,
+				R.layout.expandable_group,
 				groupFrom,
 				groupTo,
 				childData,
