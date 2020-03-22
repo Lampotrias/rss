@@ -27,8 +27,8 @@ import com.example.rss.presentation.itemDetail.ItemDetailFragment;
 import com.example.rss.presentation.itemList.adapter.ItemModel;
 import com.example.rss.presentation.itemList.adapter.RecyclerItemClickListener;
 import com.example.rss.presentation.itemList.adapter.RecyclerListAdapter;
-import com.example.rss.presentation.itemList.state.Paginator;
-import com.example.rss.presentation.itemList.state.RecyclerViewPaginator;
+import com.example.rss.domain.paginator.Paginator;
+import com.example.rss.presentation.itemList.adapter.RecyclerViewPaginator;
 
 import java.util.List;
 
@@ -280,7 +280,7 @@ public class ItemListPresenter implements
 
         @Override
         public Maybe<List<ItemModel>> invoke(int page) {
-            int offset = (page == 1) ? 1 : (page - 1) * PAGE_SIZE;
+            int offset = (page == 1) ? 0 : (page - 1) * PAGE_SIZE;
 
             return itemInteractor.getItemsWithOffsetByChannel(ItemListPresenter.this.channelId, offset, PAGE_SIZE)
                     .toObservable()
