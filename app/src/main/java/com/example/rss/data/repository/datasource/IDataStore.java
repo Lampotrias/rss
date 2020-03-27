@@ -33,6 +33,7 @@ public interface IDataStore {
 	Maybe<ItemEntity> getItemByUniqueId(String hash);
 	Maybe<Integer> deleteAllItems();
 	Maybe<Integer> deleteItemsByChannelId(Long id);
+	Maybe<Integer> deleteItemById(Long id);
 	Maybe<Integer> updateReadById(Long id, Boolean isRead);
 	Maybe<Integer> getCountItemsByChannel(Long id);
 	Maybe<Integer> getPosItemInChannelQueue(Long channelId, Long itemId);
@@ -42,7 +43,7 @@ public interface IDataStore {
 	//Files
 	Maybe<Long> addFile (FileEntity fileEntity);
 	Maybe<FileEntity> getFileById(Long id);
-
+	Maybe<Integer> deleteFileById(Long id);
 	//Category
 	Maybe<List<CategoryEntity>> getCategoriesByType(String mType);
 	Maybe<CategoryEntity> getCategoryById(Long id);

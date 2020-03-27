@@ -32,6 +32,7 @@ public interface IRepository {
 	Maybe<List<Long>> insertManyItems(List<Item> items);
 	Maybe<Item> getItemByUniqueId(String hash);
 	Maybe<Integer> deleteAllItems();
+	Maybe<Integer> deleteItemById(Long id);
 	Maybe<Integer> deleteItemsByChannelId(Long id);
 	Maybe<Integer> updateReadById(Long id, Boolean isRead);
 	Maybe<Integer> getCountItemsByChannel(Long id);
@@ -47,7 +48,7 @@ public interface IRepository {
 	//File
 	Maybe<Long> addFile(File file);
 	Maybe<File> getFileById(Long id);
-
+	Maybe<Integer> deleteFileById(Long id);
     //Favorite
 	Maybe<Integer> deleteFavByItemBy(Long id);
 	Maybe<Long> insertFavorite(Favorite favorite);

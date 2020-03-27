@@ -18,9 +18,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
 import io.reactivex.Maybe;
-import io.reactivex.Observable;
 
 public class ItemInteractor extends BaseInteractor {
     private final IRepository repository;
@@ -37,6 +35,12 @@ public class ItemInteractor extends BaseInteractor {
 
     public Maybe<Integer> deleteFavByItemBy(Long itemId) {
         return repository.deleteFavByItemBy(itemId).compose(getIOToMainTransformerMaybe());
+
+    }
+
+    public Maybe<Integer> deleteItemById(Long id) {
+        //Log.e("Logo", "id   "  + id);
+        return repository.deleteItemById(id).compose(getIOToMainTransformerMaybe());
 
     }
 

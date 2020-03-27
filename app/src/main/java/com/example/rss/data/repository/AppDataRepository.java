@@ -88,6 +88,12 @@ public class AppDataRepository implements IRepository {
     }
 
     @Override
+    public Maybe<Integer> deleteItemById(Long id) {
+        final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
+        return dataStore.deleteItemById(id);
+    }
+
+    @Override
     public Maybe<Integer> deleteItemsByChannelId(Long id) {
         final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
         return dataStore.deleteItemsByChannelId(id);
@@ -176,6 +182,12 @@ public class AppDataRepository implements IRepository {
         final IDataStore dataStore = channelDataStoreFactory.createForFile(id);
         return dataStore.getFileById(id).map(repositoryEntityDataMapper::transform);
 
+    }
+
+    @Override
+    public Maybe<Integer> deleteFileById(Long id) {
+        final IDataStore dataStore = channelDataStoreFactory.createForFile(id);
+        return dataStore.deleteFileById(id);
     }
 
     @Override

@@ -74,6 +74,11 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
+    public Maybe<Integer> deleteItemById(Long id) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
     public Maybe<Integer> updateReadById(Long id, Boolean isRead) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
@@ -95,7 +100,7 @@ public class NetworkDataStore implements IDataStore {
 
     @Override
     public Maybe<List<ItemEntity>> getItemsWithOffsetByChannel(Long channelId, Integer offset, Integer limit) {
-        return null;
+        throw new UnsupportedOperationException("Operation is not available!!!");
     }
 
     @Override
@@ -131,6 +136,11 @@ public class NetworkDataStore implements IDataStore {
     @Override
     public Maybe<FileEntity> getFileById(Long id) {
         throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Maybe<Integer> deleteFileById(Long id) {
+        return null;
     }
 
     @Override

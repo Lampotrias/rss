@@ -68,6 +68,11 @@ public class DatabaseDataStore implements IDataStore {
     }
 
     @Override
+    public Maybe<Integer> deleteItemById(Long id) {
+        return appDatabase.itemDAO().deleteItemById(id);
+    }
+
+    @Override
     public Maybe<Integer> updateReadById(Long id, Boolean isRead) {
         return appDatabase.itemDAO().updateReadById(id, isRead);
     }
@@ -128,6 +133,11 @@ public class DatabaseDataStore implements IDataStore {
     @Override
     public Maybe<FileEntity> getFileById(Long id) {
         return appDatabase.fileDAO().getFileById(id).map(ChannelDatabaseMapper::transform);
+    }
+
+    @Override
+    public Maybe<Integer> deleteFileById(Long id) {
+        return appDatabase.fileDAO().deleteFileById(id);
     }
 
     @Override

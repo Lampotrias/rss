@@ -9,7 +9,13 @@
             app:key="sync_time"
             app:title="@string/sync_time_title"
             app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/save_header">
+        <EditTextPreference
+            app:defaultValue="500"
+            app:key="save_count_item_per_channel"
+            app:title="@string/save_count_title"/>
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/sync_header">

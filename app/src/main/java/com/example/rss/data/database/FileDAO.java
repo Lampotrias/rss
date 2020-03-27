@@ -7,9 +7,7 @@ import androidx.room.Query;
 
 import com.example.rss.data.database.dto.FileDTO;
 
-import io.reactivex.Flowable;
 import io.reactivex.Maybe;
-import io.reactivex.Single;
 
 @Dao
 public interface FileDAO {
@@ -18,4 +16,7 @@ public interface FileDAO {
 
 	@Query("SELECT * FROM file WHERE id = :id")
 	Maybe<FileDTO> getFileById(Long id);
+
+	@Query("DELETE FROM file WHERE id = :id")
+	Maybe<Integer> deleteFileById(Long id);
 }

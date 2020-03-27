@@ -1,9 +1,12 @@
 package com.example.rss.presentation.global;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.navigation.NavController;
+import androidx.preference.PreferenceManager;
 
 import com.example.rss.R;
 import com.example.rss.data.exception.DatabaseConnectionException;
@@ -13,6 +16,7 @@ import com.example.rss.domain.exception.DefaultErrorBundle;
 import com.example.rss.domain.exception.IErrorBundle;
 import com.example.rss.domain.interactor.CategoryInteractor;
 import com.example.rss.domain.interactor.ChannelInteractor;
+import com.example.rss.domain.interactor.FileInteractor;
 import com.example.rss.domain.interactor.ItemInteractor;
 import com.example.rss.presentation.channelEdit.ChannelEditFragment;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
@@ -34,9 +38,12 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     private final ChannelInteractor channelInteractor;
     private final CategoryInteractor categoryInteractor;
     private final ItemInteractor itemInteractor;
+    private final FileInteractor fileInteractor;
     private final CompositeDisposable compositeDisposable;
     private final String CATEGORY_TYPE = "C";
     private final String FAVORITE_TYPE = "F";
+
+    private SharedPreferences preferences;
 
     private List<Channel> mChannels = null;
     private List<Category> mCategories = null;
@@ -45,6 +52,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     private void setCategories(List<Category> mCategories) {
         this.mCategories = mCategories;
     }
+
     private void setChannels(List<Channel> mChannels) {
         this.mChannels = mChannels;
     }
@@ -56,20 +64,25 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     NavController navController;
 
     @Inject
-    public GlobalPresenter(ChannelInteractor channelInteractor, CategoryInteractor categoryInteractor, ItemInteractor itemInteractor) {
+    public GlobalPresenter(ChannelInteractor channelInteractor, CategoryInteractor categoryInteractor, ItemInteractor itemInteractor, FileInteractor fileInteractor) {
         this.channelInteractor = channelInteractor;
         this.categoryInteractor = categoryInteractor;
         this.itemInteractor = itemInteractor;
+        this.fileInteractor = fileInteractor;
         compositeDisposable = new CompositeDisposable();
+
     }
 
     @Override
     public void setView(GlobalContract.V view) {
         mView = view;
         globalActions.updDrawerMenu();
+        preferences = PreferenceManager.getDefaultSharedPreferences(mView.context());
 
         InitBackgroundWork work = new InitBackgroundWork(mView.context());
-	    work.createAllTasks();
+        work.createAllTasks();
+
+        this.deleteOldData(Integer.parseInt(preferences.getString("save_count_item_per_channel", "500")));
     }
 
     private void reCalcMenu() {
@@ -185,15 +198,41 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
         compositeDisposable.add(
                 Maybe.merge(channelInteractor.deleteChannelById(id), itemInteractor.deleteItemsByChannelId(id), itemInteractor.getAllItems(), itemInteractor.deleteAllItems())
 
-                //TODO удаление favorites
-                //TODO удаление files
-                .subscribe(
-                integer -> {
-                    reCalcMenu();
-                    navController.navigate(R.id.nav_item_list_fragment);
-                    mView.closeDrawer();
-                },
-                throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable))));
+                        //TODO удаление favorites
+                        //TODO удаление files
+                        .subscribe(
+                                integer -> {
+                                    reCalcMenu();
+                                    navController.navigate(R.id.nav_item_list_fragment);
+                                    mView.closeDrawer();
+                                },
+                                throwable -> showErrorMessage(new DefaultErrorBundle((Exception) throwable))));
+    }
+
+    private void deleteOldData(int limit) {
+        compositeDisposable.add(
+                channelInteractor.getAllChannels()
+                        .toObservable()
+                        .flatMapIterable(channels -> channels)
+                        .flatMapMaybe(channel -> itemInteractor.getCountItemsByChannel(channel.getChannelId())
+                                .flatMap(integer -> {
+                                    if (integer < limit)
+                                        return Maybe.just(integer);
+                                    Log.e("Logo", "tet"  + (integer - limit));
+                                    return itemInteractor.getItemsWithOffsetByChannel(channel.getChannelId(), limit, integer - limit)
+                                            .toObservable()
+                                            .flatMapIterable(items -> items)
+                                            .flatMap(item -> Maybe.zip(
+                                                    itemInteractor.deleteFavByItemBy(item.getItemId()),
+                                                    fileInteractor.deleteFileById(item.getEnclosure()),
+                                                    (integer1, integer2) -> item).toObservable()
+                                                    .flatMapMaybe(item1 -> itemInteractor.deleteItemById(item1.getItemId()))
+                                            ).lastElement();
+                                })
+                        )
+                        .subscribe(count -> {
+                            Log.e("Logo", "tet"  + count);
+                        }));
     }
 
     @Override

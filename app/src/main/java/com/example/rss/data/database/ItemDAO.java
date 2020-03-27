@@ -8,7 +8,6 @@ import com.example.rss.data.database.dto.ItemDTO;
 
 import java.util.List;
 
-import io.reactivex.Completable;
 import io.reactivex.Maybe;
 
 @Dao
@@ -39,6 +38,9 @@ public interface ItemDAO {
 
     @Query("DELETE FROM item")
     Maybe<Integer> deleteAllItems();
+
+    @Query("DELETE FROM item WHERE id = :id")
+    Maybe<Integer> deleteItemById(Long id);
 
     @Query("DELETE FROM item WHERE channel_id = :id")
     Maybe<Integer> deleteItemsByChannelId(Long id);

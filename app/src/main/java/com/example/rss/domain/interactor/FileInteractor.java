@@ -24,6 +24,10 @@ public class FileInteractor extends BaseInteractor {
         return repository.addFile(file).compose(getIOToMainTransformerMaybe());
     }
 
+    public Maybe<Integer> deleteFileById(Long id) {
+        return repository.deleteFileById(id).compose(getIOToMainTransformerMaybe());
+    }
+
     public Maybe<String> getLinkByFileId(Long fileId) {
         String emptyPath = "";
         if (fileId > 0) {

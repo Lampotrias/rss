@@ -45,4 +45,6 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="show_log">Просмотр лога</string>
+    <string name="save_header">Хранение данных</string>
+    <string name="save_count_title">Хранить элементов в канале</string>
 </resources>
