@@ -55,8 +55,8 @@ public class ListViewHolder extends RecyclerView.ViewHolder implements ListRowVi
     @Override
     public void setRead(Boolean isRead) {
         if (isRead) {
-            binding.txTitle.setTextColor(Color.parseColor("#d1e0e0"));
-            binding.txDescription.setTextColor(Color.parseColor("#d1e0e0"));
+            binding.txTitle.setTextColor(Color.parseColor("#a52a2a"));
+            binding.txDescription.setTextColor(Color.parseColor("#a52a2a"));
         } else {
             binding.txTitle.setTextColor(Color.BLACK);
             binding.txDescription.setTextColor(Color.BLACK);

@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.RequestManager;
 import com.example.rss.R;
 import com.example.rss.databinding.CardListItemRowBinding;
+import com.example.rss.domain.adapter.DiffCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,45 +140,6 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<ListViewHolder> im
             }
 
             RecyclerListAdapter.this.notifyItemChanged(position);
-        }
-    }
-
-    public class DiffCallback extends DiffUtil.Callback{
-
-        List<ItemModel> oldList;
-        List<ItemModel> newList;
-
-        DiffCallback(List<ItemModel> newList, List<ItemModel> oldList) {
-            this.newList = newList;
-            this.oldList = oldList;
-        }
-
-        @Override
-        public int getOldListSize() {
-            return oldList.size();
-        }
-
-        @Override
-        public int getNewListSize() {
-            return newList.size();
-        }
-
-        @Override
-        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            return oldList.get(oldItemPosition).getItemId().equals(newList.get(newItemPosition).getItemId())
-                    && oldList.get(oldItemPosition).getTitle().equals(newList.get(newItemPosition).getTitle());
-        }
-
-        @Override
-        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-            return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
-        }
-
-        @Nullable
-        @Override
-        public Object getChangePayload(int oldItemPosition, int newItemPosition) {
-            //you can return particular field for changed item.
-            return super.getChangePayload(oldItemPosition, newItemPosition);
         }
     }
 }

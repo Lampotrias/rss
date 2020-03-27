@@ -1,6 +1,6 @@
-package com.example.rss.presentation.itemList.state;
+package com.example.rss.presentation.itemList.adapter;
 
-import com.example.rss.presentation.itemList.adapter.ItemModel;
+import com.example.rss.domain.paginator.Paginator;
 
 public class RecyclerViewPaginator extends Paginator<ItemModel> {
 

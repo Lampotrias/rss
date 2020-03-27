@@ -1,4 +1,4 @@
-package com.example.rss.presentation.itemList.state;
+package com.example.rss.domain.paginator;
 
 import java.util.List;
 
