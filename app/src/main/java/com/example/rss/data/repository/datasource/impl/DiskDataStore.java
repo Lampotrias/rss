@@ -97,6 +97,11 @@ public class DiskDataStore implements IDataStore {
     }
 
     @Override
+    public Maybe<List<ItemEntity>> getFavoritesWithOffset(Integer offset, Integer limit) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
     public Maybe<Long> addFile(FileEntity fileEntity) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }

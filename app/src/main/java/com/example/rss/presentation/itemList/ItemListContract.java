@@ -14,6 +14,7 @@ public interface ItemListContract {
         RecyclerView getRecycler();
         Long getCurChannelId();
         void setEmptyView(Boolean isShow);
+        boolean isFavoriteMode();
     }
 
     interface P<T> extends Presenter {

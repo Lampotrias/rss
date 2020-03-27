@@ -47,7 +47,6 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 	private final int MENU_DELETE = 43234;
 	private final int MENU_EDIT = 43233;
 
-
     @Inject
     public GlobalPresenter mPresenter;
 
@@ -96,6 +95,9 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 
 		Button btnAdd = findViewById(R.id.btnAddChannelDrawer);
 		btnAdd.setOnClickListener(v -> mPresenter.OnClickChannelAdd(v));
+
+		Button btnFavoriteList = findViewById(R.id.btnFavoriteList);
+		btnFavoriteList.setOnClickListener(v -> mPresenter.OnClickFavoritesList(v));
 
 		Button btnService = findViewById(R.id.btnTestService);
 //		btnService.setOnClickListener(v -> {

@@ -130,6 +130,12 @@ public class AppDataRepository implements IRepository {
     }
 
     @Override
+    public Maybe<List<Item>> getFavoritesWithOffset(Integer offset, Integer limit) {
+        final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
+        return dataStore.getFavoritesWithOffset(offset, limit).map(repositoryEntityDataMapper::transformEntityToItems);
+    }
+
+    @Override
     public Single<Channel> getChannelByUrl(String url) {
         final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
         return dataStore.getChannelByUrl(url).map(repositoryEntityDataMapper::transform);

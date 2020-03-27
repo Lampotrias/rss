@@ -52,8 +52,8 @@ public class ItemInteractor extends BaseInteractor {
         return repository.getItemsWithOffsetByChannel(channelId, offset, limit).compose(getIOToMainTransformerMaybe());
     }
 
-    public Maybe<Integer> getCountItemsForChannel(Long channelId) {
-        return repository.getCountItemsForChannel(channelId).compose(getIOToMainTransformerMaybe());
+    public Maybe<List<Item>> getFavoritesWithOffset(Integer offset, Integer limit) {
+        return repository.getFavoritesWithOffset(offset, limit).compose(getIOToMainTransformerMaybe());
     }
 
     public Maybe<List<Item>> getAllItems() {

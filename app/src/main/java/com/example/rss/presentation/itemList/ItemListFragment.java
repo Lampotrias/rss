@@ -25,8 +25,10 @@ import javax.inject.Inject;
 public class ItemListFragment extends BaseFragment implements ItemListContract.V {
     private AndroidApplication app;
     private Long curChannelId = 0L;
+    private boolean bFavMode = false;
 
     public static final String CHANNEL_ID = "CHANNEL_ID";
+    public final static String FAVORITES_MODE = "FAVORITES_MODE";
 
     @Inject
     public ItemListPresenter mPresenter;
@@ -42,6 +44,7 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
 
         if (getArguments() != null) {
             curChannelId = getArguments().getLong(CHANNEL_ID, 0);
+            bFavMode = getArguments().getBoolean(FAVORITES_MODE, false);
         }
         app = (AndroidApplication) Objects.requireNonNull(getActivity()).getApplication();
         app.getFragmentModule(this).inject(this);
@@ -111,6 +114,11 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
     @Override
     public Long getCurChannelId() {
         return curChannelId;
+    }
+
+    @Override
+    public boolean isFavoriteMode() {
+        return bFavMode;
     }
 
     @Override

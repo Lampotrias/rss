@@ -40,9 +40,9 @@ import io.reactivex.disposables.CompositeDisposable;
 
 
 public class ItemListPresenter implements
-                                            ItemListContract.P<ItemListContract.V>,
-                                            RecyclerListAdapter.SwipeCallback,
-                                            Paginator.ViewController<ItemModel> {
+        ItemListContract.P<ItemListContract.V>,
+        RecyclerListAdapter.SwipeCallback,
+        Paginator.ViewController<ItemModel> {
 
     private ItemListContract.V mView;
     private final ChannelInteractor channelInteractor;
@@ -55,7 +55,6 @@ public class ItemListPresenter implements
     private final static Integer PAGE_SIZE = 5;
 
     private LinearLayoutManager layoutManager;
-
     private RecyclerViewPaginator paginator;
 
     @Inject
@@ -70,8 +69,6 @@ public class ItemListPresenter implements
         this.itemInteractor = itemInteractor;
         this.fileInteractor = fileInteractor;
         cDisposable = new CompositeDisposable();
-
-        paginator = new RecyclerViewPaginator(new PaginatorPage(), this);
     }
 
     @Override
@@ -181,6 +178,11 @@ public class ItemListPresenter implements
         this.channelId = mView.getCurChannelId();
 
         InitializeRecycler();
+        if (mView.isFavoriteMode())
+            paginator = new RecyclerViewPaginator(new FavoritesListPaginator(), this);
+        else
+            paginator = new RecyclerViewPaginator(new SimpleListPaginator(), this);
+
         paginator.refresh();
     }
 
@@ -276,13 +278,25 @@ public class ItemListPresenter implements
         mView.setEmptyView(show);
     }
 
-    class PaginatorPage implements Paginator.Page<ItemModel> {
-
+    class SimpleListPaginator implements Paginator.Page<ItemModel> {
         @Override
         public Maybe<List<ItemModel>> invoke(int page) {
             int offset = (page == 1) ? 0 : (page - 1) * PAGE_SIZE;
 
             return itemInteractor.getItemsWithOffsetByChannel(ItemListPresenter.this.channelId, offset, PAGE_SIZE)
+                    .toObservable()
+                    .concatMapIterable(items -> items)
+                    .concatMap(item -> convertToModel(item, channelId))
+                    .toList()
+                    .toMaybe();
+        }
+    }
+
+    class FavoritesListPaginator implements Paginator.Page<ItemModel>{
+        @Override
+        public Maybe<List<ItemModel>> invoke(int page) {
+            int offset = (page == 1) ? 0 : (page - 1) * PAGE_SIZE;
+            return itemInteractor.getFavoritesWithOffset(offset, PAGE_SIZE)
                     .toObservable()
                     .concatMapIterable(items -> items)
                     .concatMap(item -> convertToModel(item, channelId))

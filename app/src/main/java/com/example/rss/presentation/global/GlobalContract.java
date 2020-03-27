@@ -23,6 +23,7 @@ public interface GlobalContract {
     interface P<T> extends Presenter {
         void setView(T view);
         void OnClickChannelAdd(View view);
+        void OnClickFavoritesList(View view);
         void openSettingsFragment();
         void openLogFragment();
         void selectTreeItemChannel(int groupPos, int childPos);

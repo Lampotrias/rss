@@ -162,6 +162,15 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     }
 
     @Override
+    public void OnClickFavoritesList(View view) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ItemListFragment.FAVORITES_MODE, true);
+
+        navController.navigate(R.id.nav_item_list_fragment, bundle);
+        mView.closeDrawer();
+    }
+
+    @Override
     public void openSettingsFragment() {
         navController.navigate(R.id.nav_settingsFragment);
     }

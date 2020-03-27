@@ -101,6 +101,11 @@ public class DatabaseDataStore implements IDataStore {
     }
 
     @Override
+    public Maybe<List<ItemEntity>> getFavoritesWithOffset(Integer offset, Integer limit) {
+        return appDatabase.itemDAO().getFavoritesWithOffset(offset, limit).map(ChannelDatabaseMapper::transformItemsDtoToEntity);
+    }
+
+    @Override
     public Single<ChannelEntity> getChannelByUrl(String url) {
         return appDatabase.channelDAO().getChannelByUrl(url).map(ChannelDatabaseMapper::transform);
     }
