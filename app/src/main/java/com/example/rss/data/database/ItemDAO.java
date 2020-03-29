@@ -33,6 +33,12 @@ public interface ItemDAO {
     @Query("SELECT item.id, item.channel_id, item.guid, item.title, item.description, item.link,  item.pub_date, item.enclosure, item.is_read, CASE WHEN favorite.item_id > 0 THEN 1 END is_favorite FROM favorite INNER JOIN item on item.id = favorite.item_id ORDER BY pub_date DESC LIMIT :offset, :limit")
     Maybe<List<ItemDTO>> getFavoritesWithOffset(Integer offset, Integer limit);
 
+    @Query("UPDATE item SET is_read = 1")
+    Maybe<Integer> setAllRead();
+
+    @Query("UPDATE item SET is_read = 1 WHERE channel_id = :id")
+    Maybe<Integer> setReadForChannel(Long id);
+
     @Insert
     Maybe<List<Long>> insertAll(List<ItemDTO> itemDTOS);
 

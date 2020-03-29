@@ -33,6 +33,14 @@ public class ItemInteractor extends BaseInteractor {
         return repository.getItemsByChannelId(id).compose(getIOToMainTransformerMaybe());
     }
 
+    public Maybe<Integer> setReadForChannel(Long id) {
+        return repository.setReadForChannel(id).compose(getIOToMainTransformerMaybe());
+    }
+
+    public Maybe<Integer> setAllRead() {
+        return repository.setAllRead().compose(getIOToMainTransformerMaybe());
+    }
+
     public Maybe<Integer> deleteFavByItemBy(Long itemId) {
         return repository.deleteFavByItemBy(itemId).compose(getIOToMainTransformerMaybe());
 

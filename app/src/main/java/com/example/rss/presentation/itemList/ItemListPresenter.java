@@ -1,6 +1,7 @@
 package com.example.rss.presentation.itemList;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.LongSparseArray;
 import android.view.View;
 
@@ -21,14 +22,16 @@ import com.example.rss.domain.exception.IErrorBundle;
 import com.example.rss.domain.interactor.ChannelInteractor;
 import com.example.rss.domain.interactor.FileInteractor;
 import com.example.rss.domain.interactor.ItemInteractor;
+import com.example.rss.domain.paginator.Paginator;
 import com.example.rss.presentation.exception.ErrorMessageFactory;
+import com.example.rss.presentation.fab.FabController;
 import com.example.rss.presentation.global.GlobalActions;
 import com.example.rss.presentation.itemDetail.ItemDetailFragment;
 import com.example.rss.presentation.itemList.adapter.ItemModel;
 import com.example.rss.presentation.itemList.adapter.RecyclerItemClickListener;
 import com.example.rss.presentation.itemList.adapter.RecyclerListAdapter;
-import com.example.rss.domain.paginator.Paginator;
 import com.example.rss.presentation.itemList.adapter.RecyclerViewPaginator;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -177,6 +180,11 @@ public class ItemListPresenter implements
         this.mView = view;
         this.channelId = mView.getCurChannelId();
 
+        FabController fabController = new FabController(globalActions.getFab(), new FabCallback());
+
+        fabController.setVisibility(true);
+
+
         InitializeRecycler();
         if (mView.isFavoriteMode())
             paginator = new RecyclerViewPaginator(new FavoritesListPaginator(), this);
@@ -302,6 +310,43 @@ public class ItemListPresenter implements
                     .concatMap(item -> convertToModel(item, channelId))
                     .toList()
                     .toMaybe();
+        }
+    }
+
+    class FabCallback extends Snackbar.Callback implements FabController.Action, View.OnClickListener {
+
+        @Override
+        public void onDismissed(Snackbar transientBottomBar, int event) {
+            if (event != DISMISS_EVENT_ACTION)
+                forceEvent();
+            super.onDismissed(transientBottomBar, event);
+        }
+
+        @Override
+        public int setIcon() {
+            return R.drawable.ic_read_all_black_30dp;
+        }
+
+        @Override
+        public void clickOnFab(View v) {
+            Snackbar.make(mView.getRecycler(), "Прочитать все", Snackbar.LENGTH_LONG)
+            		.setAction("Отменить", this)
+                    .addCallback(this)
+                    .show();
+        }
+
+        @Override
+        public void onClick(View v) {
+
+        }
+
+        void forceEvent(){
+            Log.e("logo", "force");
+            if (ItemListPresenter.this.channelId > 0){
+                ItemListPresenter.this.cDisposable.add(itemInteractor.setReadForChannel(ItemListPresenter.this.channelId).subscribe(count->paginator.refresh()));
+            }else{
+                ItemListPresenter.this.cDisposable.add(itemInteractor.setAllRead().subscribe(count->paginator.refresh()));
+            }
         }
     }
 }

@@ -40,6 +40,10 @@ public interface IDataStore {
 	Maybe<Integer> getCountItemsForChannel(Long channelId);
 	Maybe<List<ItemEntity>> getItemsWithOffsetByChannel(Long channelId, Integer offset, Integer limit);
 	Maybe<List<ItemEntity>> getFavoritesWithOffset(Integer offset, Integer limit);
+
+	Maybe<Integer> setAllRead();
+	Maybe<Integer> setReadForChannel(Long id);
+
 	//Files
 	Maybe<Long> addFile (FileEntity fileEntity);
 	Maybe<FileEntity> getFileById(Long id);

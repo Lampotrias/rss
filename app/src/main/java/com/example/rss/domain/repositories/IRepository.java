@@ -40,6 +40,10 @@ public interface IRepository {
 	Maybe<Integer> getCountItemsForChannel(Long channelId);
 	Maybe<List<Item>> getItemsWithOffsetByChannel(Long channelId, Integer offset, Integer limit);
 	Maybe<List<Item>> getFavoritesWithOffset(Integer offset, Integer limit);
+
+	Maybe<Integer> setAllRead();
+	Maybe<Integer> setReadForChannel(Long id);
+
 	//Category
 	Maybe<List<Category>> getCategoriesByType(String mType);
 	Maybe<Category> getCategoryById(Long id);

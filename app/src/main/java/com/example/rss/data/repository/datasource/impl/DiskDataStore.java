@@ -102,6 +102,16 @@ public class DiskDataStore implements IDataStore {
     }
 
     @Override
+    public Maybe<Integer> setAllRead() {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Maybe<Integer> setReadForChannel(Long id) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
     public Maybe<Long> addFile(FileEntity fileEntity) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }

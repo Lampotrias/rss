@@ -109,6 +109,16 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
+    public Maybe<Integer> setAllRead() {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Maybe<Integer> setReadForChannel(Long id) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
     public Single<ChannelEntity> getChannelByUrl(String url) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }

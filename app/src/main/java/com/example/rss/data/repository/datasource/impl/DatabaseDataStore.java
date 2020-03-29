@@ -106,6 +106,16 @@ public class DatabaseDataStore implements IDataStore {
     }
 
     @Override
+    public Maybe<Integer> setAllRead() {
+        return appDatabase.itemDAO().setAllRead();
+    }
+
+    @Override
+    public Maybe<Integer> setReadForChannel(Long id) {
+        return appDatabase.itemDAO().setReadForChannel(id);
+    }
+
+    @Override
     public Single<ChannelEntity> getChannelByUrl(String url) {
         return appDatabase.channelDAO().getChannelByUrl(url).map(ChannelDatabaseMapper::transform);
     }

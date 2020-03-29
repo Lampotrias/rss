@@ -90,8 +90,6 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 		toggle.syncState();
 
 		fab = findViewById(R.id.fab);
-		fab.setOnClickListener(view -> Snackbar.make(container, "Прочитать все", Snackbar.LENGTH_LONG)
-				.setAction("Action", null).show());
 
 		Button btnAdd = findViewById(R.id.btnAddChannelDrawer);
 		btnAdd.setOnClickListener(v -> mPresenter.OnClickChannelAdd(v));
@@ -281,6 +279,11 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 	@Override
 	public void updDrawerMenu() {
 		mPresenter.updLeftMenu();
+	}
+
+	@Override
+	public FloatingActionButton getFab() {
+		return fab;
 	}
 
 	@Override

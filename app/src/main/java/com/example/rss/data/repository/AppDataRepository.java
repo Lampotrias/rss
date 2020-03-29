@@ -136,6 +136,18 @@ public class AppDataRepository implements IRepository {
     }
 
     @Override
+    public Maybe<Integer> setAllRead() {
+        final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
+        return dataStore.setAllRead();
+    }
+
+    @Override
+    public Maybe<Integer> setReadForChannel(Long id) {
+        final IDataStore dataStore = channelDataStoreFactory.createForItems(null);
+        return dataStore.setReadForChannel(id);
+    }
+
+    @Override
     public Single<Channel> getChannelByUrl(String url) {
         final IDataStore dataStore = channelDataStoreFactory.createForChannel(null);
         return dataStore.getChannelByUrl(url).map(repositoryEntityDataMapper::transform);
