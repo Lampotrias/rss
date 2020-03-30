@@ -118,12 +118,24 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
             category1.setType(CATEGORY_TYPE);
 
             Channel channel1 = new Channel();
-            channel1.setChannelId(55L);
+            channel1.setChannelId(556L);
             channel1.setTitle("test123");
             channel1.setCategoryId(33L);
+///////////////
+            Category category2 = new Category();
+            category2.setCategoryId(111L);
+            category2.setName("test2");
+            category2.setType(CATEGORY_TYPE);
+
+            Channel channel2 = new Channel();
+            channel2.setChannelId(555L);
+            channel2.setTitle("test123");
+            channel2.setCategoryId(111L);
 
             mChannels.add(channel1);
             mCategories.add(category1);
+            mChannels.add(channel2);
+            mCategories.add(category2);
 
             Map<String, String> mCategoryTitle;
             Map<String, String> mChildAttrArr;

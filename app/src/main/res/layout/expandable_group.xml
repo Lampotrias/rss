@@ -20,6 +20,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
+        android:fontFamily="@font/open_sans"
         android:gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceListItem"
         app:layout_constraintBottom_toBottomOf="parent"
