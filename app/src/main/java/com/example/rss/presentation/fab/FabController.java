@@ -7,8 +7,8 @@ import androidx.annotation.NonNull;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class FabController {
-    private final FloatingActionButton actionButton;
-    private final Action actionCallback;
+    private FloatingActionButton actionButton;
+    private Action actionCallback;
 
     public FabController(@NonNull FloatingActionButton actionButton, @NonNull Action actionCallback) {
         this.actionButton = actionButton;
@@ -23,6 +23,11 @@ public class FabController {
         } else {
             this.actionButton.setVisibility(View.GONE);
         }
+    }
+
+    public void release(){
+        this.actionCallback = null;
+        this.actionButton = null;
     }
 
     private void initButton(){

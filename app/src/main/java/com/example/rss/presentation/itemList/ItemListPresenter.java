@@ -56,6 +56,7 @@ public class ItemListPresenter implements
     private RecyclerListAdapter recyclerAdapter;
     private static LongSparseArray<String> channelToImage = new LongSparseArray<>();
     private final static Integer PAGE_SIZE = 5;
+    FabController fabController;
 
     private LinearLayoutManager layoutManager;
     private RecyclerViewPaginator paginator;
@@ -86,6 +87,8 @@ public class ItemListPresenter implements
 
     @Override
     public void destroy() {
+        Log.e("logo", "pres destr");
+        fabController.release();
         if (!cDisposable.isDisposed())
             cDisposable.dispose();
         paginator.release();
@@ -180,10 +183,8 @@ public class ItemListPresenter implements
         this.mView = view;
         this.channelId = mView.getCurChannelId();
 
-        FabController fabController = new FabController(globalActions.getFab(), new FabCallback());
-
+        fabController = new FabController(globalActions.getFab(), new FabCallback());
         fabController.setVisibility(true);
-
 
         InitializeRecycler();
         if (mView.isFavoriteMode())

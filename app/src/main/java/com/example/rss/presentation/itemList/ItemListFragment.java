@@ -2,6 +2,7 @@ package com.example.rss.presentation.itemList;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,8 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
     public void onDestroyView() {
         binding = null;
         super.onDestroyView();
+        mPresenter.destroy();
+        Log.e("logo", "frag destroy");
     }
 
     @Nullable
@@ -86,9 +89,10 @@ public class ItemListFragment extends BaseFragment implements ItemListContract.V
 
     @Override
     public void onDestroy() {
-        mPresenter.destroy();
-        //app.releaseFragmentModule();
         super.onDestroy();
+        mPresenter.destroy();
+        app.releaseFragmentModule();
+
     }
 
     @Override
