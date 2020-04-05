@@ -48,6 +48,8 @@ public interface IRepository {
 	Maybe<List<Category>> getCategoriesByType(String mType);
 	Maybe<Category> getCategoryById(Long id);
 	Maybe<Long> addCategory(Category category);
+	Maybe<Integer> deleteCategoryById(Long id);
+	Maybe<Integer> updateCategoryNameById(Long id, String name);
 
 	//File
 	Maybe<Long> addFile(File file);

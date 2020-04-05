@@ -14,6 +14,9 @@ import io.reactivex.Maybe;
 public class CategoryInteractor extends BaseInteractor {
     private final IRepository repository;
 
+    public final static String CATEGORY_TYPE = "C";
+    public final static String FAVORITE_TYPE = "F";
+
     @Inject
     public CategoryInteractor(IRepository repository, IThreadExecutor threadExecutor, IPostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
@@ -30,5 +33,13 @@ public class CategoryInteractor extends BaseInteractor {
 
     public Maybe<List<Category>> getCategoriesByType(String mType){
         return repository.getCategoriesByType(mType).compose(getIOToMainTransformerMaybe());
+    }
+
+    public Maybe<Integer> deleteCategoryById(Long id){
+        return repository.deleteCategoryById(id).compose(getIOToMainTransformerMaybe());
+    }
+
+    public Maybe<Integer> updateCategoryNameById(Long id, String name){
+        return repository.updateCategoryNameById(id, name).compose(getIOToMainTransformerMaybe());
     }
 }

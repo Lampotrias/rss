@@ -94,7 +94,7 @@ public class DatabaseDataStore implements IDataStore {
 
     @Override
     public Maybe<List<ItemEntity>> getItemsWithOffsetByChannel(Long channelId, Integer offset, Integer limit) {
-        if(channelId > 0)
+        if (channelId > 0)
             return appDatabase.itemDAO().getItemsWithOffsetByChannel(channelId, offset, limit).map(ChannelDatabaseMapper::transformItemsDtoToEntity);
         else
             return appDatabase.itemDAO().getItemsWithOffset(offset, limit).map(ChannelDatabaseMapper::transformItemsDtoToEntity);
@@ -168,6 +168,16 @@ public class DatabaseDataStore implements IDataStore {
     @Override
     public Maybe<Long> addCategory(CategoryEntity categoryEntity) {
         return appDatabase.categoryDAO().addCategory(ChannelDatabaseMapper.transform(categoryEntity));
+    }
+
+    @Override
+    public Maybe<Integer> deleteCategoryById(Long id) {
+        return appDatabase.categoryDAO().deleteById(id);
+    }
+
+    @Override
+    public Maybe<Integer> updateCategoryNameById(Long id, String name) {
+        return appDatabase.categoryDAO().updateNameById(id, name);
     }
 
     @Override

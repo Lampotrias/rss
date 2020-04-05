@@ -26,6 +26,7 @@ public interface GlobalContract {
         void OnClickFavoritesList(View view);
         void openSettingsFragment();
         void openLogFragment();
+        void openCategoryList();
         void selectTreeItemChannel(int groupPos, int childPos);
         void updLeftMenu();
         void contextChannelEdit(Long id);

@@ -40,8 +40,6 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     private final ItemInteractor itemInteractor;
     private final FileInteractor fileInteractor;
     private final CompositeDisposable compositeDisposable;
-    private final String CATEGORY_TYPE = "C";
-    private final String FAVORITE_TYPE = "F";
 
     private SharedPreferences preferences;
 
@@ -87,7 +85,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
 
     private void reCalcMenu() {
         compositeDisposable.add(
-                categoryInteractor.getCategoriesByType(CATEGORY_TYPE)
+                categoryInteractor.getCategoriesByType(CategoryInteractor.CATEGORY_TYPE)
                         .subscribe(categories -> {
                                     this.setCategories(categories);
                                     compositeDisposable.add(
@@ -115,7 +113,6 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
             Category category1 = new Category();
             category1.setCategoryId(33L);
             category1.setName("test2");
-            category1.setType(CATEGORY_TYPE);
 
             Channel channel1 = new Channel();
             channel1.setChannelId(556L);
@@ -125,7 +122,6 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
             Category category2 = new Category();
             category2.setCategoryId(111L);
             category2.setName("test2");
-            category2.setType(CATEGORY_TYPE);
 
             Channel channel2 = new Channel();
             channel2.setChannelId(555L);
@@ -193,6 +189,12 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
     }
 
     @Override
+    public void openCategoryList() {
+        navController.navigate(R.id.nav_categoryListFragment);
+        mView.closeDrawer();
+    }
+
+    @Override
     public void selectTreeItemChannel(int groupPos, int childPos) {
         String index = channelTreeData.get(groupPos).get(childPos).get("attrChildId");
         Bundle bundle = new Bundle();
@@ -239,7 +241,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
                                 .flatMap(integer -> {
                                     if (integer < limit)
                                         return Maybe.just(integer);
-                                    Log.e("Logo", "tet"  + (integer - limit));
+                                    Log.e("Logo", "tet" + (integer - limit));
                                     return itemInteractor.getItemsWithOffsetByChannel(channel.getChannelId(), limit, integer - limit)
                                             .toObservable()
                                             .flatMapIterable(items -> items)
@@ -252,7 +254,7 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
                                 })
                         )
                         .subscribe(count -> {
-                            Log.e("Logo", "tet"  + count);
+                            Log.e("Logo", "tet" + count);
                         }));
     }
 

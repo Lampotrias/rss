@@ -174,6 +174,16 @@ public class NetworkDataStore implements IDataStore {
     }
 
     @Override
+    public Maybe<Integer> deleteCategoryById(Long id) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Maybe<Integer> updateCategoryNameById(Long id, String name) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
     public Maybe<Integer> updateNextExec(Long channelId, Long nextTimestamp) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }

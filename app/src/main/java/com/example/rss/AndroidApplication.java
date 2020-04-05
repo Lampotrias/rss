@@ -3,7 +3,8 @@ package com.example.rss;
 import android.app.Application;
 import android.content.Context;
 
-import com.example.rss.presentation.BaseFragment;
+import androidx.fragment.app.Fragment;
+
 import com.example.rss.presentation.di.component.AppComponent;
 import com.example.rss.presentation.di.component.DaggerAppComponent;
 import com.example.rss.presentation.di.component.FragmentComponent;
@@ -53,8 +54,8 @@ public class AndroidApplication extends Application {
 		this.globalActivity = globalActivity;
 	}
 
-	public FragmentComponent getFragmentModule(BaseFragment baseFragment){
-		fragmentComponent = appComponent.plusFragmentComponent(new FragmentModule(baseFragment));
+	public FragmentComponent getFragmentModule(Fragment fragment){
+		fragmentComponent = appComponent.plusFragmentComponent(new FragmentModule(fragment));
 		return fragmentComponent;
 	}
 

@@ -24,4 +24,9 @@ public interface CategoryDAO {
     @Insert
     Maybe<Long> addCategory(CategoryDTO category);
 
+    @Query("DELETE FROM category WHERE id = :id")
+    Maybe<Integer> deleteById(Long id);
+
+    @Query("UPDATE category SET name = :name WHERE id = :id")
+    Maybe<Integer> updateNameById(Long id, String name);
 }

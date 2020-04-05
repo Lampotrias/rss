@@ -143,7 +143,7 @@ public class ItemListPresenter implements
                 ItemModel item = recyclerAdapter.get(position);
                 bundle.putLong(ItemDetailFragment.DETAIL_ITEM_ID, item.getItemId());
                 bundle.putLong(ItemDetailFragment.DETAIL_CHANNEL_ID, item.getChannelId());
-                navController.navigate(R.id.nav_itemDetailFragment, bundle);
+                navController.navigate(R.id.action_nav_item_list_fragment_to_nav_itemDetailFragment, bundle);
             }
 
             @Override
@@ -301,7 +301,7 @@ public class ItemListPresenter implements
         }
     }
 
-    class FavoritesListPaginator implements Paginator.Page<ItemModel>{
+    class FavoritesListPaginator implements Paginator.Page<ItemModel> {
         @Override
         public Maybe<List<ItemModel>> invoke(int page) {
             int offset = (page == 1) ? 0 : (page - 1) * PAGE_SIZE;
@@ -331,7 +331,7 @@ public class ItemListPresenter implements
         @Override
         public void clickOnFab(View v) {
             Snackbar.make(mView.getRecycler(), "Прочитать все", Snackbar.LENGTH_LONG)
-            		.setAction("Отменить", this)
+                    .setAction("Отменить", this)
                     .addCallback(this)
                     .show();
         }
@@ -341,12 +341,12 @@ public class ItemListPresenter implements
 
         }
 
-        void forceEvent(){
+        void forceEvent() {
             Log.e("logo", "force");
-            if (ItemListPresenter.this.channelId > 0){
-                ItemListPresenter.this.cDisposable.add(itemInteractor.setReadForChannel(ItemListPresenter.this.channelId).subscribe(count->paginator.refresh()));
-            }else{
-                ItemListPresenter.this.cDisposable.add(itemInteractor.setAllRead().subscribe(count->paginator.refresh()));
+            if (ItemListPresenter.this.channelId > 0) {
+                ItemListPresenter.this.cDisposable.add(itemInteractor.setReadForChannel(ItemListPresenter.this.channelId).subscribe(count -> paginator.refresh()));
+            } else {
+                ItemListPresenter.this.cDisposable.add(itemInteractor.setAllRead().subscribe(count -> paginator.refresh()));
             }
         }
     }

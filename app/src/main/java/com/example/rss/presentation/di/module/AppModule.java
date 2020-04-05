@@ -48,11 +48,6 @@ public class AppModule {
         return userDataRepository;
     }
 
-   /* @Provides @Singleton
-    CacheEntityFabric provideCacheDataStore (CacheEntityFabric cacheEntityFabric){
-        return cacheEntityFabric;
-    }*/
-
     @Provides @Singleton
     GlobalActions provideGlobalActions(){
         return application.getGlobalActivity();

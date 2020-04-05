@@ -35,8 +35,6 @@ public class ChannelEditFragment extends BaseFragment implements ChannelEditCont
     @Inject
     public GlobalActions globalActions;
 
-    private Long categoryId;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,26 +126,15 @@ public class ChannelEditFragment extends BaseFragment implements ChannelEditCont
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         mPresenter.resume();
     }
 
     @Override
-    public void onDestroyView() {
-        binding = null;
-        super.onDestroyView();
-
-    }
-
-    @Override
     public void onDestroy() {
         mPresenter.destroy();
+        binding = null;
         app.releaseFragmentModule();
         super.onDestroy();
     }

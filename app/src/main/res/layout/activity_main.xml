@@ -81,6 +81,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/btnSettings"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/open_sans_semibold"
+                app:icon="@drawable/ic_clear_all_black_24dp"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                android:id="@+id/btnCategory"
+                android:text="@string/btnCategory"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/open_sans_semibold"

@@ -100,6 +100,9 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 		Button btnSettings = findViewById(R.id.btnSettings);
 		btnSettings.setOnClickListener(v -> onClickMenuSettings());
 
+		Button btnCategory = findViewById(R.id.btnCategory);
+		btnCategory.setOnClickListener(v -> mPresenter.openCategoryList());
+
 		Button btnService = findViewById(R.id.btnTestService);
 //		btnService.setOnClickListener(v -> {
 //			InitBackgroundWork work = new InitBackgroundWork(this);
@@ -273,6 +276,11 @@ public class GlobalActivity extends BaseActivity implements GlobalContract.V, Gl
 	public void onClickMenuSettings() {
 		mPresenter.openSettingsFragment();
 		drawer.closeDrawer(GravityCompat.START);
+	}
+
+	@Override
+	public Context getActivityContext() {
+		return this;
 	}
 
 	@Override

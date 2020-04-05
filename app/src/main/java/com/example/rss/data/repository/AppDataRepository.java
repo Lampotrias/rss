@@ -190,6 +190,18 @@ public class AppDataRepository implements IRepository {
     }
 
     @Override
+    public Maybe<Integer> deleteCategoryById(Long id) {
+        final IDataStore dataStore = channelDataStoreFactory.createForCategory(null);
+        return dataStore.deleteCategoryById(id);
+    }
+
+    @Override
+    public Maybe<Integer> updateCategoryNameById(Long id, String name) {
+        final IDataStore dataStore = channelDataStoreFactory.createForCategory(null);
+        return dataStore.updateCategoryNameById(id, name);
+    }
+
+    @Override
     public Maybe<Long> addFile(File file) {
         final IDataStore dataStore = channelDataStoreFactory.createForFile(null);
         return dataStore.addFile(repositoryEntityDataMapper.transform(file));

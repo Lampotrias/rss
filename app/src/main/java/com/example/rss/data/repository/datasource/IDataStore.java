@@ -48,10 +48,13 @@ public interface IDataStore {
 	Maybe<Long> addFile (FileEntity fileEntity);
 	Maybe<FileEntity> getFileById(Long id);
 	Maybe<Integer> deleteFileById(Long id);
+
 	//Category
 	Maybe<List<CategoryEntity>> getCategoriesByType(String mType);
 	Maybe<CategoryEntity> getCategoryById(Long id);
 	Maybe<Long> addCategory(CategoryEntity categoryEntity);
+	Maybe<Integer> deleteCategoryById(Long id);
+	Maybe<Integer> updateCategoryNameById(Long id, String name);
 
     //Favorite
 	Maybe<Integer> deleteFavByItemBy(Long id);

@@ -21,6 +21,15 @@
     <string name="menu_settings">Настройки</string>
     <string name="menu_close_app">Закрыть приложение</string>
 
+    <string name="alert_edit_cat_save">Сохранить</string>
+    <string name="alert_edit_cat_cancel">Отменить</string>
+    <string name="alert_edit_cat_new_title">Укажите новое название</string>
+    <string name="alert_edit_cat_title">Изменение</string>
+    <string name="alert_delete_cat_yes">Да</string>
+    <string name="alert_delete_cat_no">Нет</string>
+    <string name="alert_delete_cat_title">Удаление</string>
+    <string name="alert_delete_cat_message">Действительно удалить категорию?</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Settings fragment</string>
     <string name="navigation_header">Navigation header</string>
@@ -49,4 +58,6 @@
     <string name="save_count_title">Хранить элементов в канале</string>
     <string name="btnFavoriteList">Избранное</string>
     <string name="btnSettings">Настройки</string>
+    <string name="btnCategory">Категории</string>
+    <string name="menu_add_category">Добавить категорию</string>
 </resources>

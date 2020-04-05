@@ -1,5 +1,7 @@
 package com.example.rss.presentation.di.component;
 
+import com.example.rss.presentation.categoryList.CategoryListFragment;
+import com.example.rss.presentation.categoryList.EditDialogFragment;
 import com.example.rss.presentation.channelEdit.ChannelEditFragment;
 import com.example.rss.presentation.di.module.FragmentModule;
 import com.example.rss.presentation.di.scope.ChannelScope;
@@ -14,4 +16,6 @@ public interface FragmentComponent {
     void inject(ChannelEditFragment channelEditFragment);
     void inject(ItemListFragment itemListFragment);
     void inject(ItemDetailFragment itemDetailFragment);
+    void inject(CategoryListFragment categoryListFragment);
+    void inject(EditDialogFragment editDialogFragment);
 }

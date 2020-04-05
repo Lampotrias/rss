@@ -167,6 +167,16 @@ public class DiskDataStore implements IDataStore {
     }
 
     @Override
+    public Maybe<Integer> deleteCategoryById(Long id) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
+    public Maybe<Integer> updateCategoryNameById(Long id, String name) {
+        throw new UnsupportedOperationException("Operation is not available!!!");
+    }
+
+    @Override
     public Maybe<Integer> deleteFavByItemBy(Long id) {
         throw new UnsupportedOperationException("Operation is not available!!!");
     }
