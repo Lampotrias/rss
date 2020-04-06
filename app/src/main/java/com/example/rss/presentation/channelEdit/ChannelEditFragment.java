@@ -5,17 +5,21 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.rss.AndroidApplication;
 import com.example.rss.databinding.ChannelEditFragmentBinding;
+import com.example.rss.domain.Category;
 import com.example.rss.domain.Channel;
 import com.example.rss.presentation.BaseFragment;
 import com.example.rss.presentation.di.scope.ChannelScope;
 import com.example.rss.presentation.global.GlobalActions;
 
+import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -25,9 +29,11 @@ public class ChannelEditFragment extends BaseFragment implements ChannelEditCont
 
     private AndroidApplication app;
     private Long curChannelId = 0L;
+    private List<Category> categories;
     public static final String CHANNEL_ID_PARAM = "CHANNEL_ID_PARAM";
 
     private ChannelEditFragmentBinding binding;
+    private SpinnerAdapter spinnerAdapter;
 
     @Inject
     public ChannelEditPresenter mPresenter;
@@ -74,7 +80,8 @@ public class ChannelEditFragment extends BaseFragment implements ChannelEditCont
         String url = String.valueOf(binding.urlTextEdit.getText());
         if (url.length() > 0 && url.startsWith("http")) {
             binding.urlTextInput.setError(null);
-            mPresenter.onSaveButtonClicked(url, binding.ckCacheImage.isChecked(), binding.ckDownloadFullText.isChecked(), binding.ckOnlyWifi.isChecked());
+            Category category = (Category)binding.catList.getSelectedItem();
+            mPresenter.onSaveButtonClicked(url, category.getCategoryId(), binding.ckCacheImage.isChecked(), binding.ckDownloadFullText.isChecked(), binding.ckOnlyWifi.isChecked());
         } else {
             binding.urlTextInput.setError("Введите url");
         }
@@ -123,6 +130,22 @@ public class ChannelEditFragment extends BaseFragment implements ChannelEditCont
         binding.ckCacheImage.setChecked(channel.getCacheImage());
         binding.ckDownloadFullText.setChecked(channel.getDownloadFullText());
         binding.ckOnlyWifi.setChecked(channel.getOnlyWifi());
+
+        Long curCategoryId = channel.getCategoryId();
+        for (Category category: categories) {
+            if (category.getCategoryId().equals(curCategoryId)){
+                int pos = spinnerAdapter.getPosition(category);
+                binding.catList.setSelection(pos);
+            }
+        }
+    }
+
+    @Override
+    public void fillingCategories(List<Category> categories) {
+        this.categories = categories;
+        spinnerAdapter = new SpinnerAdapter(this.context(), android.R.layout.simple_spinner_item, categories);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.catList.setAdapter(spinnerAdapter);
     }
 
     @Override
@@ -137,5 +160,60 @@ public class ChannelEditFragment extends BaseFragment implements ChannelEditCont
         binding = null;
         app.releaseFragmentModule();
         super.onDestroy();
+    }
+
+    private static class SpinnerAdapter extends ArrayAdapter<Category> {
+
+        private LayoutInflater mInflater;
+        private int plainResource;
+        private int mDropDownResource;
+
+        SpinnerAdapter(@NonNull Context context, int plainResource, @NonNull List<Category> objects) {
+            super(context, plainResource, objects);
+            mInflater = LayoutInflater.from(context);
+            this.plainResource = plainResource;
+        }
+
+        @Override
+        public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            return createView(this.mInflater, position, convertView, parent, this.mDropDownResource);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            return createView(this.mInflater, position, convertView, parent, this.plainResource);
+        }
+
+        private View createView(LayoutInflater inflater, int position, View convertView, ViewGroup parent, int resource){
+            final View view;
+            final TextView text;
+
+            if (convertView == null)
+                view = mInflater.inflate(this.plainResource, parent, false);
+            else
+                view = convertView;
+
+            try{
+                text = (TextView) view;
+
+            }catch (ClassCastException e) {
+                throw new IllegalStateException(
+                        "ArrayAdapter requires the resource ID to be a TextView", e);
+            }
+
+            final Category item = getItem(position);
+            text.setText(item.getName());
+
+            return view;
+        }
+
+
+
+        @Override
+        public void setDropDownViewResource(int resource) {
+            this.mDropDownResource = resource;
+            super.setDropDownViewResource(resource);
+        }
     }
 }

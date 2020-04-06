@@ -110,29 +110,6 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
         List<Map<String, String>> groupData = new ArrayList<>();
 
         if (!mChannels.isEmpty() && !mCategories.isEmpty()) {
-            Category category1 = new Category();
-            category1.setCategoryId(33L);
-            category1.setName("test2");
-
-            Channel channel1 = new Channel();
-            channel1.setChannelId(556L);
-            channel1.setTitle("test123");
-            channel1.setCategoryId(33L);
-///////////////
-            Category category2 = new Category();
-            category2.setCategoryId(111L);
-            category2.setName("test2");
-
-            Channel channel2 = new Channel();
-            channel2.setChannelId(555L);
-            channel2.setTitle("test123");
-            channel2.setCategoryId(111L);
-
-            mChannels.add(channel1);
-            mCategories.add(category1);
-            mChannels.add(channel2);
-            mCategories.add(category2);
-
             Map<String, String> mCategoryTitle;
             Map<String, String> mChildAttrArr;
 
@@ -148,11 +125,12 @@ public class GlobalPresenter implements GlobalContract.P<GlobalContract.V> {
                         tmpChild.add(mChildAttrArr);
                     }
                 }
-                if (!tmpChild.isEmpty())
+                if (!tmpChild.isEmpty()) {
                     channelTreeData.add(tmpChild);
-                mCategoryTitle = new HashMap<>();
-                mCategoryTitle.put(attrParentTitle, category.getName());
-                groupData.add(mCategoryTitle);
+                    mCategoryTitle = new HashMap<>();
+                    mCategoryTitle.put(attrParentTitle, category.getName());
+                    groupData.add(mCategoryTitle);
+                }
             }
         }
         mView.ShowChannelListMenu(groupData, channelTreeData, attrParentTitle, attrChildTitle);
