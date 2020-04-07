@@ -8,4 +8,5 @@ public interface DetailRowView {
     void setDate(String date);
     void setLogo(RequestManager glide, String logoPath);
     void setStar(Boolean isStar, DetailViewHolder.onClick onClick);
+    void showLink(String link);
 }

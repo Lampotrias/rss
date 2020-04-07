@@ -1,5 +1,6 @@
 package com.example.rss.presentation.itemDetail.adapter;
 
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -58,6 +59,12 @@ public class DetailViewHolder extends RecyclerView.ViewHolder implements DetailR
             onClick.clickStar();
             this.setStar(!isStar, onClick);
         });
+    }
+
+    @Override
+    public void showLink(String link) {
+        binding.link.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.link.setText(link);
     }
 
     public interface onClick{

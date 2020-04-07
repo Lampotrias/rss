@@ -39,8 +39,8 @@ public class ItemDetailPresenter extends ViewPager2.OnPageChangeCallback impleme
     private final int pageSize = 3;
     private int totalItemsCount;
     private int posInChannelQueue;
-
     private int adapterTmpPosition;
+
     @Inject
     GlobalActions globalActions;
 

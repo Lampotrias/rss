@@ -72,6 +72,7 @@ public class ViewDetailAdapter extends RecyclerView.Adapter<DetailViewHolder> {
         holder.setDate(item.getPubDate());
         holder.setLogo(glide, item.getEnclosure());
         holder.setStar((item.getStar() == null) ? false : item.getStar(), onClick);
+        holder.showLink(item.getLink());
     }
 
     @Override
